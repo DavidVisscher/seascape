@@ -1,5 +1,6 @@
 defmodule UnluckyWeb.Router do
   use UnluckyWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,6 +18,8 @@ defmodule UnluckyWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    pow_routes() # User management
   end
 
   # Other scopes may use custom stacks.

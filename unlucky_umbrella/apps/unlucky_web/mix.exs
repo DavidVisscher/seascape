@@ -44,9 +44,10 @@ defmodule UnluckyWeb.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
-      {:unlucky, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:pow, "~> 1.0.20"},
+      {:unlucky, in_umbrella: true}
     ]
   end
 
