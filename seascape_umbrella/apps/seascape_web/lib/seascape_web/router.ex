@@ -1,5 +1,6 @@
 defmodule SeascapeWeb.Router do
   use SeascapeWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,10 +14,17 @@ defmodule SeascapeWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/" do
+    pipe_through :browser
+
+    pow_routes() # User management
+  end
+
   scope "/", SeascapeWeb do
     pipe_through :browser
 
     get "/", PageController, :index
+
   end
 
   # Other scopes may use custom stacks.
@@ -36,6 +44,7 @@ defmodule SeascapeWeb.Router do
 
     scope "/" do
       pipe_through :browser
+
       live_dashboard "/dashboard", metrics: SeascapeWeb.Telemetry
     end
   end
