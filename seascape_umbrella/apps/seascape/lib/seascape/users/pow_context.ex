@@ -15,7 +15,7 @@ defmodule Seascape.Users.PowContext do
 
     case User.get(user_id_value) do
       nil ->
-        verify_password(User.struct(), password) # Prevent timing attacks
+        verify_password(User.new(), password) # Prevent timing attacks
       user = %User{} ->
         verify_password(user, password)
     end
@@ -33,8 +33,7 @@ defmodule Seascape.Users.PowContext do
   end
 
   def create(params) do
-    User
-    |> struct()
+    User.new()
     |> User.changeset(params)
     |> Ecto.Changeset.validate_change(User.pow_user_id_field , &validates_uniqueness/2)
     |> do_create()

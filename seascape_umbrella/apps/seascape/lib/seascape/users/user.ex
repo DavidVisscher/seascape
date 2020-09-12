@@ -25,6 +25,9 @@ defmodule Seascape.Users.User do
   @es_index "seascape_user"
   use Elastic.Document.API
 
+  def new() do
+    %__MODULE__{}
+  end
 
   def changeset(user, changes \\ %{}) do
     user
