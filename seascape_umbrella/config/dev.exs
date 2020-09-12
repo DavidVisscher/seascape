@@ -55,7 +55,7 @@ config :seascape_web, SeascapeWeb.Endpoint,
       ~r"lib/seascape_web/templates/.*(eex)$"
     ]
   ],
-  reloadable_apps: [:seascape]
+  reloadable_apps: [:seascape, :seascape_web]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

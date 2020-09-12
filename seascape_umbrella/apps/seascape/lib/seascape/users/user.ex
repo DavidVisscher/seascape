@@ -4,7 +4,9 @@ defmodule Seascape.Users.User do
   Represented in the database.
   """
   use Ecto.Schema
-  use Pow.Ecto.Schema
+  use Pow.Ecto.Schema,
+    password_hash_methods: {&Pow.Ecto.Schema.Password.pbkdf2_hash/1,
+                            &Pow.Ecto.Schema.Password.pbkdf2_verify/2}
   @derive {Jason.Encoder, except: [:__meta__]}
 
   # @required_fields [:email, :password_hash]
@@ -24,23 +26,8 @@ defmodule Seascape.Users.User do
   use Elastic.Document.API
 
 
-
-  # defstruct [:id, email: nil, password_hash: nil]
-
-  # use Ecto.Schema
-  # use Pow.Ecto.Schema
-
   def changeset(user, changes \\ %{}) do
     user
     |> pow_changeset(changes)
-    # |> Ecto.Changeset.cast(changes, [:email, :password_hash])
-    # |> Ecto.Changeset.validate_required([:email])
-    # |> Pow.Ecto.Schema.Changeset.user_id_field_changeset(changes, @pow_config)
-    # |> Pow.Ecto.Schema.Changeset.current_password_changeset(changes, @pow_config)
-    # |> Pow.Ecto.Schema.Changeset.password_changeset(changes, @pow_config)
-  end
-
-  def verify_password(user, password) do
-    Pow.Ecto.Schema.Changeset.verify_password(user, password, nil)
   end
 end
