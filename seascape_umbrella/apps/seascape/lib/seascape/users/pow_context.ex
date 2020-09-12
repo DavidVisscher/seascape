@@ -14,8 +14,13 @@ defmodule Seascape.Users.PowContext do
 
   defp do_authenticate(_, nil, _), do: nil
   defp do_authenticate(user_id_field, user_id_value, password) do
-    result = %User{email: user_id_value, id: 42} # perform DB query
-    verify_password(result, password)
+
+    case User.get(user_id_field) do
+      nil ->
+        verify_password(%User{}, password) # Prevent timing attacks
+      user = %User{} ->
+        verify_password(user, password)
+    end
   end
 
   defp verify_password(user, password) do
@@ -40,12 +45,22 @@ defmodule Seascape.Users.PowContext do
   end
 
   defp do_create(user) do
-    # Error handling/query making based on ElasticSearch
-    {:ok, user}
+    # user = Ecto.Changeset.apply_action!(user, :create)
+    user = apply_changeset(user, :create)
+    IO.inspect(user, label: :do_create)
+    case User.get(user.email) do
+      %User{} ->
+        {:error, nil}
+      nil ->
+        put_in(user.password, nil) # Do not store virtual fields
+        Seascape.Users.User.index(user.email , user)
+        {:ok, user}
+    end
   end
 
   def delete(user) do
     IO.inspect(user, label: :delete)
+    Seascape.Users.User.delete(user.email)
   end
 
   def get_by(clauses) do
@@ -54,5 +69,25 @@ defmodule Seascape.Users.PowContext do
 
   def update(user, params) do
     IO.inspect({user, params}, label: :update)
+
+    user =
+      user
+      |> User.changeset(params)
+      # |> Ecto.Changeset.apply_action!(:update)
+      |> apply_changeset(:update)
+    Seascape.Users.User.update(user.email, user)
+  end
+
+  defp apply_changeset(changeset, action) do
+    user = Ecto.Changeset.apply_action!(changeset, action)
+    Enum.reduce(user |> Map.from_struct |> Map.keys, user, fn key, user ->
+      if key not in User.__schema__(:fields) do
+        put_in(user, [Access.key(key)], nil)
+      else
+        user
+      end
+    end)
+    # for field in (user |> Map.from_struct |> Map.keys) do
+    #   User.__schema__(:fields)
   end
 end

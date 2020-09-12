@@ -38,7 +38,8 @@ defmodule Seascape.MixProject do
     [
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
-      {:pow, "~> 1.0.20"}
+      {:pow, "~> 1.0.20"},
+      {:elastic, "~> 3.0"}
     ]
   end
 
