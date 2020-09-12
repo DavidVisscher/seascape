@@ -2,14 +2,12 @@ defmodule Seascape.Users.PowContext do
   alias Seascape.Users.User
   def authenticate(params) do
     IO.inspect(params, label: :authenticate)
-    
+
     user_id_field = User.pow_user_id_field
     user_id_value = params[Atom.to_string(user_id_field)]
     password = params["password"]
 
     do_authenticate(user_id_field, user_id_value, password)
-
-    # nil
   end
 
   defp do_authenticate(_, nil, _), do: nil
@@ -17,19 +15,17 @@ defmodule Seascape.Users.PowContext do
 
     case User.get(user_id_value) do
       nil ->
-        verify_password(%User{}, password) # Prevent timing attacks
+        verify_password(User.struct(), password) # Prevent timing attacks
       user = %User{} ->
         verify_password(user, password)
     end
   end
 
   defp verify_password(user, password) do
-    IO.inspect({user, password}, label: :verify_password)
     case User.verify_password(user, password) do
       true -> user
       false -> nil
     end
-    |> IO.inspect(label: :verify_password_result)
   end
 
   def changeset(params) do
@@ -37,17 +33,14 @@ defmodule Seascape.Users.PowContext do
   end
 
   def create(params) do
-    IO.inspect(params, label: :create)
-
     User
     |> struct()
     |> User.changeset(params)
-    |> Ecto.Changeset.validate_change(:email, &validates_uniqueness/2)
+    |> Ecto.Changeset.validate_change(User.pow_user_id_field , &validates_uniqueness/2)
     |> do_create()
   end
 
   defp do_create(changeset) do
-    IO.inspect(changeset, label: :do_create)
     case apply_changeset(changeset, :create) do
       {:error, problem} ->
         {:error, problem}
@@ -57,17 +50,16 @@ defmodule Seascape.Users.PowContext do
     end
   end
 
-  def validates_uniqueness(:email, email) do
-    case User.get(email) do
+  def validates_uniqueness(key, value) do
+    case User.get(value) do
       %User{} ->
-        [email: "already taken"]
+        [{key,  "already taken"}]
       nil ->
         []
     end
   end
 
   def delete(user) do
-    IO.inspect(user, label: :delete)
     Seascape.Users.User.delete(user.email)
   end
 
@@ -76,8 +68,6 @@ defmodule Seascape.Users.PowContext do
   end
 
   def update(user, params) do
-    IO.inspect({user, params}, label: :update)
-
     user =
       user
       |> User.changeset(params)
