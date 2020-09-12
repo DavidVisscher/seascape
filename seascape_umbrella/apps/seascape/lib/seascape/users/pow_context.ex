@@ -40,21 +40,27 @@ defmodule Seascape.Users.PowContext do
     User
     |> struct()
     |> User.changeset(params)
-    |> IO.inspect
+    |> Ecto.Changeset.validate_change(:email, &validates_uniqueness/2)
     |> do_create()
   end
 
-  defp do_create(user) do
-    # user = Ecto.Changeset.apply_action!(user, :create)
-    user = apply_changeset(user, :create)
-    IO.inspect(user, label: :do_create)
-    case User.get(user.email) do
-      %User{} ->
-        {:error, nil}
-      nil ->
-        put_in(user.password, nil) # Do not store virtual fields
+  defp do_create(changeset) do
+    IO.inspect(changeset, label: :do_create)
+    case apply_changeset(changeset, :create) do
+      {:error, problem} ->
+        {:error, problem}
+      {:ok, user} ->
         Seascape.Users.User.index(user.email , user)
         {:ok, user}
+    end
+  end
+
+  def validates_uniqueness(:email, email) do
+    case User.get(email) do
+      %User{} ->
+        [email: "already taken"]
+      nil ->
+        []
     end
   end
 
@@ -79,7 +85,13 @@ defmodule Seascape.Users.PowContext do
   end
 
   defp apply_changeset(changeset, action) do
-    user = Ecto.Changeset.apply_action!(changeset, action)
+    with {:ok, user} <- Ecto.Changeset.apply_action(changeset, action) do
+      res = filter_virtual_keys(user)
+      {:ok, res}
+    end
+  end
+
+  defp filter_virtual_keys(user) do
     Enum.reduce(user |> Map.from_struct |> Map.keys, user, fn key, user ->
       if key not in User.__schema__(:fields) do
         put_in(user, [Access.key(key)], nil)
@@ -87,7 +99,5 @@ defmodule Seascape.Users.PowContext do
         user
       end
     end)
-    # for field in (user |> Map.from_struct |> Map.keys) do
-    #   User.__schema__(:fields)
   end
 end
