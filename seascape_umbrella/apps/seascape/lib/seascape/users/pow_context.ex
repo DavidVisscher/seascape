@@ -15,7 +15,7 @@ defmodule Seascape.Users.PowContext do
   defp do_authenticate(_, nil, _), do: nil
   defp do_authenticate(user_id_field, user_id_value, password) do
 
-    case User.get(user_id_field) do
+    case User.get(user_id_value) do
       nil ->
         verify_password(%User{}, password) # Prevent timing attacks
       user = %User{} ->
@@ -24,10 +24,12 @@ defmodule Seascape.Users.PowContext do
   end
 
   defp verify_password(user, password) do
+    IO.inspect({user, password}, label: :verify_password)
     case User.verify_password(user, password) do
       true -> user
       false -> nil
     end
+    |> IO.inspect(label: :verify_password_result)
   end
 
   def changeset(params) do
