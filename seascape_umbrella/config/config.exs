@@ -31,9 +31,12 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # User management
+# config :seascape_web, :pow,
+#   user: Seascape.Users.User,
+#   repo: Seascape.Repo
 config :seascape_web, :pow,
   user: Seascape.Users.User,
-  repo: Seascape.Repo
+  users_context: Seascape.Users.PowContext
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
