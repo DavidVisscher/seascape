@@ -36,7 +36,8 @@ config :phoenix, :json_library, Jason
 #   repo: Seascape.Repo
 config :seascape_web, :pow,
   user: Seascape.Users.User,
-  users_context: Seascape.Users.PowContext
+  users_context: Seascape.Users.PowContext,
+  web_module: SeascapeWeb
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
