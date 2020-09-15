@@ -30,6 +30,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :elastic,
+  index_prefix: "seascape"
+
 # User management
 # config :seascape_web, :pow,
 #   user: Seascape.Users.User,

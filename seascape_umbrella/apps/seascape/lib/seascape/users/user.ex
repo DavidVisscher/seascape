@@ -21,8 +21,8 @@ defmodule Seascape.Users.User do
   end
 
   # Allows us to use our struct with ElasticSearch
-  @es_type "seascape_user"
-  @es_index "seascape_user"
+  @es_type "user"
+  @es_index "user"
   use Elastic.Document.API
 
   def new() do
