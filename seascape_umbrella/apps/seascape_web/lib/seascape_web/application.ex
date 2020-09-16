@@ -7,10 +7,13 @@ defmodule SeascapeWeb.Application do
 
   def start(_type, _args) do
     children = [
-      # Start the Telemetry supervisor
+      # Start the Telemetry supervisor:
       SeascapeWeb.Telemetry,
-      # Start the Endpoint (http/https)
-      SeascapeWeb.Endpoint
+      # Start the Endpoint (http/https):
+      SeascapeWeb.Endpoint,
+      # Persistent user sessions across nodes:
+      Pow.Store.Backend.MnesiaCache,
+      Pow.Store.Backend.MnesiaCache.Unsplit
       # Start a worker by calling: SeascapeWeb.Worker.start_link(arg)
       # {SeascapeWeb.Worker, arg}
     ]
