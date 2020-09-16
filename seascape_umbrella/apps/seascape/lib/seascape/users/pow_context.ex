@@ -17,12 +17,17 @@ defmodule Seascape.Users.PowContext do
 
   defp do_authenticate(_, nil, _), do: nil
   defp do_authenticate(_user_id_field, user_id_value, password) do
-    case Users.get(user_id_value) do
-      {:error, :not_found} ->
-        # Prevent timing attacks by running a 'useless' verification:
-        verify_password(User.new(), password)
-      {:ok, user = %User{}} ->
-        verify_password(user, password)
+    try do
+      case Users.get(user_id_value) do
+        {:error, :not_found} ->
+          # Prevent timing attacks by running a 'useless' verification:
+          verify_password(User.new(), password)
+        {:ok, user = %User{}} ->
+          verify_password(user, password)
+      end
+    rescue
+      Seascape.ElasticSearch.ClusterDownError ->
+        nil
     end
   end
 

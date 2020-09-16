@@ -33,11 +33,16 @@ defmodule Seascape.Users do
   end
 
   defp validates_uniqueness(key, value) do
-    case get(value) do
-      {:ok, _user} ->
-        [{key,  "already taken"}]
-      {:error, :not_found} ->
-        []
+    try do
+      case get(value) do
+        {:ok, _user} ->
+          [{key,  "already taken"}]
+        {:error, :not_found} ->
+          []
+      end
+    rescue
+      ElasticSearch.ClusterDownError ->
+        [{key, "No users can currently be registered (the application runs in non-persistence mode)."}]
     end
   end
 
