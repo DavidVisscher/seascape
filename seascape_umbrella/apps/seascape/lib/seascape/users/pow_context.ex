@@ -2,9 +2,12 @@ defmodule Seascape.Users.PowContext do
   alias Seascape.Users
   alias Seascape.Users.User
 
-  def authenticate(params) do
-    IO.inspect(params, label: :authenticate)
+  @moduledoc """
+  Wrapper of the `SeaScape.Users` context to be used with the interface
+  that the `Pow` authentication library provides.
+  """
 
+  def authenticate(params) do
     user_id_field = User.pow_user_id_field
     user_id_value = params[Atom.to_string(user_id_field)]
     password = params["password"]
