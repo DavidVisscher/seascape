@@ -8,10 +8,11 @@ defmodule Seascape.Users do
   - The actual datatype and (persistence-less) logic is found in `Seascape.Users.User`.
   - Authentication can be done using `Seascape.Users.PowContext` (and this is usually handled inside the Pow HTTP Plug).
   """
+  alias __MODULE__.User
 
-  def find(email) do
+  def get(email) do
     case User.get(email) do
-      %User{} -> {:ok, %User{}}
+      user = %User{} -> {:ok, user}
       nil -> {:error, :not_found}
     end
   end
@@ -54,7 +55,7 @@ defmodule Seascape.Users do
   end
 
   defp do_update(user) do
-    SeaScape.Users.User.update(user.email, user)
+    User.index(user.email, user)
   end
 
   defp apply_changeset(changeset, action) do
