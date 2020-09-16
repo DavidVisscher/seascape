@@ -38,7 +38,7 @@ defmodule Seascape.MixProject do
     [
       {:capture_pipe, "~> 0.1.0"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:phoenix_ecto, "~> 4.0"},
+      {:ecto, "~> 3.0"},
       {:pow, "~> 1.0.20"},
       {:elastic, "~> 3.0"}
     ]

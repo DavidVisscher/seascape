@@ -1,4 +1,5 @@
 defmodule Seascape.Users do
+  alias __MODULE__.User
   use CapturePipe
 
   @moduledoc """
@@ -10,7 +11,6 @@ defmodule Seascape.Users do
   - The actual datatype and (persistence-less) logic is found in `Seascape.Users.User`.
   - Authentication can be done using `Seascape.Users.PowContext` (and this is usually handled inside the Pow HTTP Plug).
   """
-  alias __MODULE__.User
 
   defp index_name() do
     "user"
@@ -30,10 +30,9 @@ defmodule Seascape.Users do
   end
 
   defp into_struct(source) do
-    map =
-      source
-      |> Enum.into(%{}, fn {key, val} -> {String.to_existing_atom(key), val} end)
-    struct(User, map)
+    source
+    |> Enum.into(%{}, fn {key, val} -> {String.to_existing_atom(key), val} end)
+    |> &struct(User, &1)
   end
 
   def create(params) do
@@ -84,6 +83,8 @@ defmodule Seascape.Users do
     end
   end
 
+  # Since we are not using an Ecto adapter
+  # we need to do this ourselves.
   defp filter_virtual_keys(user) do
     Enum.reduce(user |> Map.from_struct |> Map.keys, user, fn key, user ->
       if key not in User.__schema__(:fields) do

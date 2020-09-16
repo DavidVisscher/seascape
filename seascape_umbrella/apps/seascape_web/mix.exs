@@ -46,7 +46,9 @@ defmodule SeascapeWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:seascape, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+
+      {:pow, "~> 1.0.20"},
     ]
   end
 
