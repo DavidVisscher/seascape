@@ -7,6 +7,7 @@ defmodule Seascape.Application do
 
   def start(_type, _args) do
     children = [
+      Seascape.ElasticSearch.Watchdog,
       # Start the PubSub system
       {Phoenix.PubSub, name: Seascape.PubSub}
       # Start a worker by calling: Seascape.Worker.start_link(arg)
