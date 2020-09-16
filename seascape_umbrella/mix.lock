@@ -1,5 +1,6 @@
 %{
   "aws_auth": {:hex, :aws_auth, "0.7.2", "ae67eb824d6f4699759fa6eaa6955008b2f11beafdf3254ec8ab3469d12e6fa3", [:mix], [], "hexpm", "8b01e9e6fa41ef9f06b3a01a9add4953453c32fada8694fe3bb4028776e83f28"},
+  "capture_pipe": {:hex, :capture_pipe, "0.1.0", "3029b9dfbbc93fe7f065c9e865183c0c15b786af9f8be69ecb08c6c8d41397ac", [:mix], [], "hexpm", "bc8dacf4408978b16895e923197260414161b46d290f6f8a61cf40c6fdde611d"},
   "cowboy": {:hex, :cowboy, "2.8.0", "f3dc62e35797ecd9ac1b50db74611193c29815401e53bac9a5c0577bd7bc667d", [:rebar3], [{:cowlib, "~> 2.9.1", [hex: :cowlib, repo: "hexpm", optional: false]}, {:ranch, "~> 1.7.1", [hex: :ranch, repo: "hexpm", optional: false]}], "hexpm", "4643e4fba74ac96d4d152c75803de6fad0b3fa5df354c71afdd6cbeeb15fac8a"},
   "cowlib": {:hex, :cowlib, "2.9.1", "61a6c7c50cf07fdd24b2f45b89500bb93b6686579b069a89f88cb211e1125c78", [:rebar3], [], "hexpm", "e4175dc240a70d996156160891e1c62238ede1729e45740bdd38064dad476170"},
   "decimal": {:hex, :decimal, "2.0.0", "a78296e617b0f5dd4c6caf57c714431347912ffb1d0842e998e9792b5642d697", [:mix], [], "hexpm", "34666e9c55dea81013e77d9d87370fe6cb6291d1ef32f46a1600230b1d44f577"},

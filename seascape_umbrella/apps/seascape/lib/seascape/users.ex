@@ -1,4 +1,6 @@
 defmodule Seascape.Users do
+  use CapturePipe
+
   @moduledoc """
   The `Users` context. Responsible for user registration/autorization.
 
@@ -20,7 +22,7 @@ defmodule Seascape.Users do
 
   def get(email) do
     case Elastic.Document.get(index_name(), type_name(), email) do
-      {:ok, 200, %{"_source" => source, "_id" => id}} ->
+      {:ok, 200, %{"_source" => source}} ->
         {:ok, into_struct(source)}
       {:error, 404, %{"found" => false}} ->
         {:error, :not_found}

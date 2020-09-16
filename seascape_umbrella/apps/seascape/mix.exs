@@ -36,6 +36,7 @@ defmodule Seascape.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:capture_pipe, "~> 0.1.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:pow, "~> 1.0.20"},

@@ -16,8 +16,7 @@ defmodule Seascape.Users.PowContext do
   end
 
   defp do_authenticate(_, nil, _), do: nil
-  defp do_authenticate(user_id_field, user_id_value, password) do
-
+  defp do_authenticate(_user_id_field, user_id_value, password) do
     case Users.get(user_id_value) do
       {:error, :not_found} ->
         verify_password(User.new(), password) # Prevent timing attacks
