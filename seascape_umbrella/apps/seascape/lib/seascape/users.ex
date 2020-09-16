@@ -10,25 +10,42 @@ defmodule Seascape.Users do
   """
   alias __MODULE__.User
 
+  defp index_name() do
+    "user"
+  end
+
+  defp type_name() do
+    "seascape_user"
+  end
+
   def get(email) do
-    case User.get(email) do
-      user = %User{} -> {:ok, user}
-      nil -> {:error, :not_found}
+    case Elastic.Document.get(index_name(), type_name(), email) do
+      {:ok, 200, %{"_source" => source, "_id" => id}} ->
+        {:ok, into_struct(source)}
+      {:error, 404, %{"found" => false}} ->
+        {:error, :not_found}
     end
+  end
+
+  defp into_struct(source) do
+    map =
+      source
+      |> Enum.into(%{}, fn {key, val} -> {String.to_existing_atom(key), val} end)
+    struct(User, map)
   end
 
   def create(params) do
     User.new()
     |> User.changeset(params)
-    |> Ecto.Changeset.validate_change(User.pow_user_id_field , &validates_uniqueness/2)
+    |> Ecto.Changeset.validate_change(User.pow_user_id_field, &validates_uniqueness/2)
     |> do_create()
   end
 
   defp validates_uniqueness(key, value) do
-    case User.get(value) do
-      %User{} ->
+    case get(value) do
+      {:ok, _user} ->
         [{key,  "already taken"}]
-      nil ->
+      {:error, :not_found} ->
         []
     end
   end
@@ -38,13 +55,13 @@ defmodule Seascape.Users do
       {:error, problem} ->
         {:error, problem}
       {:ok, user} ->
-        Seascape.Users.User.index(user.email , user)
+        Elastic.Document.index(index_name(), type_name(), user.email, user)
         {:ok, user}
     end
   end
 
   def delete(user) do
-    Seascape.Users.User.delete(user.email)
+    Elastic.Document.delete(index_name(), type_name(), user.email)
   end
 
   def update(user, params) do
@@ -55,7 +72,7 @@ defmodule Seascape.Users do
   end
 
   defp do_update(user) do
-    User.index(user.email, user)
+    Elastic.Document.update(index_name(), type_name(), user.email, user)
   end
 
   defp apply_changeset(changeset, action) do
