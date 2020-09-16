@@ -41,7 +41,6 @@ defmodule Seascape.ElasticSearch.Watchdog do
     |> &{:noreply, &1}
   end
 
-
   defp perform_check(state) do
     Process.send_after(self(), :perform_check, ping_timeout())
     case {state.status, check()} do

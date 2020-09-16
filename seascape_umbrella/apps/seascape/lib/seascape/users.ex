@@ -1,6 +1,7 @@
 defmodule Seascape.Users do
   alias __MODULE__.User
   use CapturePipe
+  alias Seascape.ElasticSearch
 
   @moduledoc """
   The `Users` context. Responsible for user registration/autorization.
@@ -21,18 +22,7 @@ defmodule Seascape.Users do
   end
 
   def get(email) do
-    case Elastic.Document.get(index_name(), type_name(), email) do
-      {:ok, 200, %{"_source" => source}} ->
-        {:ok, into_struct(source)}
-      {:error, 404, %{"found" => false}} ->
-        {:error, :not_found}
-    end
-  end
-
-  defp into_struct(source) do
-    source
-    |> Enum.into(%{}, fn {key, val} -> {String.to_existing_atom(key), val} end)
-    |> &struct(User, &1)
+    ElasticSearch.get(index_name(), type_name(), email, User)
   end
 
   def create(params) do
@@ -56,13 +46,13 @@ defmodule Seascape.Users do
       {:error, problem} ->
         {:error, problem}
       {:ok, user} ->
-        Elastic.Document.index(index_name(), type_name(), user.email, user)
+        ElasticSearch.create(index_name(), type_name(), user.email, user)
         {:ok, user}
     end
   end
 
   def delete(user) do
-    Elastic.Document.delete(index_name(), type_name(), user.email)
+    ElasticSearch.delete(index_name(), type_name(), user.email)
   end
 
   def update(user, params) do
@@ -73,7 +63,7 @@ defmodule Seascape.Users do
   end
 
   defp do_update(user) do
-    Elastic.Document.update(index_name(), type_name(), user.email, user)
+    ElasticSearch.update(index_name(), type_name(), user.email, user)
   end
 
   defp apply_changeset(changeset, action) do
