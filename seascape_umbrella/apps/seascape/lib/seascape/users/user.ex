@@ -18,7 +18,6 @@ defmodule Seascape.Users.User do
     field :current_password, :string, virtual: true
     field :password,         :string, virtual: true
     field :confirm_password, :string, virtual: true
-
   end
 
   # Allows us to use our struct with ElasticSearch

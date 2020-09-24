@@ -42,4 +42,19 @@ defmodule Seascape.Repository.ElasticSearch do
     raise_unless_cluster_ok!()
     Elastic.Document.delete(index, type, key)
   end
+
+  def search(struct_module, index, query) do
+    result =
+      Elastic.Query.build(index, query)
+      |> Elastic.Index.search()
+    case result do
+      {:error, _code, problem} ->
+        {:error, problem}
+      {:ok, 200, %{"hits" => %{"hits" => hits}}} ->
+        hits
+        |> Enum.map(fn %{"_source" => source, "_id" => id} ->
+          into_struct(struct_module, source)
+        end)
+    end
+  end
 end

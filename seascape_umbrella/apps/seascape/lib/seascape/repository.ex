@@ -36,7 +36,7 @@ defmodule Seascape.Repository do
       {:error, code, problem} ->
         changeset =
           Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
-        {:error, problem}
+        {:error, changeset}
       end
   end
 
@@ -44,12 +44,16 @@ defmodule Seascape.Repository do
     ElasticSearch.delete(table_name, type_name(struct), pkey_value(struct))
   end
 
+  def search(struct_module, table_name, query) do
+    ElasticSearch.search(struct_module, table_name, query)
+  end
+
   defp pkey_value(struct = %module{}) do
     key = hd module.__schema__(:primary_key)
     get_in(struct, [Access.key(key)])
   end
 
-  defp type_name(struct = %module{}) do
+  defp type_name(%module{}) do
     module.__schema__(:source)
   end
 

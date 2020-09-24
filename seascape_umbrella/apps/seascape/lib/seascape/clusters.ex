@@ -28,4 +28,19 @@ defmodule Seascape.Clusters do
     |> Cluster.changeset(params)
     |> Repository.update(@table_name)
   end
+
+  def all_of_user(user) do
+    Repository.search(Cluster, @table_name,
+      %{query: %{
+           constant_score: %{
+             filter: %{
+               term: %{
+                 user_id: user.id
+               }
+             }
+           }
+        }
+      }
+    )
+  end
 end

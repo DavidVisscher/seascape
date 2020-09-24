@@ -19,7 +19,7 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
       IO.puts("  Skipping ElasticSearch index #{full_name} as it already exists.")
     else
       IO.write("  Creating ElasticSearch index #{full_name}...")
-      Elastic.Index.create(full_name)
+      Elastic.Index.create(name)
       IO.puts(" done!")
     end
   end
