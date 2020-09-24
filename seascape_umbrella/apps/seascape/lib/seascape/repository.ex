@@ -1,5 +1,6 @@
 defmodule Seascape.Repository do
   alias Seascape.Repository.ElasticSearch
+  require Logger
 
   defmodule ClusterDownError do
     defexception [:message]
@@ -7,8 +8,16 @@ defmodule Seascape.Repository do
 
   def create(changeset, table_name) do
     with {:ok, struct} <- apply_changeset(changeset, :create),
-         {:ok, 200, result} <- ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct) do
-      {:ok, result}
+         {:ok, _code, result} <- ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct) do
+      Logger.debug(inspect(result))
+      {:ok, struct}
+    else
+      {:error, problem} ->
+        {:error, problem}
+      {:error, code, problem} ->
+        changeset =
+          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+        {:error, changeset}
     end
   end
 
@@ -18,8 +27,16 @@ defmodule Seascape.Repository do
 
   def update(changeset, table_name) do
     with {:ok, struct} <- apply_changeset(changeset, :update),
-         {:ok, 200, result} <- ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct) do
-      {:ok, result}
+         {:ok, _code, result} <- ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct) do
+      Logger.debug(inspect(result))
+      {:ok, struct}
+    else
+      {:error, problem} ->
+        {:error, problem}
+      {:error, code, problem} ->
+        changeset =
+          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+        {:error, problem}
       end
   end
 
@@ -28,7 +45,7 @@ defmodule Seascape.Repository do
   end
 
   defp pkey_value(struct = %module{}) do
-    key = module.__schema__(:primary_key)
+    key = hd module.__schema__(:primary_key)
     get_in(struct, [Access.key(key)])
   end
 

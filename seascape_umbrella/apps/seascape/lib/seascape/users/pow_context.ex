@@ -39,7 +39,8 @@ defmodule Seascape.Users.PowContext do
   end
 
   def create(params) do
-    Users.create(params)
+    res = Users.create(params)
+    IO.inspect(res)
   end
 
   def delete(user) do

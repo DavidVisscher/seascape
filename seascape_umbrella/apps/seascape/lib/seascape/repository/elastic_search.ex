@@ -20,7 +20,7 @@ defmodule Seascape.Repository.ElasticSearch do
   def get(index, type, key, struct_module) do
     raise_unless_cluster_ok!()
     case Elastic.Document.get(index, type, key) do
-      {:ok, 200, %{"_source" => source}} ->
+      {:ok, _code, %{"_source" => source}} ->
         {:ok, into_struct(struct_module, source)}
       {:error, 404, %{"found" => false}} ->
         {:error, :not_found}
