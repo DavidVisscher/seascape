@@ -37,15 +37,12 @@ defmodule Seascape.Users do
   end
 
   defp validates_uniqueness(key, value) do
-    try do
-      case Repository.get(value, User, @table_name) do
-        {:ok, _user} ->
-          [{key,  "already taken"}]
-        {:error, :not_found} ->
-          []
-      end
-    rescue
-      ElasticSearch.ClusterDownError ->
+    case Repository.get(value, User, @table_name) do
+      {:ok, _user} ->
+        [{key,  "already taken"}]
+      {:error, :not_found} ->
+        []
+      {:error, :cluster_down} ->
         [{key, "No users can currently be registered (the application runs in non-persistence mode)."}]
     end
   end

@@ -7,37 +7,56 @@ defmodule Seascape.Repository do
   end
 
   def create(changeset, table_name) do
-    with {:ok, struct} <- apply_changeset(changeset, :create),
-         {:ok, _code, result} <- ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct) do
-      Logger.debug(inspect(result))
-      {:ok, struct}
-    else
-      {:error, problem} ->
-        {:error, problem}
-      {:error, code, problem} ->
-        changeset =
+    try do
+      with {:ok, struct} <- apply_changeset(changeset, :create),
+           {:ok, _code, result} <- ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct) do
+        Logger.debug(inspect(result))
+        {:ok, struct}
+      else
+        {:error, problem} ->
+          {:error, problem}
+        {:error, code, problem} ->
+          changeset =
           Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+        {:error, changeset}
+      end
+    rescue
+      ClusterDownError ->
+        changeset =
+          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
         {:error, changeset}
     end
   end
 
   def get(primary_key_value, module, table_name) do
-    ElasticSearch.get(table_name, module.__schema__(:source), primary_key_value, module)
+    try do
+      ElasticSearch.get(table_name, module.__schema__(:source), primary_key_value, module)
+    rescue
+      ClusterDownError ->
+        {:error, :cluster_down}
+    end
   end
 
   def update(changeset, table_name) do
-    with {:ok, struct} <- apply_changeset(changeset, :update),
-         {:ok, _code, result} <- ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct) do
-      Logger.debug(inspect(result))
-      {:ok, struct}
-    else
-      {:error, problem} ->
-        {:error, problem}
-      {:error, code, problem} ->
-        changeset =
+    try do
+      with {:ok, struct} <- apply_changeset(changeset, :update),
+           {:ok, _code, result} <- ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct) do
+        Logger.debug(inspect(result))
+        {:ok, struct}
+      else
+        {:error, problem} ->
+          {:error, problem}
+        {:error, code, problem} ->
+          changeset =
           Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
         {:error, changeset}
       end
+    rescue
+      ClusterDownError ->
+        changeset =
+        Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
+      {:error, changeset}
+  end
   end
 
   def delete(struct, table_name) do
