@@ -6,12 +6,9 @@ defmodule Seascape.Repository do
   end
 
   def create(changeset, table_name) do
-    case apply_changeset(changeset, :create) do
-      {:error, problem} ->
-        {:error, problem}
-      {:ok, struct} ->
-        result = ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct)
-        {:ok, result}
+    with {:ok, struct} <- apply_changeset(changeset, :create),
+         {:ok, 200, result} <- ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct) do
+      {:ok, result}
     end
   end
 
@@ -20,13 +17,10 @@ defmodule Seascape.Repository do
   end
 
   def update(changeset, table_name) do
-    case apply_changeset(changeset, :update) do
-      {:error, problem} ->
-        {:error, problem}
-      {:ok, struct} ->
-        res = ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct)
-        {:ok, res}
-    end
+    with {:ok, struct} <- apply_changeset(changeset, :update),
+         {:ok, 200, result} <- ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct) do
+      {:ok, result}
+      end
   end
 
   def delete(struct, table_name) do
@@ -35,7 +29,7 @@ defmodule Seascape.Repository do
 
   defp pkey_value(struct = %module{}) do
     key = module.__schema__(:primary_key)
-    get_in(struct, Access.key(key))
+    get_in(struct, [Access.key(key)])
   end
 
   defp type_name(struct = %module{}) do

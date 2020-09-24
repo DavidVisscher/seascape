@@ -6,7 +6,7 @@ defmodule Seascape.Clusters.Cluster do
 
   use Ecto.Schema
   @primary_key {:id, :binary_id, autogenerate: false}
-  schema "clusters" do
+  schema "cluster" do
     field :user_id, :binary_id
     field :name, :string
   end

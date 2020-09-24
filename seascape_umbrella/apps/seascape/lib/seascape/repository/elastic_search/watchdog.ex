@@ -7,7 +7,7 @@ defmodule Seascape.Repository.ElasticSearch.Watchdog do
   use GenServer
   use CapturePipe
 
-  @initial_state %{status: :disconnected, consecutive_successes: 0}
+  @initial_state %{status: :disconnected, consecutive_successes: @required_consecutive_successes}
   @seconds_between_pings 3
   @required_consecutive_successes 3
 
@@ -70,7 +70,6 @@ defmodule Seascape.Repository.ElasticSearch.Watchdog do
   defp jitter() do
     :rand.uniform() * 10
   end
-
 
   defp check() do
     case Elastic.HTTP.get("_cluster/health/") do

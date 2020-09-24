@@ -11,7 +11,7 @@ defmodule Seascape.Users.User do
 
   # @required_fields [:email, :password_hash]
   @primary_key false
-  schema "users" do
+  schema "user" do
     field :email, :string, primary_key: true
     field :id, :binary_id
     field :password_hash,    :string
