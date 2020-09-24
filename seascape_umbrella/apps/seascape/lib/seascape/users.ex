@@ -4,7 +4,7 @@ defmodule Seascape.Users do
   alias Seascape.ElasticSearch
 
   @moduledoc """
-  The `Users` context. Responsible for user registration/autorization.
+  The `Users` DDD-context. Responsible for user registration/autorization.
 
   This particular module's functions can be used
   to read/write users in the database.
@@ -14,7 +14,7 @@ defmodule Seascape.Users do
   """
 
   defp index_name() do
-    "user"
+    "users"
   end
 
   defp type_name() do
@@ -46,7 +46,7 @@ defmodule Seascape.Users do
     end
   end
 
-  def do_create(changeset) do
+  defp do_create(changeset) do
     case apply_changeset(changeset, :create) do
       {:error, problem} ->
         {:error, problem}
