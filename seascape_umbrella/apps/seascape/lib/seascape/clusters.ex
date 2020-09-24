@@ -43,7 +43,8 @@ defmodule Seascape.Clusters do
            match: %{
              user_id: user.id
            }
-        }
+        },
+        size: 10_000
       }
         ) do
       {:ok, results} ->
