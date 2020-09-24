@@ -33,14 +33,15 @@ config :phoenix, :json_library, Jason
 config :elastic,
   index_prefix: "seascape"
 
+# Distributed persistent store/cache:
+config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "priv/mnesia/"))
+
 # User management
-# config :seascape_web, :pow,
-#   user: Seascape.Users.User,
-#   repo: Seascape.Repo
 config :seascape_web, :pow,
   user: Seascape.Users.User,
   users_context: Seascape.Users.PowContext,
-  web_module: SeascapeWeb
+  web_module: SeascapeWeb,
+  cache_store_backend: Pow.Store.Backend.MnesiaCache
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

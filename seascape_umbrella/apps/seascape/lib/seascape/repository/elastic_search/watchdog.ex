@@ -7,9 +7,9 @@ defmodule Seascape.Repository.ElasticSearch.Watchdog do
   use GenServer
   use CapturePipe
 
-  @initial_state %{status: :disconnected, consecutive_successes: @required_consecutive_successes}
   @seconds_between_pings 3
   @required_consecutive_successes 3
+  @initial_state %{status: :disconnected, consecutive_successes: @required_consecutive_successes}
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, @initial_state, name: __MODULE__)

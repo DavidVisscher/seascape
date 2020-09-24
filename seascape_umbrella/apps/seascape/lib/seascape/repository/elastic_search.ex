@@ -65,6 +65,7 @@ defmodule Seascape.Repository.ElasticSearch do
         |> Enum.map(fn %{"_source" => source, "_id" => id} ->
           into_struct(struct_module, source)
         end)
+        |> &{:ok, &1}
     end
   end
 end

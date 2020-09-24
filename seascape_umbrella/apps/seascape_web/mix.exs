@@ -24,7 +24,7 @@ defmodule SeascapeWeb.MixProject do
   def application do
     [
       mod: {SeascapeWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools, :os_mon]
+      extra_applications: [:logger, :runtime_tools, :os_mon, :mnesia]
     ]
   end
 
