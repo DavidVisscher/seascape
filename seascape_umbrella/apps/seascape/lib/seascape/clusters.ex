@@ -26,6 +26,6 @@ defmodule Seascape.Clusters do
   def update(cluster, params) do
     cluster
     |> Cluster.changeset(params)
-    |> Repository.update(cluster, @table_name)
+    |> Repository.update(@table_name)
   end
 end

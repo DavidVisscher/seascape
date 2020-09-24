@@ -17,6 +17,6 @@ defmodule Seascape.Clusters.Cluster do
 
   def changeset(cluster, changes \\ {}) do
     cluster
-    |> cast(changes, [:name])
+    |> Ecto.Changeset.cast(changes, [:name])
   end
 end

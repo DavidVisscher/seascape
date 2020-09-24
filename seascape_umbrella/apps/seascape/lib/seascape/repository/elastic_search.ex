@@ -1,17 +1,14 @@
-defmodule Seascape.ElasticSearch do
+defmodule Seascape.Repository.ElasticSearch do
   @moduledoc """
   Wrapper around the `Elastic` library
   that performs a health-check and slightly abstracts away
   some low-level details of ElasticSearch.
   """
   use CapturePipe
-  defmodule ClusterDownError do
-    defexception [:message]
-  end
 
   def raise_unless_cluster_ok!() do
-    unless Seascape.ElasticSearch.Watchdog.cluster_ok?() do
-      raise Seascape.ElasticSearch.ClusterDownError, "ElasticSearch database cannot be reached."
+    unless __MODULE__.Watchdog.cluster_ok?() do
+      raise Seascape.Repository.ClusterDownError, "ElasticSearch database cannot be reached."
     end
   end
 

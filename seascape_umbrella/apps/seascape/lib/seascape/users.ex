@@ -1,7 +1,7 @@
 defmodule Seascape.Users do
   alias __MODULE__.User
   use CapturePipe
-  alias Seascape.ElasticSearch
+  alias Seascape.Repository
 
   @moduledoc """
   The `Users` DDD-context. Responsible for user registration/autorization.
@@ -33,12 +33,12 @@ defmodule Seascape.Users do
   def update(user, params) do
     user
     |> User.changeset(params)
-    |> Repository.update(user, @table_name)
+    |> Repository.update(@table_name)
   end
 
   defp validates_uniqueness(key, value) do
     try do
-      case Repository.get(value) do
+      case Repository.get(value, User, @table_name) do
         {:ok, _user} ->
           [{key,  "already taken"}]
         {:error, :not_found} ->

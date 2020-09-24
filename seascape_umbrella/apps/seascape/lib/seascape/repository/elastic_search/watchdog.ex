@@ -1,4 +1,4 @@
-defmodule Seascape.ElasticSearch.Watchdog do
+defmodule Seascape.Repository.ElasticSearch.Watchdog do
   @moduledoc """
   Keeps track of the health of the ElasticSearch cluster,
   to degrade service this node can provide when the cluster (or the connection to it) has problems.
