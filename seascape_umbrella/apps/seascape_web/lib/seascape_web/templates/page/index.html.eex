@@ -1,1 +1,5 @@
-Welcome to Seascape
+<%= if Pow.Plug.current_user(@conn) do %>
+    Your Clusters:
+<% else %>
+    Welcome to Seascape!
+<% end %>
