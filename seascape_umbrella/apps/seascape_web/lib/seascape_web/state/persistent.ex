@@ -10,6 +10,8 @@ defmodule SeascapeWeb.State.Persistent do
   def handle_event(state, {event, params}) do
     case event do
       ["cluster", "create"] ->
+        {:ok, new_cluster} = Seascape.Clusters.create(state.user, %{name: "New cluster"})
+        state = put_in(state.clusters[new_cluster.id], new_cluster)
         {state, []}
       ["cluster", cluster_id | rest] ->
         Effect.update_in(state, [Access.key(:clusters), Access.key(cluster_id)], &Clusters.handle_event(&1, {rest, params}))

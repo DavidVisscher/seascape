@@ -1,7 +1,7 @@
 Current page: <%= inspect(@state.ephemeral.current_page) %>
 
 <ul>
-  <%= for cluster <- @state.persistent.clusters do %>
+  <%= for {_id, cluster} <- @state.persistent.clusters do %>
      <li phx-click="ephemeral/change_page" phx-value-page="clusters/show/<%= cluster.id %>" >
        <%= cluster.name %>
      </li>

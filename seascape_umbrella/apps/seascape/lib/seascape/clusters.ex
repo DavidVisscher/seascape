@@ -30,13 +30,21 @@ defmodule Seascape.Clusters do
   end
 
   def all_of_user(user) do
-    Repository.search(Cluster, @table_name,
+    case Repository.search(Cluster, @table_name,
       %{query: %{
            match: %{
              user_id: user.id
            }
         }
       }
-    )
+        ) do
+      {:ok, results} ->
+        results
+        |> Enum.map(fn cluster -> {cluster.id, cluster} end)
+        |> Enum.into(%{})
+        |> &{:ok, &1}
+      other ->
+        other
+    end
   end
 end
