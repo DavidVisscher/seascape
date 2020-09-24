@@ -7,6 +7,8 @@ defmodule SeascapeWeb.MainLive do
   def mount(_params, session, socket) do
     IO.inspect(session)
     current_user = SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache])
+    Seascape.Clusters.subscribe(current_user)
+
     with {:ok, state} <- State.new(current_user) do
       socket
       |> assign(:state, state)
@@ -15,19 +17,30 @@ defmodule SeascapeWeb.MainLive do
   end
 
   def handle_event(event, params, socket) do
+    IO.inspect({event, params}, label: :handle_info)
+
     event
     |> String.split("/")
-    |> IO.inspect(label: :event)
     |> do_handle_event(params, socket)
-    |> IO.inspect(label: :handle_event)
+    |> IO.inspect(label: :handle_event_result)
+  end
+
+  def handle_info({event, params}, socket) do
+    IO.inspect({event, params}, label: :handle_info)
+
+    event
+    |> String.split("/")
+    |> do_handle_event(params, socket)
+    |> IO.inspect(label: :handle_info_result)
   end
 
   defp do_handle_event(event, params, socket) do
-    {new_state, _effects} =
+    {new_state, effects} =
       socket.assigns.state
       |> SeascapeWeb.State.handle_event({event, params})
 
     socket
+    |> SeascapeWeb.EffectInterpreter.execute_effects(effects)
     |> assign(:state, new_state)
     |> &{:noreply, &1}
   end

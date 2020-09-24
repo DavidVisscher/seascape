@@ -36,6 +36,7 @@ defmodule Seascape.Users do
     |> Repository.update(@table_name)
   end
 
+
   defp validates_uniqueness(key, value) do
     case Repository.get(value, User, @table_name) do
       {:ok, _user} ->
