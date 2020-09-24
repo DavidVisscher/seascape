@@ -31,8 +31,8 @@ defmodule SeascapeWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/<%= lib_web_name %>/templates",
-        namespace: <%= web_namespace %>
+        root: "lib/seascape_web/templates",
+        namespace: SeascapeWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -64,7 +64,7 @@ defmodule SeascapeWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {<%= web_namespace %>.LayoutView, "live.html"}
+        layout: {SeascapeWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
     end
