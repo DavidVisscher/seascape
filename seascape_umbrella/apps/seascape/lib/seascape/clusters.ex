@@ -13,8 +13,8 @@ defmodule Seascape.Clusters do
     Repository.get(id, Cluster, @table_name)
   end
 
-  def create(params) do
-    Cluster.new()
+  def create(user, params) do
+    Cluster.new(user.id)
     |> Cluster.changeset(params)
     |> Repository.create(@table_name)
   end

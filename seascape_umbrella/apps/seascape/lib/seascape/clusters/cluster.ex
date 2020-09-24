@@ -5,14 +5,19 @@ defmodule Seascape.Clusters.Cluster do
   """
 
   use Ecto.Schema
+
+  @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key {:id, :binary_id, autogenerate: false}
   schema "cluster" do
     field :user_id, :binary_id
     field :name, :string
   end
 
-  def new() do
-    %__MODULE__{}
+  def new(user_id) do
+    %__MODULE__{
+      user_id: user_id,
+      id: Ecto.UUID.generate()
+    }
   end
 
   def changeset(cluster, changes \\ {}) do

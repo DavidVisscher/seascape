@@ -8,8 +8,6 @@ defmodule Seascape.Users.User do
     password_hash_methods: {&Pow.Ecto.Schema.Password.pbkdf2_hash/1,
                             &Pow.Ecto.Schema.Password.pbkdf2_verify/2}
   @derive {Jason.Encoder, except: [:__meta__]}
-
-  # @required_fields [:email, :password_hash]
   @primary_key false
   schema "user" do
     field :email, :string, primary_key: true
@@ -24,7 +22,9 @@ defmodule Seascape.Users.User do
   # use Elastic.Document.API
 
   def new() do
-    %__MODULE__{}
+    %__MODULE__{
+      id: Ecto.UUID.generate()
+    }
   end
 
   def changeset(user, changes \\ %{}) do
