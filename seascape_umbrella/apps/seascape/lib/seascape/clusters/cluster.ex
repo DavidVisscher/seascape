@@ -17,7 +17,7 @@ defmodule Seascape.Clusters.Cluster do
   def new(user_id) do
     %__MODULE__{
       user_id: user_id,
-      id: Ecto.UUID.generate()
+      id: Ecto.UUID.generate(),
       api_key: Ecto.UUID.generate()
     }
   end
