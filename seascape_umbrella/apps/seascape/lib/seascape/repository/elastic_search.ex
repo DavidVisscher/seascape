@@ -40,7 +40,17 @@ defmodule Seascape.Repository.ElasticSearch do
 
   def delete(index, type, key) do
     raise_unless_cluster_ok!()
-    Elastic.Document.delete(index, type, key)
+
+    require Logger
+    Logger.debug(inspect({index, type, key}))
+    case Elastic.Document.delete(index, type, key) do
+      {:ok, _code, _result} ->
+        :ok
+      {:error, 404, _} ->
+        {:error, :not_found}
+      {:error, code, problem} ->
+        {:error, code, problem}
+    end
   end
 
   def search(struct_module, index, query) do
