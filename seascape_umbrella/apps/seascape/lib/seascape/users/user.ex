@@ -13,6 +13,7 @@ defmodule Seascape.Users.User do
   @primary_key false
   schema "users" do
     field :email, :string, primary_key: true
+    field :id, :binary_id
     field :password_hash,    :string
     field :current_password, :string, virtual: true
     field :password,         :string, virtual: true

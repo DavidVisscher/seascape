@@ -13,28 +13,32 @@ defmodule Seascape.Users do
   - Authentication can be done using `Seascape.Users.PowContext` (and this is usually handled inside the Pow HTTP Plug).
   """
 
-  defp index_name() do
-    "users"
-  end
-
-  defp type_name() do
-    "seascape_user"
-  end
+  @table_name "users"
 
   def get(email) do
-    ElasticSearch.get(index_name(), type_name(), email, User)
+    Repository.get(email, User, @table_name)
   end
 
   def create(params) do
     User.new()
     |> User.changeset(params)
     |> Ecto.Changeset.validate_change(User.pow_user_id_field, &validates_uniqueness/2)
-    |> do_create()
+    |> Repository.create(@table_name)
+  end
+
+  def delete(user) do
+    Repository.delete(user, @table_name)
+  end
+
+  def update(user, params) do
+    user
+    |> User.changeset(params)
+    |> Repository.update(user, @table_name)
   end
 
   defp validates_uniqueness(key, value) do
     try do
-      case get(value) do
+      case Repository.get(value) do
         {:ok, _user} ->
           [{key,  "already taken"}]
         {:error, :not_found} ->
@@ -44,49 +48,5 @@ defmodule Seascape.Users do
       ElasticSearch.ClusterDownError ->
         [{key, "No users can currently be registered (the application runs in non-persistence mode)."}]
     end
-  end
-
-  defp do_create(changeset) do
-    case apply_changeset(changeset, :create) do
-      {:error, problem} ->
-        {:error, problem}
-      {:ok, user} ->
-        ElasticSearch.create(index_name(), type_name(), user.email, user)
-        {:ok, user}
-    end
-  end
-
-  def delete(user) do
-    ElasticSearch.delete(index_name(), type_name(), user.email)
-  end
-
-  def update(user, params) do
-    user
-    |> User.changeset(params)
-    |> apply_changeset(:update)
-    |> do_update()
-  end
-
-  defp do_update(user) do
-    ElasticSearch.update(index_name(), type_name(), user.email, user)
-  end
-
-  defp apply_changeset(changeset, action) do
-    with {:ok, user} <- Ecto.Changeset.apply_action(changeset, action) do
-      res = filter_virtual_keys(user)
-      {:ok, res}
-    end
-  end
-
-  # Since we are not using an Ecto adapter
-  # we need to do this ourselves.
-  defp filter_virtual_keys(user) do
-    Enum.reduce(user |> Map.from_struct |> Map.keys, user, fn key, user ->
-      if key not in User.__schema__(:fields) do
-        put_in(user, [Access.key(key)], nil)
-      else
-        user
-      end
-    end)
   end
 end
