@@ -11,6 +11,32 @@ defmodule SeascapeWeb.MainLive do
       socket
       |> assign(:current_user, current_user)
       |> assign(:clusters, clusters)
+      |> assign(:page, [])
     {:ok, socket}
+  end
+
+  def handle_event(event, params, socket) do
+    event
+    |> String.split("/")
+    |> IO.inspect(label: :event)
+    |> do_handle_event(params, socket)
+    |> IO.inspect(label: :handle_event)
+  end
+
+  defp do_handle_event(["clusters", "create"], _params, socket) do
+    {:ok, new_cluster} = Seascape.Clusters.create(socket.assigns.current_user, %{name: "New cluster"})
+    socket =
+      socket
+      |> assign(:clusters, [new_cluster | socket.assigns.clusters])
+
+    {:noreply, socket}
+  end
+
+  defp do_handle_event(["clusters", "show", cluster_id], params, socket) do
+    socket =
+      socket
+      |> assign(:page, ["clusters", "show", cluster_id])
+
+    {:noreply, socket}
   end
 end

@@ -1,2 +1,11 @@
-Your clusters:
+Current page: <%= inspect(@page) %>
 
+<ul>
+  <%= for cluster <- @clusters do %>
+     <li phx-click="clusters/show/<%= cluster.id %>" >
+       <%= cluster.name %>
+     </li>
+     <% end %>
+</ul>
+
+<button phx-click="clusters/create">Add Cluster</button>

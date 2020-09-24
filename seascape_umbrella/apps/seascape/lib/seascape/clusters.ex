@@ -32,12 +32,8 @@ defmodule Seascape.Clusters do
   def all_of_user(user) do
     Repository.search(Cluster, @table_name,
       %{query: %{
-           constant_score: %{
-             filter: %{
-               term: %{
-                 user_id: user.id
-               }
-             }
+           match: %{
+             user_id: user.id
            }
         }
       }
