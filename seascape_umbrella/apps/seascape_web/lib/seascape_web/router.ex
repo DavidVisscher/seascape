@@ -29,7 +29,7 @@ defmodule SeascapeWeb.Router do
   scope "/", SeascapeWeb do
     pipe_through :browser
 
-    live "/", MainLive, layout: {SeascapeWeb.LayoutView, :root}
+    live "/*spa_path", MainLive, layout: {SeascapeWeb.LayoutView, :root}
   end
 
   scope "/", SeascapeWeb do

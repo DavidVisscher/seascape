@@ -1,0 +1,11 @@
+<ul>
+  <%= for {_id, cluster} <- @state.persistent.clusters do %>
+      <li>
+        <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ) do %>
+          <%= cluster.name %>
+          <% end %>
+      </li>
+    <% end %>
+</ul>
+
+<button phx-click="persistent/cluster/create">Add Cluster</button>

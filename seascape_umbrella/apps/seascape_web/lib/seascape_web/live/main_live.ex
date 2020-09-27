@@ -1,5 +1,6 @@
 defmodule SeascapeWeb.MainLive do
   use Phoenix.LiveView, layout: {SeascapeWeb.LayoutView, "live.html"}
+  use SeascapeWeb, :live_view
   use CapturePipe
 
   alias SeascapeWeb.State
@@ -25,11 +26,15 @@ defmodule SeascapeWeb.MainLive do
     end
   end
 
+  # Invoked on page change.
+  def handle_params(params = %{"spa_path" => path}, url, socket) do
+    do_handle_event(["ephemeral", "changed_page"], params, socket)
+  end
+
   def handle_event(event, params, socket) do
     IO.inspect({event, params}, label: :handle_info)
 
     event
-    |> String.split("/")
     |> do_handle_event(params, socket)
     |> IO.inspect(label: :handle_event_result)
   end
@@ -53,6 +58,8 @@ defmodule SeascapeWeb.MainLive do
     |> assign(:state, new_state)
     |> &{:noreply, &1}
   end
+
+
 
   # defp do_handle_event(["clusters", "create"], _params, socket) do
   #   {:ok, new_cluster} = Seascape.Clusters.create(socket.assigns.current_user, %{name: "New cluster"})
