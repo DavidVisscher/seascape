@@ -9,3 +9,10 @@ Project: **Docker resource use measurement**
 
 We are hosting the architecture slides outside of GitHub for an easy viewing/presenting experience.
 You can (re)view them at [https://slides.com/qqwy/web-and-cloud-computing-group-13](https://slides.com/qqwy/web-and-cloud-computing-group-13).
+
+## Salt formulas
+
+We are using some official salt formulas instead of writing all salt states ourselves.
+
+Currently we're using:
+ - [docker-formula](https://github.com/saltstack-formulas/docker-formula/tree/v0.44.0/docker)
