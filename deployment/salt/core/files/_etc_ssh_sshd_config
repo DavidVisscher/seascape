@@ -1,0 +1,68 @@
+
+## DEFINE BASE
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+MaxSessions 10
+ClientAliveInterval 300
+ClientAliveCountMax 4
+Protocol 2
+
+
+## DEFINE HOST KEY
+HostKey /etc/ssh/ssh_host_ecdsa_key ## WILL REMOVE THIS LATER
+HostKey /etc/ssh/ssh_host_ed25519_key
+## HostKey /etc/ssh/ssh_host_rsa_key
+
+## LOGGING
+SyslogFacility AUTHPRIV
+LogLevel INFO
+
+## AUTH
+PermitRootLogin no
+PermitEmptyPasswords no
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+HostbasedAuthentication no
+
+
+GSSAPIAuthentication no #### change this for salt-ssh
+GSSAPICleanupCredentials no
+UsePAM yes ## Maybe needed for session setup
+
+MaxAuthTries 3
+DenyUsers centos
+
+## ENCRYPTION
+KexAlgorithms curve25519-sha256@libssh.org
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr,aes192-ctr
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
+
+
+## USAGE
+AllowTcpForwarding yes
+AllowAgentForwarding no
+GatewayPorts no
+X11Forwarding no
+PermitTTY yes
+{%- if grains.os_family != 'RedHat' %}
+PrintMotd no ## This is off to circumvent use of motd for privesc
+{%- endif %}
+PrintLastLog yes
+TCPKeepAlive yes
+UsePrivilegeSeparation sandbox
+UseDNS yes
+
+
+## Banner
+Banner /etc/issue.net
+
+
+## ENV
+AcceptEnv LANG LC_*
+AcceptEnv XMODIFIER
+
+

@@ -1,0 +1,10 @@
+[DEFAULT]
+backend = systemd
+ignoreip = 217.101.132.36
+bantime = 600
+findtime = 1200
+maxretry = 3
+[sshd]
+enabled = true
+port = ssh
+filter = sshd

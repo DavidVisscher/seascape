@@ -1,0 +1,14 @@
+
+  Host     : {{ salt.grains.get('id') }}
+  Master   : {{ salt.grains.get('master') }}
+
+  OS       : {{ salt.grains.get('osfullname') }}
+  Kernel   : {{ salt.grains.get('kernelrelease') }}
+  Platform : {{ salt.grains.get('manufacturer') }}
+  SELinux  : {{ salt.grains.get('selinux:enforced') }}
+
+  CPU      : {{ salt.grains.get('num_cpus') }}
+  Memory   : {{ salt.grains.get('mem_total') }} MB
+
+0------------------------------------------------------------------------------0
+
