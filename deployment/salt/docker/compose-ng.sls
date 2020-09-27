@@ -43,6 +43,18 @@ include:
   {%- if 'command' in container %}
     - command: {{ container.command }}
   {%- endif %}
+  {%- if 'working_dir' in container %}
+    - working_dir: {{ container.working_dir }}
+  {%- endif %}
+  {%- if 'volume_driver' in container %}
+    - volume_driver: {{ container.volume_driver }}
+  {%- endif %}
+  {%- if 'userns_mode' in container %}
+    - userns_mode: {{ container.userns_mode }}
+  {%- endif %}
+  {%- if 'user' in container %}
+    - user: {{ container.user }}
+  {%- endif %}
   {%- if 'environment' in container and container.environment is iterable %}
     - environment:
     {%- for variable, value in container.environment.items() %}
@@ -57,7 +69,7 @@ include:
         {%- if mapping|length < 2 %}
       - "{{ mapping[0] }}"
         {%- elif mapping|length > 2 %}
-      - "{{ mapping[0] }}:{{ mapping[1] }}:{{ mapping[-1] }}
+      - "{{ mapping[0] }}:{{ mapping[1] }}:{{ mapping[-1] }}"
         {%- else %}
       - "{{ mapping[0] }}:{{ mapping[-1] }}"
         {%- endif %}
