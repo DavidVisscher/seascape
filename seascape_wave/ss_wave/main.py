@@ -5,10 +5,17 @@ Sets up the basic infrastructure for monitoring an sending data to SeaScape Umbr
 '''
 
 import logging
+import threading
+
+from pathlib import Path
+from queue import Queue
 
 import click
 
 import ss_wave.salt_connector as salt_connector
+
+from ss_wave.exporters.file_exporter import file_exporter
+from ss_wave.salt_connector.collector import salt_collector
 
 
 @click.command()
@@ -26,6 +33,15 @@ def main(debug):
     
     nodes = salt_connector.minions.list_minions() 
     logging.info("%s", nodes)
+
+    dataqueue = Queue()
+    out_thread = threading.Thread(target=file_exporter, daemon=True, args=[dataqueue, Path('/tmp/ss_wave')])
+    in_thread = threading.Thread(target=salt_collector, daemon=True, args=[dataqueue])
+
+    out_thread.start()
+    in_thread.start()
+    in_thread.join()
+    out_thread.join()
 
 def init_logging(debug=False):
     """
