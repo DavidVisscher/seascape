@@ -1,5 +1,5 @@
 <header>
-    <section class="container">
+    <section class="ui container">
         <nav role="navigation">
             <ul>
                 <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
