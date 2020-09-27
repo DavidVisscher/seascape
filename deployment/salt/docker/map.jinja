@@ -1,0 +1,49 @@
+{# vi: set ft=jinja: #}
+{% set containers = salt['grains.filter_by']({
+        'default': {}
+    },
+    merge=salt['pillar.get']('docker-containers:lookup'))
+%}
+
+{% set registry = salt['grains.filter_by']({
+    'default': {
+        'description': 'Docker Registry',
+        'port': '5000',
+        'version': 'latest',
+        'restart': 'no',
+        'search_backend': 'sqlalchemy',
+        'runoptions': []
+    },
+}, merge=salt['pillar.get']('registry:lookup')) %}
+
+{% set amazon = salt['grains.filter_by']({
+    'default': {
+        'settings_flavor': 's3',
+        'storage_path': '/registry'
+    },
+}, merge=salt['pillar.get']('registry:lookup:amazon')) %}
+
+{#- Get the `tplroot` from `tpldir` #}
+{%- set tplroot = tpldir.split('/')[0] %}
+
+{# Begin migration to new style map.jinja using tplroot for portability #}
+{% import_yaml tplroot ~ "/defaults.yaml" or {} as defaults %}
+{% import_yaml tplroot ~ "/osfamilymap.yaml" or {} as osfamilymap %}
+{% import_yaml tplroot ~ "/codenamemap.yaml" or {} as codemap %}
+{% import_yaml tplroot ~ "/osmap.yaml" or {} as osmap %}
+
+{% set pkg = salt['pillar.get']('docker-pkg:lookup', default={}, merge=True) %}
+{% do defaults.docker.pkg.update(pkg) %}
+
+{% set osfamily = salt['grains.filter_by'](osfamilymap, grain='os_family') or {} %}
+{% do defaults.docker.update(osfamily) %}
+
+{% set oscode = salt['grains.filter_by'](codemap, grain='oscodename') or {} %}
+{% do defaults.docker.update(oscode) %}
+
+{% set os = salt['grains.filter_by'](osmap, grain='os') or {} %}
+{% do defaults.docker.update(os) %}
+
+{% set docker = salt['pillar.get']('docker', default=defaults['docker'], merge=True) %}
+
+{% set compose = salt['pillar.get']('docker:compose', default={}, merge=True) %}
