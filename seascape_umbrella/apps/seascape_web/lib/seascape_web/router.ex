@@ -27,12 +27,6 @@ defmodule SeascapeWeb.Router do
   end
 
   scope "/", SeascapeWeb do
-    pipe_through :browser
-
-    live "/*spa_path", MainLive, layout: {SeascapeWeb.LayoutView, :root}
-  end
-
-  scope "/", SeascapeWeb do
     pipe_through [:browser, :protected]
   end
 
@@ -56,5 +50,11 @@ defmodule SeascapeWeb.Router do
 
       live_dashboard "/dashboard", metrics: SeascapeWeb.Telemetry
     end
+  end
+
+  scope "/", SeascapeWeb do
+    pipe_through :browser
+
+    live "/*spa_path", MainLive, layout: {SeascapeWeb.LayoutView, :root}
   end
 end
