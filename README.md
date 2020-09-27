@@ -16,4 +16,4 @@ We are using some official salt formulas instead of writing all salt states ours
 Official formulas are sources from [the SaltStack Formulas Gitlab Organisation](https://github.com/saltstack-formulas)
 
 Currently we're using:
- - [docker-formula](https://github.com/saltstack-formulas/docker-formula/tree/v0.44.0/docker)
+ - [docker-formula v0.44.0](https://github.com/saltstack-formulas/docker-formula/tree/v0.44.0/docker)
