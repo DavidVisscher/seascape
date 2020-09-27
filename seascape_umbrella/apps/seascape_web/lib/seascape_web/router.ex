@@ -11,8 +11,13 @@ defmodule SeascapeWeb.Router do
     plug :put_root_layout, {SeascapeWeb.LayoutView, :root}
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  # pipeline :api do
+  #   plug :accepts, ["json"]
+  # end
+
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
   scope "/" do
@@ -24,8 +29,11 @@ defmodule SeascapeWeb.Router do
   scope "/", SeascapeWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", MainLive, layout: {SeascapeWeb.LayoutView, :root}
+  end
 
+  scope "/", SeascapeWeb do
+    pipe_through [:browser, :protected]
   end
 
   # Other scopes may use custom stacks.

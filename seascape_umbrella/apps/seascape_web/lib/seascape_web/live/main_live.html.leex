@@ -1,11 +1,18 @@
-Current page: <%= inspect(@state.ephemeral.current_page) %>
+<%= if @current_user == nil do %>
+  Render homepage here
+<% else %>
+Inside the logged in application.
 
-<ul>
-  <%= for {_id, cluster} <- @state.persistent.clusters do %>
-     <li phx-click="ephemeral/change_page" phx-value-page="clusters/show/<%= cluster.id %>" >
-       <%= cluster.name %>
-     </li>
-     <% end %>
-</ul>
+  Current page: <%= inspect(@state.ephemeral.current_page) %>
 
-<button phx-click="persistent/cluster/create">Add Cluster</button>
+  <ul>
+    <%= for {_id, cluster} <- @state.persistent.clusters do %>
+      <li phx-click="ephemeral/change_page" phx-value-page="clusters/show/<%= cluster.id %>" >
+        <%= cluster.name %>
+      </li>
+      <% end %>
+  </ul>
+
+  <button phx-click="persistent/cluster/create">Add Cluster</button>
+
+<% end %>

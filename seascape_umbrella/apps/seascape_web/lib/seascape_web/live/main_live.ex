@@ -1,18 +1,27 @@
 defmodule SeascapeWeb.MainLive do
-  use Phoenix.LiveView
+  use Phoenix.LiveView, layout: {SeascapeWeb.LayoutView, "live.html"}
   use CapturePipe
 
   alias SeascapeWeb.State
 
   def mount(_params, session, socket) do
     IO.inspect(session)
-    current_user = SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache])
-    Seascape.Clusters.subscribe(current_user)
+    case SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache]) do
+      nil ->
+        socket
+        |> assign(:current_user, nil)
+        |> assign(:state, nil)
+        |> &{:ok, &1}
 
-    with {:ok, state} <- State.new(current_user) do
-      socket
-      |> assign(:state, state)
-      |> &{:ok, &1}
+      current_user ->
+        Seascape.Clusters.subscribe(current_user)
+
+        with {:ok, state} <- State.new(current_user) do
+          socket
+          |> assign(:current_user, current_user)
+          |> assign(:state, state)
+          |> &{:ok, &1}
+        end
     end
   end
 
