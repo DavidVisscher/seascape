@@ -17,3 +17,4 @@ Official formulas are sources from [the SaltStack Formulas Gitlab Organisation](
 
 Currently we're using:
  - [docker-formula v0.44.0](https://github.com/saltstack-formulas/docker-formula/tree/v0.44.0/docker)
+ - [haproxy-formula v0.17.0](https://github.com/saltstack-formulas/haproxy-formula/tree/v0.17.0)
