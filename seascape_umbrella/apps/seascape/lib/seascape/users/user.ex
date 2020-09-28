@@ -8,25 +8,23 @@ defmodule Seascape.Users.User do
     password_hash_methods: {&Pow.Ecto.Schema.Password.pbkdf2_hash/1,
                             &Pow.Ecto.Schema.Password.pbkdf2_verify/2}
   @derive {Jason.Encoder, except: [:__meta__]}
-
-  # @required_fields [:email, :password_hash]
   @primary_key false
-  schema "users" do
+  schema "user" do
     field :email, :string, primary_key: true
+    field :id, :binary_id
     field :password_hash,    :string
     field :current_password, :string, virtual: true
     field :password,         :string, virtual: true
     field :confirm_password, :string, virtual: true
-
   end
 
   # Allows us to use our struct with ElasticSearch
-  @es_type "seascape_user"
-  @es_index "seascape_user"
-  use Elastic.Document.API
+  # use Elastic.Document.API
 
   def new() do
-    %__MODULE__{}
+    %__MODULE__{
+      id: Ecto.UUID.generate()
+    }
   end
 
   def changeset(user, changes \\ %{}) do
