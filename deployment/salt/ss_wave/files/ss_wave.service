@@ -1,0 +1,13 @@
+[Unit]
+Description=Seascape Wave Agent
+Before=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/var/run/ss_wave.env/bin/python -m ss_wave
+User=root
+Group=root
+WorkingDirectory=/opt/seascape/seascape_wave
+
+[Install]
+WantedBy=multi-user.target
