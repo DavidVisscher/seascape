@@ -1,8 +1,13 @@
 defmodule Seascape.Users.PowContext do
+  alias Seascape.Users
   alias Seascape.Users.User
-  def authenticate(params) do
-    IO.inspect(params, label: :authenticate)
 
+  @moduledoc """
+  Wrapper of the `SeaScape.Users` context to be used with the interface
+  that the `Pow` authentication library provides.
+  """
+
+  def authenticate(params) do
     user_id_field = User.pow_user_id_field
     user_id_value = params[Atom.to_string(user_id_field)]
     password = params["password"]
@@ -11,13 +16,15 @@ defmodule Seascape.Users.PowContext do
   end
 
   defp do_authenticate(_, nil, _), do: nil
-  defp do_authenticate(user_id_field, user_id_value, password) do
-
-    case User.get(user_id_value) do
-      nil ->
-        verify_password(User.new(), password) # Prevent timing attacks
-      user = %User{} ->
+  defp do_authenticate(_user_id_field, user_id_value, password) do
+    case Users.get(user_id_value) do
+      {:error, :not_found} ->
+        # Prevent timing attacks by running a 'useless' verification:
+        verify_password(User.new(), password)
+      {:ok, user = %User{}} ->
         verify_password(user, password)
+      {:error, :cluster_down} ->
+        nil
     end
   end
 
@@ -28,67 +35,24 @@ defmodule Seascape.Users.PowContext do
     end
   end
 
-  def changeset(params) do
-    IO.inspect(params, label: :changeset)
-  end
-
   def create(params) do
-    User.new()
-    |> User.changeset(params)
-    |> Ecto.Changeset.validate_change(User.pow_user_id_field , &validates_uniqueness/2)
-    |> do_create()
-  end
-
-  defp do_create(changeset) do
-    case apply_changeset(changeset, :create) do
-      {:error, problem} ->
-        {:error, problem}
-      {:ok, user} ->
-        Seascape.Users.User.index(user.email , user)
-        {:ok, user}
-    end
-  end
-
-  def validates_uniqueness(key, value) do
-    case User.get(value) do
-      %User{} ->
-        [{key,  "already taken"}]
-      nil ->
-        []
-    end
+    res = Users.create(params)
+    IO.inspect(res)
   end
 
   def delete(user) do
-    Seascape.Users.User.delete(user.email)
+    Users.delete(user)
+  end
+
+  def update(user, params) do
+    Users.update(user, params)
   end
 
   def get_by(clauses) do
     IO.inspect(clauses, label: :get_by)
   end
 
-  def update(user, params) do
-    user =
-      user
-      |> User.changeset(params)
-      # |> Ecto.Changeset.apply_action!(:update)
-      |> apply_changeset(:update)
-    Seascape.Users.User.update(user.email, user)
-  end
-
-  defp apply_changeset(changeset, action) do
-    with {:ok, user} <- Ecto.Changeset.apply_action(changeset, action) do
-      res = filter_virtual_keys(user)
-      {:ok, res}
-    end
-  end
-
-  defp filter_virtual_keys(user) do
-    Enum.reduce(user |> Map.from_struct |> Map.keys, user, fn key, user ->
-      if key not in User.__schema__(:fields) do
-        put_in(user, [Access.key(key)], nil)
-      else
-        user
-      end
-    end)
+  def changeset(params) do
+    IO.inspect(params, label: :changeset)
   end
 end
