@@ -10,7 +10,8 @@ defmodule SeascapeWeb.Application do
       # Start the Telemetry supervisor
       SeascapeWeb.Telemetry,
       # Start the Endpoint (http/https)
-      SeascapeWeb.Endpoint
+      SeascapeWeb.Endpoint,
+      Pow.Store.Backend.MnesiaCache
       # Start a worker by calling: SeascapeWeb.Worker.start_link(arg)
       # {SeascapeWeb.Worker, arg}
     ]

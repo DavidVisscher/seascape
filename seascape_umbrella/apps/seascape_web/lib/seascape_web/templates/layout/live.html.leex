@@ -1,0 +1,26 @@
+<header>
+    <section class="ui container">
+        <nav role="navigation">
+            <ul>
+                <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+                    <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@socket, :home) %></li>
+                <% end %>
+                <%= if @current_user do %>
+                    Welcome,
+                    <strong>
+                        <%= @current_user.email %>
+                    </strong>
+                    <li><%= link "Sign out", to: Routes.pow_session_path(@socket, :delete), method: :delete %></li>
+                <% else %>
+                    <li><%= link "Register", to: Routes.pow_registration_path(@socket, :new) %></li>
+                    <li><%= link "Sign in", to: Routes.pow_session_path(@socket, :new) %></li>
+                <% end %>
+            </ul>
+        </nav>
+    </section>
+</header>
+<main role="main" class="container">
+    <p class="alert alert-info" role="alert"><%= live_flash(@flash, :info) %></p>
+    <p class="alert alert-danger" role="alert"><%= live_flash(@flash, :error) %></p>
+    <%= @inner_content %>
+</main>

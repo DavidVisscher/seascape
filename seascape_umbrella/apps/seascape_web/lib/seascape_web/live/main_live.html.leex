@@ -1,0 +1,35 @@
+<%= if @current_user == nil do %>
+  Render homepage here
+<% else %>
+  <section class="ui center aligned container">
+    <div class="ui vertically divided grid">
+    <div class="row">
+      <div class="ui breadcrumb">
+        <%= live_patch "Home", to: Routes.live_path(@socket, SeascapeWeb.MainLive, []), class: "section" %>
+        <%= for element <- @state.ephemeral.current_page do %>
+            <div class="divider">/</div>
+            <%= live_patch element, to: Routes.live_path(@socket, SeascapeWeb.MainLive, [element]), class: "section" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row">
+        <%= case @state.ephemeral.current_page do %>
+          <% [] -> %>
+            <%= live_component(@socket, SeascapeWeb.IndexComponent, state: @state) %>
+          <% ["clusters", cluster_id | rest] -> %>
+              <%= live_component(@socket, SeascapeWeb.ClusterComponent, cluster: @state.persistent.clusters[cluster_id], page: rest) %>
+          <% _other -> %>
+          <p>
+            Unknown page.
+
+            <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, []) do %>
+            Go back home
+            <% end %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+<% end %>

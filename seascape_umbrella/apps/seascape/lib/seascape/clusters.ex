@@ -14,9 +14,17 @@ defmodule Seascape.Clusters do
   end
 
   def create(user, params) do
-    Cluster.new(user.id)
-    |> Cluster.changeset(params)
-    |> Repository.create(@table_name)
+    result =
+      Cluster.new(user.id)
+      |> Cluster.changeset(params)
+      |> Repository.create(@table_name)
+    case result do
+      {:ok, result} ->
+        Phoenix.PubSub.broadcast(Seascape.PubSub, "#{__MODULE__}:#{user.id}:clusters", {"persistent/cluster/created", %{"cluster" => result}})
+        {:ok, result}
+      other ->
+        other
+    end
   end
 
   def delete(cluster) do
@@ -30,17 +38,30 @@ defmodule Seascape.Clusters do
   end
 
   def all_of_user(user) do
-    Repository.search(Cluster, @table_name,
+    case Repository.search(Cluster, @table_name,
       %{query: %{
-           constant_score: %{
-             filter: %{
-               term: %{
-                 user_id: user.id
-               }
-             }
+           match: %{
+             user_id: user.id
            }
-        }
+        },
+        size: 10_000
       }
-    )
+        ) do
+      {:ok, results} ->
+        results
+        |> Enum.map(fn cluster -> {cluster.id, cluster} end)
+        |> Enum.into(%{})
+        |> &{:ok, &1}
+      other ->
+        other
+    end
+  end
+
+  @doc """
+  When subscribed, process will be kept up-to-date
+  of changes happening to all clusters of `user`.
+  """
+  def subscribe(user) do
+    Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}:#{user.id}:clusters")
   end
 end

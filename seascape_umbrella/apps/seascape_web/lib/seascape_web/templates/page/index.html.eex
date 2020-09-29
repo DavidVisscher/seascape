@@ -1,1 +1,5 @@
-Welcome to Seascape
+<%= if Pow.Plug.current_user(@conn) do %>
+    <%= live_render @conn, SeascapeWeb.MainLive %>
+<% else %>
+    Welcome to Seascape!
+<% end %>

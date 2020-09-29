@@ -1,0 +1,17 @@
+Page for Cluster "<%= @cluster.name %>"
+(Id: <%= @cluster.id %>)
+
+<%= case @page do %>
+<% [] -> %>
+Show.
+<% ["settings"] -> %>
+Settings.
+<% _other -> %>
+    <p>
+      Unknown page.
+
+      <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, []) do %>
+      Go back home
+      <% end %>
+    </p>
+<% end %>
