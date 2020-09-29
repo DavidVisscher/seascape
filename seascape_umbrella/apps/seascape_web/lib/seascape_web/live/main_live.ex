@@ -37,6 +37,7 @@ defmodule SeascapeWeb.MainLive do
     IO.inspect({event, params}, label: :handle_info)
 
     event
+    |> String.split("/")
     |> do_handle_event(params, socket)
     |> IO.inspect(label: :handle_event_result)
   end
