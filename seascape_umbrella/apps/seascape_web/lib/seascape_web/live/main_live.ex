@@ -9,9 +9,11 @@ defmodule SeascapeWeb.MainLive do
     IO.inspect(session)
     case SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache]) do
       nil ->
+        {:ok, state} = State.new()
+
         socket
         |> assign(:current_user, nil)
-        |> assign(:state, nil)
+        |> assign(:state, state)
         |> &{:ok, &1}
 
       current_user ->

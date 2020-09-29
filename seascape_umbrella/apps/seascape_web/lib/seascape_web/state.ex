@@ -5,6 +5,12 @@ defmodule SeascapeWeb.State do
   alias SeascapeWeb.Effect
   require Effect
 
+  def new() do
+    with {:ok, ephemeral} <- Ephemeral.new() do
+      {:ok, %__MODULE__{ephemeral: ephemeral, persistent: nil}}
+    end
+  end
+
   def new(current_user) do
     with {:ok, ephemeral} <- Ephemeral.new(),
          {:ok, persistent} <- Persistent.new(current_user) do
