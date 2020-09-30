@@ -17,13 +17,13 @@ defmodule Seascape.Repository do
           {:error, problem}
         {:error, code, problem} ->
           changeset =
-          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+          Ecto.Changeset.add_error(changeset, pkey(changeset.data), inspect(problem["error"]), http_status_code: code)
         {:error, changeset}
       end
     rescue
       ClusterDownError ->
         changeset =
-          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
+          Ecto.Changeset.add_error(changeset, pkey(changeset.data), "Data persistence is currently not possible.")
         {:error, changeset}
     end
   end
@@ -48,13 +48,13 @@ defmodule Seascape.Repository do
           {:error, problem}
         {:error, code, problem} ->
           changeset =
-          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+          Ecto.Changeset.add_error(changeset, pkey(changeset.data), problem["error"], http_status_code: code)
         {:error, changeset}
       end
     rescue
       ClusterDownError ->
         changeset =
-        Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
+        Ecto.Changeset.add_error(changeset, pkey(changeset.data), "Data persistence is currently not possible.")
       {:error, changeset}
   end
   end
@@ -67,9 +67,12 @@ defmodule Seascape.Repository do
     ElasticSearch.search(struct_module, table_name, query)
   end
 
+  defp pkey(%module{}) do
+    hd module.__schema__(:primary_key)
+  end
+
   defp pkey_value(struct = %module{}) do
-    key = hd module.__schema__(:primary_key)
-    get_in(struct, [Access.key(key)])
+    get_in(struct, [Access.key(pkey(struct))])
   end
 
   defp type_name(%module{}) do
