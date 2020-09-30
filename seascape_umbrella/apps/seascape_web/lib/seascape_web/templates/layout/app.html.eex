@@ -1,26 +1,30 @@
 <header>
+    <nav role="navigation" class="ui top fixed inverted menu">
     <section class="ui container">
-        <nav role="navigation">
-            <ul>
-                <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-                    <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-                <% end %>
-                <%= if Pow.Plug.current_user(@conn) do %>
-                    Welcome,
+            <%=  link "Seascape", to: Routes.live_path(@conn, SeascapeWeb.MainLive, []), class: "header item" %>
+            <%= if Pow.Plug.current_user(@conn) do %>
+                <div class="item">
                     <strong>
                         <%= Pow.Plug.current_user(@conn).email %>
                     </strong>
-                    <li><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %></li>
+                </div>
+                    <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+                            <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home), class: "item" %>
+                    <% end %>
+                    <div class="right menu">
+                            <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete, class: "item" %>
+                    </div>
                 <% else %>
-                    <li><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></li>
-                    <li><%= link "Sign in", to: Routes.pow_session_path(@conn, :new) %></li>
+                    <div class="right menu">
+                            <%= link "Register", to: Routes.pow_registration_path(@conn, :new), class: "item" %>
+                            <%= link "Sign in", to: Routes.pow_session_path(@conn, :new), class: "item" %>
+                    </div>
                 <% end %>
             </ul>
-        </nav>
     </section>
-
+    </nav>
 </header>
-<main role="main" class="container">
+<main role="main" class="ui container">
     <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
     <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
     <%= @inner_content %>
