@@ -39,7 +39,7 @@ read -n 1 -s
 
 mkdir -p /srv/
 git clone git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git --recurse-submodules /srv/seascape
-ln -s /srv/seascape/deployment/salt/states /srv/salt
+ln -s /srv/seascape/deployment/salt /srv/salt
 ln -s /srv/seascape/deployment/pillar /srv/pillar
 ln -s /srv/seascape/deployment/reactor /srv/reactor
 
