@@ -10,12 +10,9 @@ ss_wave_clone:
     - name: "/opt/seascape"
     - user: root
     - group: root
-    - dir_mode: 700
-    - file_mode: 700
     - recurse:
       - user
       - group
-      - mode
   git.latest:
     - name: "git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git"
     - target: /opt/seascape
