@@ -8,3 +8,4 @@ base_packages:
       - bind-utils
       - fail2ban
       - mdadm
+      - python3-dnf-plugin-versionlock 

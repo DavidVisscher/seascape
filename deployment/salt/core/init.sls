@@ -1,4 +1,5 @@
 include:
+  - {{ slspath }}/salt-minion
   - {{ slspath }}/hosts
   - {{ slspath }}/packages
   - {{ slspath }}/selinux

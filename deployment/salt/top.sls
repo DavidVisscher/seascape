@@ -7,3 +7,5 @@ base:
     - core
     - users
     - docker
+    - docker.compose
+    - docker.compose-ng
