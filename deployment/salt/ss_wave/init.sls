@@ -1,8 +1,9 @@
 ss_wave_dependencies:
   pkg.installed:
-    - pkgs: 
-      - python3-pip
-      - python-virtualenv
+    - pkgs:
+      - python38
+      - python38-pip
+      - python3-virtualenv
 
 ss_wave_clone:
   file.directory:
@@ -19,12 +20,16 @@ ss_wave_clone:
     - name: "git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git"
     - target: /opt/seascape
     - user: root
-    - branch: master
+    - identity:
+      - /tmp/github_key
+    - branch: {{ salt['pillar.get']('ss_wave:branch', 'master') }}
+    - force_reset: True
+    - force_checkout: True
 
 ss_wave_venv:
   virtualenv.managed:
     - name: /var/run/ss_wave.env
-    - python: /bin/python3.6
+    - python: /bin/python3.8
     - requirements: /opt/seascape/seascape_wave/requirements.txt
 
 ss_wave_unit:
@@ -45,5 +50,4 @@ ss_wave_service:
     - enable: True
     - watch:
       - git: ss_wave_clone
-      - file: ss_wave_config
       - file: ss_wave_unit

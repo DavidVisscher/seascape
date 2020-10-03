@@ -59,6 +59,7 @@ UseDNS yes
 
 ## Banner
 Banner /etc/issue.net
+PrintMotd No
 
 
 ## ENV

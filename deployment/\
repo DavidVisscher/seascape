@@ -3,9 +3,11 @@
 
 $salt_master_setup = <<-SCRIPT
 salt-key -Ay
-sleep 20
+sleep 5
 salt '*' saltutil.refresh_pillar
 salt '*' mine.update
+mkdir -p -m 700 /root/.ssh # UGLY
+cp -v /tmp/id* ~/.ssh/ # UGLY
 salt-call state.highstate
 usermod -aG wheel vagrant
 SCRIPT
@@ -28,8 +30,9 @@ Vagrant.configure("2") do |config|
     # The keys won't leave your local machine, so it's fine for now.
     # TODO: Future David, get mad at past David for even thinking of doing this.
     # 
-    # Once a better solution is found. Remove or modify lines or blocks tagged with UGLY
-    saltmaster.vm.provision "file", source: "~/.ssh/id_rsa", destination: "/tmp/github_key" # UGLY
+    # Once a better solution is found. Remove lines tagged with UGLY
+    saltmaster.vm.provision "file", source: "~/.ssh/id_rsa", destination: "/tmp/id_rsa" # UGLY
+    saltmaster.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/id_rsa.pub" # UGLY
 
     saltmaster.vm.synced_folder "../salt/", "/srv/salt"
     saltmaster.vm.synced_folder "../pillar/", "/srv/pillar"

@@ -7,3 +7,6 @@ auditd:
     - reload: True
     - watch:
       - pkg: audit
+
+selinux_mode:
+  selinux.mode: {{ salt['pillar.get']('selinux_mode', 'enforcing') }}
