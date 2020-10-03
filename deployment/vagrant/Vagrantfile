@@ -19,7 +19,9 @@ Vagrant.configure("2") do |config|
       salt.install_master = true
       salt.install_type = "stable"
     end
-
+  
+    saltmaster.vm.provision "shell", inline: "salt-key -Ay"
+    saltmaster.vm.provision "shell", inline: "salt-call state.highstate"
   end
 
   config.vm.define "elastic0" do |elastic0|
