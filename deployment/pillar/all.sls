@@ -1,2 +1,4 @@
 mine_functions:
-  network.ip_addrs: [eth0]
+  test.ping: []
+  network.ip_addrs:
+    interface: eth0
