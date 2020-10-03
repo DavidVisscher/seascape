@@ -7,7 +7,7 @@
   OS       : {{ salt.grains.get('osfullname') }}
   Kernel   : {{ salt.grains.get('kernelrelease') }}
   Platform : {{ salt.grains.get('manufacturer') }}
-  SELinux  : {{ salt.grains.get('selinux:enforced') }}
+  SELinux  : {{ salt.pillar.get('selinux_mode') }}
 
   CPU      : {{ salt.grains.get('num_cpus') }}
   Memory   : {{ salt.grains.get('mem_total') }} MB

@@ -8,8 +8,9 @@ selinux_dependencies:
 
 selinux_auditd:
   service.running:
+    - name: auditd
     - enable: True
-    - reload: True
+    - restart: True
     - watch:
       - pkg: selinux_dependencies
 
