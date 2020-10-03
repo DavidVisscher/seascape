@@ -4,7 +4,7 @@
 #          or: elastic-12.seascape.example
 
 {% set hostname, domainname = opts ['id'].split('.', 1) %} # Split hostname & Domainname
-{% set type, number = hostname.split('-', 1) %} # Split type and number out of hostname
+{% set type = hostname.split('-', 1)[0] %} # Split number out of hostname
 
 base:
   '*':

@@ -8,4 +8,3 @@ base_packages:
       - bind-utils
       - fail2ban
       - mdadm
-      - python36-docker
