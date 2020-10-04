@@ -4,6 +4,7 @@
 {%- from tplroot ~ "/map.jinja" import compose with context %}
 
 include:
+  - docker.volumes_dir
   - docker.compose
 
 {%- for name, container in compose.items() %}
@@ -58,7 +59,13 @@ include:
   {%- if 'environment' in container and container.environment is iterable %}
     - environment:
     {%- for variable, value in container.environment.items() %}
-        - {{ variable }}: {{ value }}
+        - {{ variable }}: "{{ value }}"
+    {%- endfor %}
+  {%- endif %}
+  {%- if 'extra_hosts' in container and container.extra_hosts is iterable %}
+    - extra_hosts:
+    {%- for value in container.extra_hosts %}
+        - {{ value }}
     {%- endfor %}
   {%- endif %}
   {%- if 'ports' in container and container.ports is iterable %}

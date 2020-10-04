@@ -8,4 +8,4 @@ base_packages:
       - bind-utils
       - fail2ban
       - mdadm
-      - python36-docker
+      - python3-dnf-plugin-versionlock 

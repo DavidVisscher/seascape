@@ -45,6 +45,8 @@ docker-package:
         {%- endif %}
     - require:
       - pkg: docker-package-dependencies
+    - watch_in:
+      - service: salt_minion_service
 
   {%- if grains.os != 'MacOS' %}
 docker-config:
