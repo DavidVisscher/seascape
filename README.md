@@ -26,3 +26,11 @@ Currently we're using:
  - [docker-formula v0.44.0](https://github.com/saltstack-formulas/docker-formula/tree/v0.44.0/docker)
  - [haproxy-formula v0.17.0](https://github.com/saltstack-formulas/haproxy-formula/tree/v0.17.0)
 
+## Vagrant development environment
+
+Setting up a local development using vagrant is possible. 
+It requires a machine with a working libvirt installation and that the current user can make use of it.
+Then, follow these steps:
+ 1. Navigate to deployment/vagrant and run `vagrant up --provider libvirt`.
+ 2. After this is done, you can ssh to the salt master with `vagrant ssh`.
+ 3. Once on the salt master, run `salt -b 1 \* state.highstate` as root.
