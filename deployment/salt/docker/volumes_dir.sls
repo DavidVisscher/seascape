@@ -14,7 +14,6 @@
           - recurse:
             - user
             - group
-            - mode
       {% endfor %}
   {%- endif %}
 {%- endfor %}

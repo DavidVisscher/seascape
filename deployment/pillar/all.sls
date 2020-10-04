@@ -3,5 +3,6 @@ mine_functions:
   network.ip_addrs:
     interface: eth0
   pkg.list_pkgs: []
+  grains.items: []
 
 selinux_mode: permissive

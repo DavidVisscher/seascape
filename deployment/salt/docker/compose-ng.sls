@@ -62,6 +62,12 @@ include:
         - {{ variable }}: "{{ value }}"
     {%- endfor %}
   {%- endif %}
+  {%- if 'extra_hosts' in container and container.extra_hosts is iterable %}
+    - extra_hosts:
+    {%- for value in container.extra_hosts %}
+        - {{ value }}
+    {%- endfor %}
+  {%- endif %}
   {%- if 'ports' in container and container.ports is iterable %}
     - port_bindings:
     {%- for port_mapping in container.ports %}
