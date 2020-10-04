@@ -33,4 +33,4 @@ It requires a machine with a working libvirt installation and that the current u
 Then, follow these steps:
  1. Navigate to deployment/vagrant and run `vagrant up --provider libvirt`.
  2. After this is done, you can ssh to the salt master with `vagrant ssh`.
- 3. Once on the salt master, run `salt -b 1 \* state.highstate` as root.
+ 3. Once on the salt master, run `salt -b 1 \* state.highstate` as root. Depending on your network connection, this may take quite a while. I've also had it fail when connections drop, in that case you may need to run it again. Normally this shouldn't happen if the connection is stable.
