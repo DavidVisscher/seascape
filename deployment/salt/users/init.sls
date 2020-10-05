@@ -1,3 +1,3 @@
 include:
   - {{ slspath }}/david
-  - {{ slspath }}/wiebemarten
+  - {{ slspath }}/qqwy
