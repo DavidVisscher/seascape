@@ -24,7 +24,7 @@ defmodule SeascapeWeb.MixProject do
   def application do
     [
       mod: {SeascapeWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools, :os_mon]
+      extra_applications: [:logger, :runtime_tools, :os_mon, :mnesia]
     ]
   end
 
@@ -38,6 +38,7 @@ defmodule SeascapeWeb.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.5.4"},
+      {:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.2"},
@@ -46,7 +47,11 @@ defmodule SeascapeWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:seascape, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+
+      {:phoenix_live_view, "~> 0.14.6"},
+      {:pow, "~> 1.0.20"},
+      {:floki, ">= 0.27.0", only: :test},
     ]
   end
 

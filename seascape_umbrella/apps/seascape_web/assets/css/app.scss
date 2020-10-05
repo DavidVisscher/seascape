@@ -1,5 +1,7 @@
 /* This file is for your main application css. */
-@import "./phoenix.css";
+// @import "./phoenix.css";
+@import "../node_modules/nprogress/nprogress.css";
+
 
 /* Alerts and form errors */
 .alert {
@@ -33,4 +35,8 @@
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
+}
+
+main {
+    padding-top: 4em;
 }

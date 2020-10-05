@@ -5,13 +5,19 @@ defmodule SeascapeWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :put_root_layout, {SeascapeWeb.LayoutView, :root}
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  # pipeline :api do
+  #   plug :accepts, ["json"]
+  # end
+
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
   scope "/" do
@@ -21,10 +27,7 @@ defmodule SeascapeWeb.Router do
   end
 
   scope "/", SeascapeWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-
+    pipe_through [:browser, :protected]
   end
 
   # Other scopes may use custom stacks.
@@ -47,5 +50,11 @@ defmodule SeascapeWeb.Router do
 
       live_dashboard "/dashboard", metrics: SeascapeWeb.Telemetry
     end
+  end
+
+  scope "/", SeascapeWeb do
+    pipe_through :browser
+
+    live "/*spa_path", MainLive, layout: {SeascapeWeb.LayoutView, :root}
   end
 end

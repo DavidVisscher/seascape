@@ -1,0 +1,12 @@
+# Warning!
+# 
+# This file is managed by salt.
+# All changes will be lost on next highstate.
+
+127.0.0.1       localhost
+127.0.0.1       {{ salt.grains.get('host') }}
+
+{% for minion, addrs in salt.mine.get('*', 'network.ip_addrs', tgt_type='glob' ) | dictsort() -%}
+{%- set hostname = minion.split('.', 1)[0] -%}{# Split hostname & Domainname#}
+{{ addrs[0] }}  {{hostname}} {{ minion }}
+{%- endfor %}

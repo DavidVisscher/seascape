@@ -35,7 +35,7 @@ def _collect_metrics(queue: Queue, *, target='*'):
     out_data = {'ss_datatype': 'metrics', 'timestamp': str(datetime.datetime.utcnow())}
     salt = SaltClient()
     
-    docker_data = salt.cmd(target, 'docker.ps', kwarg={'allFalse':True, 'host':True, 'verbose':True})
+    docker_data = salt.cmd(target, 'docker.ps', kwarg={'all':True, 'host':False, 'verbose':False})
     for host, metrics in docker_data.items():
         if host not in out_data.keys():
             out_data[host] = {}

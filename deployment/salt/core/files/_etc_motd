@@ -1,0 +1,16 @@
+{% include 'core/files/_etc_issue' %}
+
+
+  Host     : {{ salt.grains.get('id') }}
+  Master   : {{ salt.grains.get('master') }}
+
+  OS       : {{ salt.grains.get('osfullname') }}
+  Kernel   : {{ salt.grains.get('kernelrelease') }}
+  Platform : {{ salt.grains.get('manufacturer') }}
+  SELinux  : {{ salt.pillar.get('selinux_mode') }}
+
+  CPU      : {{ salt.grains.get('num_cpus') }}
+  Memory   : {{ salt.grains.get('mem_total') }} MB
+
+0------------------------------------------------------------------------------0
+

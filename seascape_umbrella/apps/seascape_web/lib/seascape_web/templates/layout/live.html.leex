@@ -1,0 +1,31 @@
+<header>
+        <nav role="navigation" class="ui top fixed inverted menu">
+    <section class="ui container">
+            <%=  link "Seascape", to: Routes.live_path(@socket, SeascapeWeb.MainLive, []), class: "header item" %>
+            <%= if @current_user do %>
+                <div class="item">
+                    <strong>
+                        <%= @current_user.email %>
+                    </strong>
+                </div>
+                    <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+                            <%= link "LiveDashboard", to: Routes.live_dashboard_path(@socket, :home), class: "item" %>
+                    <% end %>
+                    <div class="right menu">
+                        <%= link "Sign out", to: Routes.pow_session_path(@socket, :delete), method: :delete, class: "item" %>
+                    </div>
+                <% else %>
+                <div class="right menu">
+                        <%= link "Register", to: Routes.pow_registration_path(@socket, :new), class: "item" %>
+                        <%= link "Sign in", to: Routes.pow_session_path(@socket, :new), class: "item" %>
+                </div>
+                <% end %>
+            </ul>
+    </section>
+        </nav>
+</header>
+<main role="main" class="ui container">
+    <p class="alert alert-info" role="alert"><%= live_flash(@flash, :info) %></p>
+    <p class="alert alert-danger" role="alert"><%= live_flash(@flash, :error) %></p>
+    <%= @inner_content %>
+</main>

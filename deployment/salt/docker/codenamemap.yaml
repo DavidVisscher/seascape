@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+wheezy:
+  kernel:
+    pkg:
+      name: linux-image-amd64
+      fromrepo: wheezy-backports
+    pkgrepo:
+      name: deb http://http.debian.net/debian wheezy-backports main
+      humanname: Wheezy Backports
+      dist: wheezy-backports
+    pkgs: []
+
+jessie:
+  kernel:
+    pkg:
+      name: linux-image-amd64
+      fromrepo: jessie-backports
+    pkgrepo:
+      name: deb http://http.debian.net/debian jessie-backports main
+      humanname: Jessie Backports
+      dist: jessie-backports
+    pkgs: []
+
+trusty:
+  kernel:
+    pkgs:
+      - linux-image-extra-virtual
+      - linux-image-extra-{{ grains.kernelrelease }}
+
+precise:
+  kernel:
+    pkgs:
+      - linux-image-generic-lts-raring
+      - linux-headers-generic-lts-raring
