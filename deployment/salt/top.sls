@@ -3,7 +3,7 @@ base:
     - core
     - users
     - ss_wave
-  "elastic*":
+  "elastic-*":
     - core
     - users
     - docker
