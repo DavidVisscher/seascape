@@ -10,7 +10,8 @@ echo "Updating Mine..."
 salt '*' mine.update
 salt-call state.highstate
 usermod -aG wheel vagrant
-salt --output=json '*' pkg.upgrade > /tmp/salt_upgrade
+echo "Installing updates..."
+salt --batch-size 1 --state-output=terse '*' pkg.upgrade 
 SCRIPT
 
 
@@ -101,57 +102,4 @@ Vagrant.configure("2") do |config|
     
     elastic2.vm.provision "shell", inline: "usermod -aG wheel vagrant"
   end
-
-  config.vm.define "elastic3" do |elastic3|
-    elastic3.vm.box = "centos/8"
-    elastic3.vm.hostname = 'elastic-3.seascape.example'
-
-    elastic3.vm.provider :libvirt do |libvirt|
-      libvirt.cpus = 4
-      libvirt.memory = 2048
-    end
-
-    elastic3.vm.provision :salt do |salt|
-      salt.install_master = false
-      salt.masterless = false
-    end
-    
-    elastic3.vm.provision "shell", inline: "usermod -aG wheel vagrant"
-  end
-
-  
-  config.vm.define "elastic4" do |elastic4|
-    elastic4.vm.box = "centos/8"
-    elastic4.vm.hostname = 'elastic-4.seascape.example'
-
-    elastic4.vm.provider :libvirt do |libvirt|
-      libvirt.cpus = 4
-      libvirt.memory = 2048
-    end
-
-    elastic4.vm.provision :salt do |salt|
-      salt.install_master = false
-      salt.masterless = false
-    end
-    
-    elastic4.vm.provision "shell", inline: "usermod -aG wheel vagrant"
-  end
-
-  config.vm.define "elastic5" do |elastic5|
-    elastic5.vm.box = "centos/8"
-    elastic5.vm.hostname = 'elastic-5.seascape.example'
-
-    elastic5.vm.provider :libvirt do |libvirt|
-      libvirt.cpus = 4
-      libvirt.memory = 2048
-    end
-
-    elastic5.vm.provision :salt do |salt|
-      salt.install_master = false
-      salt.masterless = false
-    end
-    
-    elastic5.vm.provision "shell", inline: "usermod -aG wheel vagrant"
-  end
-
 end
