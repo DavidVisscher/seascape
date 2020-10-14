@@ -8,7 +8,7 @@ defmodule Seascape.Clusters.Cluster do
 
   @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key {:id, :binary_id, autogenerate: false}
-  schema "cluster" do
+  schema "_doc" do
     field :user_id, :binary_id
     field :name, :string
     field :api_key, :binary_id
