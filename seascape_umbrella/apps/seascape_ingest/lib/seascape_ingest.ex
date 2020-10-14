@@ -1,18 +1,8 @@
 defmodule SeascapeIngest do
   @moduledoc """
-  Documentation for `SeascapeIngest`.
+  Entrypoint for the `SeascapeIngest`-application.
+
+  This application contains the logic to ingest data
+  from the SeascapeWave daemons that are running in remote clusters.
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> SeascapeIngest.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end
