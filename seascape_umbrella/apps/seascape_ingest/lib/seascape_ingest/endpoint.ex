@@ -4,6 +4,7 @@ defmodule SeascapeIngest.Endpoint do
   require Logger
 
   plug(Plug.Logger, log: :debug)
+
   plug(:match)
 
   plug(Plug.Parsers,
@@ -14,10 +15,12 @@ defmodule SeascapeIngest.Endpoint do
 
   plug(:dispatch)
 
-  forward("/ingest", to: SeascapeIngest.Router)
+  post("/ingest", to: SeascapeIngest.IngestPlug)
 
   match _ do
-    send_resp(conn, 404, Jason.encode!(%{status: "error", message: "not found"}))
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(404, Jason.encode!(%{status: "error", message: "not found"}))
   end
 
   # defp config, do: Application.fetch_env(:seascape_ingest, __MODULE__)

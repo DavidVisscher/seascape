@@ -30,6 +30,7 @@ defmodule SeascapeIngest.MixProject do
       {:plug, "~> 1.10"},
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.0"},
+      {:solution, "~> 1.0"},
 
       # In umbrella:
       {:seascape, in_umbrella: true}

@@ -17,7 +17,7 @@ defmodule Seascape.Repository do
           {:error, problem}
         {:error, code, problem} ->
           changeset =
-          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), inspect(problem["error"]), http_status_code: code)
         {:error, changeset}
       end
     rescue

@@ -13,6 +13,28 @@ defmodule Seascape.Clusters do
     Repository.get(id, Cluster, @table_name)
   end
 
+
+  def get_by_api_key(api_key) do
+    results = Repository.search(Cluster, @table_name,
+      %{
+        query: %{
+          bool: %{
+            filter: [
+              %{match: %{api_key: api_key}}
+            ]
+          }
+        },
+        size: 1
+      })
+
+    case results do
+      {:ok, []} ->
+        {:error, "API key invalid"}
+      {:ok, [one_result]} ->
+        {:ok, one_result}
+    end
+  end
+
   def create(user, params) do
     result =
       Cluster.new(user.id)
