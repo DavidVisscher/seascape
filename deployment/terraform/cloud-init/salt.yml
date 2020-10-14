@@ -1,5 +1,10 @@
 #cloud-config
 
+users:
+    - default
+
+ssh_pwauth: True
+
 write_files:
     - encoding: b64
       content: ${deploy_key}
@@ -13,7 +18,7 @@ write_files:
       permissions: '600'
 
 runcmd:
-    - "echo 'Starting runcmd as $(whoami)'"
+    - "echo \"Starting runcmd as $(whoami)\""
     - "printf 'LANG=en_US.UTF-8' > /etc/locale.conf"
     - "localectl set-locale LANG=en_US.UTF-8"
     - "printf \"\n127.0.0.1\tsalt\n\" >> /etc/hosts"
@@ -26,14 +31,10 @@ runcmd:
     - "systemctl start salt-minion"
     - "sleep 10"
     - "salt-key -yA"
-    - "yum install -y git"
-    - "git clone git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git --recurse-submodules /srv/seascape"
-    - "ln -s /srv/seascape/deployment/salt /srv/salt"
-    - "ln -s /srv/seascape/deployment/pillar /srv/pillar"
-    - "ln -s /srv/seascape/deployment/reactor /srv/reactor"
-    - "systemctl restart salt-master"
-    - "salt-call state.highstate"
+    - "touch /etc/cloud_init_finished"
 
-package_upgrade: False
+package_upgrade: True
+
+hostname: salt.seascape.example
 
 final_message: "The system is up, after $UPTIME seconds"
