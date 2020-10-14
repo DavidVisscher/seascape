@@ -7,7 +7,7 @@ defmodule Seascape.Clusters.Machine do
   """
 
   use Ecto.Schema
-  @derive {Jason.Encode, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key false
   schema "machines" do
     field :cluster_id, :binary_id, primary_key: true
@@ -17,7 +17,6 @@ defmodule Seascape.Clusters.Machine do
   def new(cluster_id) do
     %__MODULE__{
       cluster_id: cluster_id,
-      id: Ecto.UUID.generate()
     }
   end
 

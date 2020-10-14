@@ -9,7 +9,7 @@ defmodule Seascape.Users.User do
                             &Pow.Ecto.Schema.Password.pbkdf2_verify/2}
   @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key false
-  schema "_doc" do
+  schema "users" do
     field :email, :string, primary_key: true
     field :id, :binary_id
     field :password_hash,    :string
