@@ -24,6 +24,13 @@ defmodule SeascapeWeb.MainLive do
           |> assign(:current_user, current_user)
           |> assign(:state, state)
           |> &{:ok, &1}
+        else
+          {:error, _} ->
+            {:ok, state} = State.new()
+            socket
+            |> assign(:current_user, current_user)
+            |> assign(:state, state)
+            |> &{:ok, &1}
         end
     end
   end

@@ -1,9 +1,18 @@
 defmodule Seascape.Repository do
   alias Seascape.Repository.ElasticSearch
+  alias Seascape.Repository.ElasticSearch.Watchdog
   require Logger
 
   defmodule ClusterDownError do
     defexception [:message]
+  end
+
+  def cluster_ok? do
+    Watchdog.cluster_ok?()
+  end
+
+  def subscribe_to_cluster_status do
+    Phoenix.PubSub.subscribe(Seascape.PubSub, "Seascape.Repository/health")
   end
 
   def create(changeset) do

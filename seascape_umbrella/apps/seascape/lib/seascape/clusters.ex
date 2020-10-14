@@ -114,7 +114,7 @@ defmodule Seascape.Clusters do
       |> Repository.create()
     case result do
       {:ok, result} ->
-        Phoenix.PubSub.broadcast(Seascape.PubSub, "#{__MODULE__}:#{user.id}:clusters", {"persistent/cluster/created", %{"cluster" => result}})
+        Phoenix.PubSub.broadcast(Seascape.PubSub, "#{__MODULE__}/#{user.id}", {"persistent/cluster/created", %{"cluster" => result}})
         {:ok, result}
       other ->
         other
@@ -165,6 +165,6 @@ defmodule Seascape.Clusters do
   of changes happening to all clusters of `user`.
   """
   def subscribe(user) do
-    Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}:#{user.id}:clusters")
+    Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}/#{user.id}")
   end
 end

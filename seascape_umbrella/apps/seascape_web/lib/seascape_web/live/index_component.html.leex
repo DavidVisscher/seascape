@@ -1,18 +1,26 @@
-    <button phx-click="persistent/cluster/create" class="ui green blue icon button"><i class="plus icon"></i> Add Cluster</button>
-  </div>
-  <div class="three column row">
-      <%= for {_id, cluster} <- @state.persistent.clusters do %>
-          <div class="ui column">
-            <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ), class: "ui fluid card" do %>
-            <div class="content">
-              <div class="header">
-                <%= cluster.name %>
-              </div>
-              <div class="metadata">
-                <span>Health here</span>
-              </div>
-            </div>
-            <% end %>
-          </div>
-        <% end %>
+<%= if @state.persistent do %>
+<div class="row">
+  <button phx-click="persistent/cluster/create" class="ui green blue icon button"><i class="plus icon"></i> Add Cluster</button>
 </div>
+<div class="three column row">
+    <%= for {_id, cluster} <- @state.persistent.clusters do %>
+        <div class="ui column">
+          <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ), class: "ui fluid card" do %>
+          <div class="content">
+            <div class="header">
+              <%= cluster.name %>
+            </div>
+            <div class="metadata">
+              <span>Health here</span>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      <% end %>
+  </div>
+
+<% else %>
+  <p class="alert alert-danger">
+    Cannot currently fetch information as connection with database is lost.
+  </p>
+<% end %>
