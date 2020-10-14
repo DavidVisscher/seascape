@@ -4,7 +4,7 @@ defmodule Seascape.Clusters.Container do
   """
 
   use Ecto.Schema
-  @derive {Jason.Encode, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key false
   schema "containers" do
     field :machine_id, :string, primary_key: true
@@ -28,5 +28,10 @@ defmodule Seascape.Clusters.Container do
 
   def primary_key(machine_id, id) do
     "#{machine_id}/#{id}"
+  end
+
+  def primary_key(cluster_id, hostname, container_id) do
+    Machine.primary_key(cluster_id, hostname)
+    |> primary_key(container_id)
   end
 end

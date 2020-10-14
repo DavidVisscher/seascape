@@ -164,7 +164,7 @@ defmodule Seascape.Clusters do
   When subscribed, process will be kept up-to-date
   of changes happening to all clusters of `user`.
   """
-  def subscribe_to_clusters(user) do
+  def subscribe(user) do
     Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}:#{user.id}:clusters")
   end
 end
