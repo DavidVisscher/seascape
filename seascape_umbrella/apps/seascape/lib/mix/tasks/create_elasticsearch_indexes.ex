@@ -4,8 +4,8 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
   @shortdoc "Creates all not-yet-existent ElasticSearch(ES) indexes in the ES cluster."
   def run(_) do
     Mix.Task.run("app.start")
-    IO.puts("Creating missing ElasticSearch indexes...")
     Process.sleep(1000)
+    IO.puts("Creating missing ElasticSearch indexes...")
 
     idempotently_create_index("users", %{mappings: %{properties: %{id: %{type: :keyword}}}})
     idempotently_create_index("clusters",
@@ -33,8 +33,16 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
       IO.puts("  Skipping ElasticSearch index #{full_name} as it already exists.")
     else
       IO.write("  Creating ElasticSearch index #{full_name}...")
-      Elastic.Index.create(name, params)
-      IO.puts(" done!")
+      res = Elastic.Index.create(name, params)
+      case res do
+        {:error, _, _} ->
+          IO.puts("Unexpected result: ")
+          IO.inspect(res)
+          IO.puts("Stopping immediately")
+          System.halt()
+        _ ->
+          IO.puts(" done!")
+      end
     end
   end
 end
