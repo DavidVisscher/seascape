@@ -8,7 +8,7 @@ defmodule Seascape.Clusters.Cluster do
 
   @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key {:id, :binary_id, autogenerate: false}
-  schema "_doc" do
+  schema "clusters" do
     field :user_id, :binary_id
     field :name, :string
     field :api_key, :binary_id
@@ -22,7 +22,7 @@ defmodule Seascape.Clusters.Cluster do
     }
   end
 
-  def changeset(cluster, changes \\ {}) do
+  def changeset(cluster, changes \\ %{}) do
     cluster
     |> Ecto.Changeset.cast(changes, [:name])
   end
