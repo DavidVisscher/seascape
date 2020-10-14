@@ -1,24 +1,18 @@
-<div class="ui divided items">
-  
-  <div class="item">
-    
     <button phx-click="persistent/cluster/create" class="ui green blue icon button"><i class="plus icon"></i> Add Cluster</button>
   </div>
-  <div class="item">
-    
-    <div class="ui center aligned three cards">
+  <div class="three column row">
       <%= for {_id, cluster} <- @state.persistent.clusters do %>
-          <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ), class: "ui card" do %>
-          <div class="content">
-            <div class="header">
-              <%= cluster.name %>
+          <div class="ui column">
+            <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ), class: "ui fluid card" do %>
+            <div class="content">
+              <div class="header">
+                <%= cluster.name %>
+              </div>
+              <div class="metadata">
+                <span>Health here</span>
+              </div>
             </div>
-            <div class="metadata">
-              <span>Health here</span>
-            </div>
+            <% end %>
           </div>
-          <% end %>
         <% end %>
-
-    </div>
-  </div>
+</div>
