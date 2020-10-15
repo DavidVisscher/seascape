@@ -7,8 +7,8 @@ resource "openstack_compute_instance_v2" "salt-master" {
   user_data = templatefile(
                 "${path.module}/cloud-init/salt.yml", 
                 {       
-                    deploy_key = base64encode(var.deploy_key), 
-                    deploy_pubkey = base64encode(var.deploy_pubkey)
+                    deploy_key =var.deploy_key, 
+                    deploy_pubkey = var.deploy_pubkey
                 }
               )
 
