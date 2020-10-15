@@ -19,7 +19,7 @@ ENV SECRET_KEY_BASE=$secret_key_base
 COPY mix.exs .
 COPY mix.lock .
 COPY config config
-COPY apps apps
+# COPY apps apps
 RUN mix do deps.get, deps.compile
 
 # build assets
@@ -29,7 +29,7 @@ RUN npm --prefix ./apps/seascape_web/assets ci --progress=false --no-audit --log
 # COPY apps/seascape_web/priv apps/seascape_web/priv
 # COPY assets ./apps/seascape_web/assets
 RUN npm run --prefix ./apps/seascape_web/assets deploy
-WORKDIR ./apps/seascape_web/priv
+WORKDIR ./apps/seascape_web
 RUN mix phx.digest
 
 WORKDIR /app
