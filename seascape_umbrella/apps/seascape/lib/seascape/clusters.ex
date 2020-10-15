@@ -45,6 +45,8 @@ defmodule Seascape.Clusters do
         {:error, "API key invalid"}
       {:ok, [one_result]} ->
         {:ok, one_result}
+      {:error, problem} ->
+        {:error, problem}
     end
   end
 

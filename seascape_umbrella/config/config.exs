@@ -34,7 +34,7 @@ config :elastic,
   index_prefix: "seascape"
 
 # Distributed persistent store/cache:
-config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "priv/mnesia/"))
+config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "/tmp/mnesia/"))
 
 # User management
 config :seascape_web, :pow,
