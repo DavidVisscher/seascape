@@ -13,32 +13,30 @@ defmodule Seascape.Users do
   - Authentication can be done using `Seascape.Users.PowContext` (and this is usually handled inside the Pow HTTP Plug).
   """
 
-  @table_name "users"
-
   def get(email) do
-    Repository.get(email, User, @table_name)
+    Repository.get(email, User)
   end
 
   def create(params) do
     User.new()
     |> User.changeset(params)
     |> Ecto.Changeset.validate_change(User.pow_user_id_field, &validates_uniqueness/2)
-    |> Repository.create(@table_name)
+    |> Repository.create()
   end
 
   def delete(user) do
-    Repository.delete(user, @table_name)
+    Repository.delete(user)
   end
 
   def update(user, params) do
     user
     |> User.changeset(params)
-    |> Repository.update(@table_name)
+    |> Repository.update()
   end
 
 
   defp validates_uniqueness(key, value) do
-    case Repository.get(value, User, @table_name) do
+    case Repository.get(value, User) do
       {:ok, _user} ->
         [{key,  "already taken"}]
       {:error, :not_found} ->

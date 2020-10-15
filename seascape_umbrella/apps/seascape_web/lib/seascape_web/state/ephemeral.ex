@@ -1,21 +1,21 @@
 defmodule SeascapeWeb.State.Ephemeral do
   use CapturePipe
 
-  defstruct [current_page: []]
+  defstruct [current_page: [], repository_ok?: false]
 
   def new do
-    {:ok, %__MODULE__{}}
+    Seascape.Repository.subscribe_to_cluster_status()
+    {:ok, %__MODULE__{repository_ok?: Seascape.Repository.cluster_ok?() }}
   end
 
-  def handle_event(state, {["changed_page"], %{"spa_path" => new_page}}) do
-    state.current_page
-    |> put_in(new_page)
+  def handle_event(state, event) do
+    case event do
+      {["changed_page"], %{"spa_path" => new_page}} ->
+        state.current_page
+        |> put_in(new_page)
+      {["repository", "connected"], status} ->
+        state.repository_ok?
+        |> put_in(status)
+    end
   end
-
-  # def handle_event(state, {["change_page"], %{"spa_path" => new_page}}) do
-  #   effect = fn socket ->
-  #     live_redirect(new_page)
-  #   end
-  #   {state, []}
-  # end
 end
