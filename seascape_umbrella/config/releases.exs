@@ -17,7 +17,8 @@ config :seascape_web, SeascapeWeb.Endpoint,
     transport_options: [socket_opts: [:inet6]],
   ],
   server: true,
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  url: [host: System.get_env("SEASCAPE_WEB_HOST", "seascape.example")]
 
 # ## Using releases (Elixir v1.9+)
 #
@@ -28,3 +29,7 @@ config :seascape_web, SeascapeWeb.Endpoint,
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+config :elastic,
+  base_url: ,System.get_env("ELASTICSEARCH_DB_URL")
+#  basic_auth: {System.get_env("ELASTICSEARCH_USER"), System.get_env("ELASTICSEARCH_PASSWORD")},
