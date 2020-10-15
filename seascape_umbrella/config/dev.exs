@@ -67,6 +67,3 @@ config :phoenix, :plug_init_mode, :runtime
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
-# Override Mnesia persistency directory to be in current working directory
-# rather than in a static location as on production
-config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "priv/mnesia/"))
