@@ -1,0 +1,15 @@
+#cloud-config
+
+
+hostname: ${role}-${count}.seascape.example
+
+runcmd:
+    - "echo \"Starting runcmd as $(whoami)\""
+    - "printf 'LANG=en_US.UTF-8' > /etc/locale.conf"
+    - "localectl set-locale LANG=en_US.UTF-8"
+    - "printf \"\n127.0.0.1\tsalt\n\" >> /etc/hosts"
+    - "printf \"\n\" >> /root/.ssh/id_rsa"
+    - "yum install -y https://repo.saltstack.com/py3/redhat/salt-py3-repo-latest.el8.noarch.rpm"
+    - "yum clean expire-cache"
+    - "yum install -y salt-minion"
+    - "systemctl start salt-minion"
