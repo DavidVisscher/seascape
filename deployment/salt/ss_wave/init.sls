@@ -17,8 +17,7 @@ ss_wave_clone:
     - name: "git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git"
     - target: /opt/seascape
     - user: root
-    - identity:
-      - /tmp/github_key
+    - identity: {{ salt['pillar.get']('ss_wave:branch', ['/tmp/github_key', '/root/.ssh/id_rsa']) }}
     - branch: {{ salt['pillar.get']('ss_wave:branch', 'master') }}
     - force_reset: True
     - force_checkout: True

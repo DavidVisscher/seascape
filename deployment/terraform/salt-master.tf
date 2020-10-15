@@ -42,40 +42,4 @@ resource "openstack_compute_floatingip_associate_v2" "salt-master" {
   floating_ip = openstack_networking_floatingip_v2.salt-master.address
   instance_id = openstack_compute_instance_v2.salt-master.id
   fixed_ip    = openstack_compute_instance_v2.salt-master.network.0.fixed_ip_v4
-
-  connection {
-    type     = "ssh"
-    user     = "centos"
-    password = "thisisatemporarypasswordforduringinitialsetup!"
-    host     = openstack_networking_floatingip_v2.salt-master.address
-  }
-  
-  provisioner "remote-exec" {
-    inline = [
-       "while [ ! -f /etc/cloud_init_finished ]; do; sleep 5; echo \"Wait until cloud-init finishes...\"; done;"
-    ]
-  }
-  
-  provisioner "file" {
-    source = "${path.module}/../salt"
-    destination = "/srv/salt"
-  }
-
-  provisioner "file" {
-    source = "${path.module}/../pillar"
-    destination = "/srv/pillar"
-  }
-
-  provisioner "file" {
-    source = "${path.module}/../reactor"
-    destination = "/srv/reactor"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-       "sudo chown -R root: /srv",
-       "sudo yum update -y",
-       "sudo salt-call state.highstate"
-    ]
-  }
 }

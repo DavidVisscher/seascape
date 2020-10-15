@@ -1,9 +1,8 @@
 #cloud-config
 
-users:
-    - default
+#ssh_pwauth: True
+#password: "thisisatemporarypasswordforduringinitialsetup!"
 
-ssh_pwauth: True
 
 write_files:
     - encoding: b64
@@ -27,13 +26,21 @@ runcmd:
     - "yum clean expire-cache"
     - "yum install -y salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api"
     - "systemctl start salt-master"
-    - "sleep 10"
+    - "sleep 5"
     - "systemctl start salt-minion"
-    - "sleep 10"
+    - "sleep 5"
     - "salt-key -yA"
+    - "yum install -y git"
+    - "while [ ! -f /root/.ssh/id_rsa ]; do sleep 2; echo 'wait for keyfile'; done"
+    - "ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts"
+    - "git clone -v git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git /srv/seascape"
+    - "ln -s /srv/seascape/deployment/salt /srv/salt"
+    - "ln -s /srv/seascape/deployment/pillar /srv/pillar"
+    - "ln -s /srv/seascape/deployment/reactor /srv/reactor"
+    - "salt-call state.highstate"
     - "touch /etc/cloud_init_finished"
 
-package_upgrade: True
+package_upgrade: False
 
 hostname: salt.seascape.example
 
