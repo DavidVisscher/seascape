@@ -10,7 +10,7 @@ defmodule SeascapeIngest.Endpoint do
     signing_salt: "2gQmlhDl"
   ]
 
-  socket "/socket", SeascapeIngest.UserSocket,
+  socket "/ingest", SeascapeIngest.ApiSocket,
     websocket: true,
     longpoll: false
 
