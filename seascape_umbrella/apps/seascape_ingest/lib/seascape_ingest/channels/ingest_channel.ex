@@ -2,15 +2,15 @@ defmodule SeascapeIngest.IngestChannel do
   use Phoenix.Channel
 
   # TODO API key auth
-  def join("ingest", params, socket) do
-    if authenticate_api_key(params) do
+  def join("ingest", payload, socket) do
+    if authenticate_api_key(payload) do
       {:ok, socket}
     else
       {:error, %{reason: "unknown API key"}}
     end
   end
 
-  def handle_in("metrics", params, socket) do
+  def handle_in("metrics", payload, socket) do
     # Perform the handling of metrics information here.
     {:noreply, socket}
   end

@@ -6,6 +6,11 @@ import time
 
 def join(ws, topic, payload):
    send_event(ws, topic, "phx_join", payload)
+   successful = json.loads(ws.recv())
+   if successful['payload']['status'] == 'error':
+      raise Exception(successful['payload']['response'])
+   else:
+      successful
 
 def send_event(ws, topic, event, payload):
     print('Sending {}'.format(payload))
@@ -22,7 +27,8 @@ while True:
          # Put this in event loop
          send_event(ws, "ingest", "metrics", dict(foo="bar", a=1))
          time.sleep(5)
-   except:
+   except Exception as error:
+      print(error)
       # Retry with incremental backoff + jitter
       timeout = (1000 * backoff + random.randint(0, 1000))
       print('websocket connection failed. reconnecting after {} ms...'.format(timeout))
