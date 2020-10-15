@@ -20,6 +20,14 @@ config :seascape_web, SeascapeWeb.Endpoint,
   secret_key_base: secret_key_base,
   url: [host: System.get_env("SEASCAPE_WEB_HOST", "seascape.example")]
 
+config :seascape_ingest, SeascapeIngestWeb.Endpoint,
+  http: [
+    port: String.to_integer(System.get_env("INGEST_PORT") || "4001"),
+    transport_options: [socket_opts: [:inet6]]
+  ],
+  server: true,
+  secret_key_base: secret_key_base
+
 # ## Using releases (Elixir v1.9+)
 #
 # If you are doing OTP releases, you need to instruct Phoenix
