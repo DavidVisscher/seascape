@@ -2,7 +2,7 @@
 # from environment variables. You can also hardcode secrets,
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
-use Mix.Config
+import Config
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
@@ -14,9 +14,11 @@ secret_key_base =
 config :seascape_web, SeascapeWeb.Endpoint,
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
-    transport_options: [socket_opts: [:inet6]]
+    transport_options: [socket_opts: [:inet6]],
   ],
-  secret_key_base: secret_key_base
+  server: true,
+  secret_key_base: secret_key_base,
+  url: [host: System.get_env("SEASCAPE_WEB_HOST", "seascape.example")]
 
 # ## Using releases (Elixir v1.9+)
 #
@@ -27,3 +29,11 @@ config :seascape_web, SeascapeWeb.Endpoint,
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+config :elastic,
+  base_url: System.get_env("ELASTICSEARCH_DB_URL")
+#  basic_auth: {System.get_env("ELASTICSEARCH_USER"), System.get_env("ELASTICSEARCH_PASSWORD")},
+
+# Override Mnesia persistency directory to be in current working directory
+# rather than in a static location as on production
+config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "/tmp/mnesia/"))

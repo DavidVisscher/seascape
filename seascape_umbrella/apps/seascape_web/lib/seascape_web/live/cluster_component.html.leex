@@ -1,9 +1,18 @@
+<ul>
+  <li>
 Page for Cluster "<%= @cluster.name %>"
+  </li>
+  <li>
 (Id: <%= @cluster.id %>)
+  </li>
+  <li>
+  API key: <%= @cluster.api_key %>
+  </li>
+</ul>
 
 <%= case @page do %>
 <% [] -> %>
-Show.
+<!-- Show. -->
 <% ["settings"] -> %>
 Settings.
 <% _other -> %>

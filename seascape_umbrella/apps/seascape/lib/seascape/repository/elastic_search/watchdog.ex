@@ -48,6 +48,7 @@ defmodule Seascape.Repository.ElasticSearch.Watchdog do
         %{status: :connected}
       {:connected, :disconnected} ->
         Logger.error("Connection with ElasticSearch lost!")
+        Phoenix.PubSub.broadcast(Seascape.PubSub, "Seascape.Repository/health", {"ephemeral/repository/connected", false})
         @initial_state
       {:disconnected, :disconnected} ->
         @initial_state
@@ -55,7 +56,8 @@ defmodule Seascape.Repository.ElasticSearch.Watchdog do
         if state.consecutive_successes < @required_consecutive_successes do
           update_in(state.consecutive_successes, &(&1 + 1))
         else
-          Logger.error("Connection with ElasticSearch re-established")
+          Logger.error("Connection with ElasticSearch (re-)established")
+          Phoenix.PubSub.broadcast(Seascape.PubSub, "Seascape.Repository/health", {"ephemeral/repository/connected", true})
           %{status: :connected}
         end
     end

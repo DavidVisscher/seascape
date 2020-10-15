@@ -37,21 +37,25 @@ defmodule SeascapeWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Remote dependencies:
       {:phoenix, "~> 1.5.4"},
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.2"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
-      {:seascape, in_umbrella: true},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-
       {:phoenix_live_view, "~> 0.14.6"},
       {:pow, "~> 1.0.20"},
+
+      # Testing only/dev only:
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:floki, ">= 0.27.0", only: :test},
+
+      # In umbrella:
+      {:seascape, in_umbrella: true}
     ]
   end
 

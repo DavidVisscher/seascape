@@ -1,3 +1,14 @@
+<%= if @state.ephemeral.repository_ok? do %>
+  <p class="alert alert-info">
+    The database is working correctly.
+  </p>
+<% else %>
+  <p class="alert alert-danger" role="alert">
+  Connection with the database lost.
+  You can still read real-time information,
+  but signing in or looking at historical information is temporarily not possible.
+  </p>
+<% end %>
 <section class="ui center aligned container">
   <%= if @current_user == nil do %>
     Welcome!
@@ -18,7 +29,18 @@
             <% [] -> %>
               <%= live_component(@socket, SeascapeWeb.IndexComponent, state: @state) %>
             <% ["clusters", cluster_id | rest] -> %>
+            <%= if @state.persistent do %>
                 <%= live_component(@socket, SeascapeWeb.ClusterComponent, cluster: @state.persistent.clusters[cluster_id], page: rest) %>
+                <% else %>
+                  <p class="alert alert-danger">
+                    Cannot currently fetch information as connection with database is lost.
+
+                    <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, []) do %>
+                    Go back home
+                    <% end %>
+                  </p>
+
+                <% end %>
             <% _other -> %>
             <p>
               Unknown page.
@@ -30,7 +52,5 @@
           <% end %>
         </div>
       </div>
-
   <% end %>
-
 </section>

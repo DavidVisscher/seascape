@@ -7,7 +7,17 @@ defmodule Seascape.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: [
+        web: [
+          version: "0.0.1",
+          applications: [seascape_web: :permanent, seascape: :permanent, mnesia: :permanent]
+        ],
+        ingest: [
+          version: "0.0.1",
+          applications: [seascape_ingest: :permanent, seascape: :permanent, mnesia: :permanent]
+        ]
+      ]
     ]
   end
 

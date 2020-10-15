@@ -2,7 +2,7 @@ defmodule SeascapeWeb.State.Persistent do
   defstruct [:user, :clusters]
 
   def new(user) do
-    with {:ok, clusters} <- Seascape.Clusters.all_of_user(user) do
+    with {:ok, clusters} <- Seascape.Clusters.get_user_clusters(user) do
       {:ok, %__MODULE__{user: user, clusters: clusters}}
     end
   end
@@ -11,7 +11,7 @@ defmodule SeascapeWeb.State.Persistent do
     case {event, params} do
       {["cluster", "create"], %{}} ->
         create_cluster_function = fn ->
-          Seascape.Clusters.create(state.user, %{name: "New cluster"})
+          Seascape.Clusters.create_cluster(state.user, %{name: "New cluster"})
         end
 
         {state, [create_cluster_function]}

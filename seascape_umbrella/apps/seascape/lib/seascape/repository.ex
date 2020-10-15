@@ -1,15 +1,24 @@
 defmodule Seascape.Repository do
   alias Seascape.Repository.ElasticSearch
+  alias Seascape.Repository.ElasticSearch.Watchdog
   require Logger
 
   defmodule ClusterDownError do
     defexception [:message]
   end
 
-  def create(changeset, table_name) do
+  def cluster_ok? do
+    Watchdog.cluster_ok?()
+  end
+
+  def subscribe_to_cluster_status do
+    Phoenix.PubSub.subscribe(Seascape.PubSub, "Seascape.Repository/health")
+  end
+
+  def create(changeset) do
     try do
       with {:ok, struct} <- apply_changeset(changeset, :create),
-           {:ok, _code, result} <- ElasticSearch.create(table_name, type_name(struct), pkey_value(struct), struct) do
+           {:ok, _code, result} <- ElasticSearch.create(table_name(struct), type_name(struct), pkey_value(struct), struct) do
         Logger.debug(inspect(result))
         {:ok, struct}
       else
@@ -17,7 +26,7 @@ defmodule Seascape.Repository do
           {:error, problem}
         {:error, code, problem} ->
           changeset =
-          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), problem["error"], http_status_code: code)
+          Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), inspect(problem["error"]), http_status_code: code)
         {:error, changeset}
       end
     rescue
@@ -28,19 +37,19 @@ defmodule Seascape.Repository do
     end
   end
 
-  def get(primary_key_value, module, table_name) do
+  def get(primary_key_value, module) do
     try do
-      ElasticSearch.get(table_name, module.__schema__(:source), primary_key_value, module)
+      ElasticSearch.get(table_name(module), type_name(module), primary_key_value, module)
     rescue
       ClusterDownError ->
         {:error, :cluster_down}
     end
   end
 
-  def update(changeset, table_name) do
+  def update(changeset) do
     try do
       with {:ok, struct} <- apply_changeset(changeset, :update),
-           {:ok, _code, result} <- ElasticSearch.update(table_name, type_name(struct), pkey_value(struct), struct) do
+           {:ok, _code, result} <- ElasticSearch.update(table_name(struct), type_name(struct), pkey_value(struct), struct) do
         Logger.debug(inspect(result))
         {:ok, struct}
       else
@@ -59,22 +68,28 @@ defmodule Seascape.Repository do
   end
   end
 
-  def delete(struct, table_name) do
-    ElasticSearch.delete(table_name, type_name(struct), pkey_value(struct))
+  def delete(struct) do
+    ElasticSearch.delete(table_name(struct), type_name(struct), pkey_value(struct))
   end
 
-  def search(struct_module, table_name, query) do
-    ElasticSearch.search(struct_module, table_name, query)
+  def search(struct_module, query) do
+    ElasticSearch.search(struct_module, table_name(struct_module), query)
   end
 
   defp pkey_value(struct = %module{}) do
-    key = hd module.__schema__(:primary_key)
-    get_in(struct, [Access.key(key)])
+    if function_exported?(module, :primary_key, 1) do
+      module.primary_key(struct)
+    else
+      key = hd module.__schema__(:primary_key)
+      get_in(struct, [Access.key(key)])
+    end
   end
 
-  defp type_name(%module{}) do
-    module.__schema__(:source)
-  end
+  defp type_name(%module{}), do: type_name(module)
+  defp type_name(module) when is_atom(module), do: "_doc"
+
+  defp table_name(%module{}), do: table_name(module)
+  defp table_name(module) when is_atom(module), do: module.__schema__(:source)
 
   defp apply_changeset(changeset, action) do
     with {:ok, cluster} <- Ecto.Changeset.apply_action(changeset, action) do
