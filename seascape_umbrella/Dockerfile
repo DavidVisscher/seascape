@@ -1,7 +1,7 @@
-FROM elixir:1.10.0-alpine AS build
+FROM elixir:1.9.0-alpine AS build
 
 # install build dependencies
-RUN apk add --no-cache build-base npm git python
+RUN apk add --no-cache build-base npm git python tree
 
 # prepare build dir
 WORKDIR /app
@@ -18,24 +18,36 @@ ENV SECRET_KEY_BASE=$secret_key_base
 # # install mix dependencies
 COPY mix.exs .
 COPY mix.lock .
+COPY apps/seascape/mix.exs apps/seascape/
+COPY apps/seascape_web/mix.exs apps/seascape_web/
+COPY apps/seascape_ingest/mix.exs apps/seascape_ingest/
 COPY config config
-# COPY apps apps
 RUN mix do deps.get, deps.compile
 
 # build assets
-# COPY apps/seascape_web/assets/package.json apps/seascape_web/assets/package-lock.json ./apps/seascape_web/assets/
+COPY apps/seascape_web/assets/package.json apps/seascape_web/assets/package-lock.json ./apps/seascape_web/assets/
+COPY apps/seascape_web/assets/node_modules/ ./apps/seascape_web/assets/node_modules/
+
+# Fix symlink problems:
+COPY deps/phoenix ./apps/seascape_web/assets/node_modules/phoenix/
+COPY deps/phoenix_live_view ./apps/seascape_web/assets/node_modules/phoenix_live_view/
+COPY deps/phoenix_html ./apps/seascape_web/assets/node_modules/phoenix_html/
+COPY deps/phoenix_live_dashboard ./apps/seascape_web/assets/node_modules/phoenix_live_dashboard/
+RUN tree apps/seascape_web/assets
+
+# Continue with building front-end deps
 RUN npm --prefix ./apps/seascape_web/assets ci --progress=false --no-audit --loglevel=error
 
-# COPY apps/seascape_web/priv apps/seascape_web/priv
-# COPY assets ./apps/seascape_web/assets
+COPY apps/seascape_web/priv apps/seascape_web/priv
+COPY ./apps/seascape_web/assets ./apps/seascape_web/assets
 RUN npm run --prefix ./apps/seascape_web/assets deploy
-WORKDIR ./apps/seascape_web
 RUN mix phx.digest
-
-WORKDIR /app
+COPY ./apps/seascape_web/priv/static ./apps/seascape_web/priv/static
 
 # compile and build release
-# COPY lib lib
+COPY ./apps/seascape/lib/ ./apps/seascape/lib/
+COPY ./apps/seascape_web/lib/ ./apps/seascape_web/lib/
+# COPY ./apps/seascape_ingest/lib/ ./apps/seascape_ingest/lib/
 # uncomment COPY if rel/ exists
 # COPY rel rel
 RUN mix do compile, release web
