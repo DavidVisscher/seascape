@@ -64,6 +64,8 @@ config :seascape_web, SeascapeWeb.Endpoint,
   ],
   reloadable_apps: [:seascape, :seascape_web]
 
+config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "priv/mnesia/"))
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
