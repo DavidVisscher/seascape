@@ -3,7 +3,7 @@
 
 docker:
   compose:
-    elasticsearch:
+    seascape-web:
       image: 'qqwy/seascape:web'
       container_name: 'seascape-web'
       extra_hosts:
@@ -11,4 +11,4 @@ docker:
         - {{ minion.split('.',1)[0] }}:{{ addrs[0] }}
       {% endfor %}
       ports:
-        - '4000:127.0.0.1:4000'
+        - '4000:4000'
