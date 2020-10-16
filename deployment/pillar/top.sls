@@ -17,7 +17,7 @@ base:
     # Things specific to this machine:
     # The exception is the rule
     {% set minionpath = '/srv/pillar/minions/' + domainname | replace('.', '_') + '/' + hostname %}
-    {% set minionfiles = /srv/pillar/'minions/' | list_files | join(',') %}
+    {% set minionfiles = '/srv/pillar/'minions/' | list_files | join(',') %}
     {% if minionpath in minionfiles %}
     - minions/{{ domainname | replace('.', '_') }}/{{ hostname }}
     {% endif %}
