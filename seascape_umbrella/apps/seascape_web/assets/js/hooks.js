@@ -56,40 +56,4 @@ Hooks.Chart = {
     }
 };
 
-Hooks.TimeLineChart = {
-    mounted() {
-        let self = this;
-        this.label = this.el.dataset.label;
-        this.points = JSON.parse(this.el.dataset.points);
-        this.xs = this.el.dataset.xs;
-        let options = {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: this.label,
-                    data: this.points
-                }]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'time'
-                    }]
-                }
-            }
-        };
-        let canvas = this.el.appendChild(document.createElement('canvas'));
-        this.chart = new Chart(canvas, options);
-    },
-    updated() {
-        // let data = JSON.parse(this.el.dataset.points);
-        this.points = JSON.parse(this.el.dataset.points);
-        this.chart.data.datasets[0].data = this.points;
-        this.chart.update();
-        console.log(this);
-        console.log(this.chart.data);
-        return true;
-    }
-};
-
 export default Hooks;
