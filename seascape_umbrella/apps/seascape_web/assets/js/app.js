@@ -20,19 +20,18 @@ import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
 let Hooks = {};
-Hooks.Chart = {
+Hooks.TimeLineChart = {
     mounted() {
         let self = this;
         this.label = this.el.dataset.label;
-        this.ys = JSON.parse(this.el.dataset.ys);
+        this.points = JSON.parse(this.el.dataset.points);
         this.xs = this.el.dataset.xs;
         let options = {
             type: 'line',
-            // labels: this.xs,
             data: {
                 datasets: [{
                     label: this.label,
-                    data: this.ys
+                    data: this.points
                 }]
             },
             options: {
@@ -48,10 +47,8 @@ Hooks.Chart = {
     },
     updated() {
         // let data = JSON.parse(this.el.dataset.points);
-        this.xs = JSON.parse(this.el.dataset.xs);
-        this.ys = JSON.parse(this.el.dataset.ys);
-        this.chart.labels = this.xs;
-        this.chart.data.datasets[0].data = this.ys;
+        this.points = JSON.parse(this.el.dataset.points);
+        this.chart.data.datasets[0].data = this.points;
         this.chart.update();
         console.log(this);
         console.log(this.chart.data);

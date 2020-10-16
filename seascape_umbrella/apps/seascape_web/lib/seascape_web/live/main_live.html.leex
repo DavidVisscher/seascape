@@ -55,8 +55,6 @@
   <% end %>
 </section>
 
-<% labels = for {str, _} <- Enum.reverse(@seconds), do: str %>
 <% data = for {str, second} <- Enum.reverse(@seconds), do: %{x: str, y: second} %>
 
-<div id="chart1" phx-hook="Chart" phx-update="ignore" data-label="Foo" data-xs="<%= Jason.encode!(labels) %>" data-ys="<%= Jason.encode!(data) %>" >
-</div>
+<div id="chart1" phx-hook="TimeLineChart" phx-update="ignore" data-label="Seconds over time" data-points="<%= Jason.encode!(data) %>" ></div>
