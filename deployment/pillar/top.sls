@@ -15,7 +15,8 @@ base:
     - roles/{{type}} 
      
     # Things specific to this machine:
-    {% set minionpath = 'minions/' domainname | replace('.', '_') + '/' + hostname %}
+    # The exception is the rule
+    {% set minionpath = 'minions/' + domainname | replace('.', '_') + '/' + hostname %}
     {% set minionfiles = 'minions/' | list_files %}
     {% if minionpath in minionfiles %}
     - {{ minionpath }}
