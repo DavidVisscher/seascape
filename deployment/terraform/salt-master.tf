@@ -9,6 +9,7 @@ resource "openstack_compute_instance_v2" "salt-master" {
                 {       
                     deploy_key =var.deploy_key, 
                     deploy_pubkey = var.deploy_pubkey
+                    deploy_pubkey_decoded = base64decode(var.deploy_pubkey)
                 }
               )
 
@@ -23,15 +24,10 @@ resource "openstack_compute_instance_v2" "salt-master" {
   
   network {
     access_network = true
-    name = "seascape_ext_network"
+    name = "seascape_network"
   }
 
-  network {
-    name = "seascape_int_network"
-  }
-
-  depends_on = [openstack_networking_network_v2.seascape_ext_network,
-                openstack_networking_network_v2.seascape_int_network]
+  depends_on = [openstack_networking_network_v2.seascape_network]
 }
 
 resource "openstack_networking_floatingip_v2" "salt-master" {
