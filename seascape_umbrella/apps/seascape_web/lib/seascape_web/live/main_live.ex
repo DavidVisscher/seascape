@@ -96,4 +96,27 @@ defmodule SeascapeWeb.MainLive do
   #   |> assign(:page, ["clusters", "show", cluster_id])
   #   |> &{:noreply, &1}
   # end
+
+  def line_chart(id, label, points, assigns) do
+    type = "line"
+    data = %{
+      datasets: [%{
+                    label: label,
+                    data: points
+                 }]
+    }
+    options = %{scales: %{ xAxes: [%{type: "time"}]}}
+    %{type: type, data: data, options: options}
+    ~L"""
+    <div
+      id="<%= id %>"
+      phx-update="ignore"
+      phx-hook="Chart"
+      data-chart-type="<%= type %>"
+      data-chart-data="<%= Jason.encode!(data) %>"
+      data-chart-options="<%= Jason.encode!(options) %>"
+    >
+    </div>
+    """
+  end
 end

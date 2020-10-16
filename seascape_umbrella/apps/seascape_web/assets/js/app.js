@@ -13,48 +13,11 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
-import Chart from "chart.js"
+import Hooks from "./hooks.js"
 import NProgress from "nprogress"
 
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
-
-let Hooks = {};
-Hooks.TimeLineChart = {
-    mounted() {
-        let self = this;
-        this.label = this.el.dataset.label;
-        this.points = JSON.parse(this.el.dataset.points);
-        this.xs = this.el.dataset.xs;
-        let options = {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: this.label,
-                    data: this.points
-                }]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'time'
-                    }]
-                }
-            }
-        };
-        let canvas = this.el.appendChild(document.createElement('canvas'));
-        this.chart = new Chart(canvas, options);
-    },
-    updated() {
-        // let data = JSON.parse(this.el.dataset.points);
-        this.points = JSON.parse(this.el.dataset.points);
-        this.chart.data.datasets[0].data = this.points;
-        this.chart.update();
-        console.log(this);
-        console.log(this.chart.data);
-        return true;
-    }
-}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
