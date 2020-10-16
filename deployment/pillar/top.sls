@@ -15,4 +15,8 @@ base:
     - roles/{{type}} 
      
     # Things specific to this machine:
-    - minions/{{ domainname | replace('.', '_') }}/{{ hostname }} 
+    {% set minionpath = 'minions/' domainname | replace('.', '_') + '/' + hostname %}
+    {% set minionfiles = 'minions/' | list_files %}
+    {% if minionpath in minionfiles %}
+    - {{ minionpath }}
+    {% endif %}
