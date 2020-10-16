@@ -1,7 +1,7 @@
 resource "openstack_compute_instance_v2" "elastic" {
   count           = 3
   name            = "elastic-${count.index}"
-  flavor_id       = "4"
+  flavor_id       = "3"
   key_pair        = "David"
   security_groups = ["default"]
 
