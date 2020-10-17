@@ -27,7 +27,7 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
     IO.puts("fully done!")
   end
 
-  defp idempotently_create_index(name, params \\ []) do
+  defp idempotently_create_index(name, params) do
     full_name = Elastic.Index.name(name)
     if Elastic.Index.exists?(name) do
       IO.puts("  Skipping ElasticSearch index #{full_name} as it already exists.")

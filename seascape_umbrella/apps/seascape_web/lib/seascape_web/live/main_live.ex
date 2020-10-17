@@ -1,5 +1,4 @@
 defmodule SeascapeWeb.MainLive do
-  use Phoenix.LiveView, layout: {SeascapeWeb.LayoutView, "live.html"}
   use SeascapeWeb, :live_view
   use CapturePipe
 
@@ -36,7 +35,7 @@ defmodule SeascapeWeb.MainLive do
   end
 
   # Invoked on page change.
-  def handle_params(params = %{"spa_path" => path}, url, socket) do
+  def handle_params(params = %{"spa_path" => _}, _url, socket) do
     do_handle_event(["ephemeral", "changed_page"], params, socket)
   end
 

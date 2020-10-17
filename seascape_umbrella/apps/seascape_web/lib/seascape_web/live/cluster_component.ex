@@ -1,5 +1,4 @@
 defmodule SeascapeWeb.ClusterComponent do
-  use Phoenix.LiveComponent
-  use SeascapeWeb, :live_view
+  use SeascapeWeb, :live_component
   use CapturePipe
 end

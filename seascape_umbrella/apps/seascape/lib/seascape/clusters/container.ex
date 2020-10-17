@@ -1,4 +1,5 @@
 defmodule Seascape.Clusters.Container do
+  alias Seascape.Clusters.Machine
   @moduledoc """
   Datastructure representing information of a single container in a `Seascape.Clusters.Machine`.
   """

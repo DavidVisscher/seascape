@@ -62,7 +62,7 @@ defmodule Seascape.Repository.ElasticSearch do
         {:error, problem}
       {:ok, 200, %{"hits" => %{"hits" => hits}}} ->
         hits
-        |> Enum.map(fn %{"_source" => source, "_id" => id} ->
+        |> Enum.map(fn %{"_source" => source, "_id" => _id} ->
           into_struct(struct_module, source)
         end)
         |> &{:ok, &1}
