@@ -10,12 +10,12 @@ defmodule SeascapeIngest.IngestChannel do
     end
   end
 
-  def handle_in("metrics", payload, socket) do
+  def handle_in("metrics", _payload, socket) do
     # Perform the handling of metrics information here.
     {:noreply, socket}
   end
 
-  defp authenticate_api_key(params) do
+  defp authenticate_api_key(_params) do
     true
   end
 end
