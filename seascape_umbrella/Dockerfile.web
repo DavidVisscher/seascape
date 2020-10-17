@@ -33,7 +33,6 @@ COPY deps/phoenix ./apps/seascape_web/assets/node_modules/phoenix/
 COPY deps/phoenix_live_view ./apps/seascape_web/assets/node_modules/phoenix_live_view/
 COPY deps/phoenix_html ./apps/seascape_web/assets/node_modules/phoenix_html/
 COPY deps/phoenix_live_dashboard ./apps/seascape_web/assets/node_modules/phoenix_live_dashboard/
-RUN tree apps/seascape_web/assets
 
 # Continue with building front-end deps
 RUN npm --prefix ./apps/seascape_web/assets ci --progress=false --no-audit --loglevel=error
