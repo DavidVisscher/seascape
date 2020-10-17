@@ -58,7 +58,7 @@ defmodule SeascapeWeb.MainLive do
     Process.send_after(self, :update_self, 1000)
     socket =
       socket
-      |> assign(:seconds, [{DateTime.utc_now(), Time.utc_now |> Time.to_erl |> elem(2)} | socket.assigns.seconds])
+      |> assign(:seconds, Enum.take([{DateTime.utc_now(), Time.utc_now |> Time.to_erl |> elem(2)} | socket.assigns.seconds], 20))
     {:noreply, socket}
   end
 
