@@ -21,6 +21,13 @@ config :seascape_web, SeascapeWeb.Endpoint,
     ]
   ]
 
+config :seascape_ingest, SeascapeIngest.Endpoint,
+  http: [port: 4001],
+  debug_errors: true,
+  code_reloader: true,
+  check_origin: false,
+  watchers: []
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

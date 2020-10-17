@@ -13,6 +13,10 @@ config :seascape_web, SeascapeWeb.Endpoint,
   url: [host: "seascape.example", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :seascape_ingest, SeascapeIngest.Endpoint,
+  url: [host: "seascape.example", port: 80], # TODO is this setting important for an API-only app?
+  # cache_static_manifest: "priv/static/cache_manifest.json"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
