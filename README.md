@@ -30,14 +30,14 @@ For our interactive single-page application we use [Phoenix LiveView](https://he
 This means that we are able to create an SPA while writing (virtually) no JavaScript.
 Only for the graphs we want to show do we hook the LiveView-state-changes into the JS chart-drawing library [`charts.js`](https://www.chartjs.org/), so we do not need to re-invent this wheel.
 
-(c.f. /seascape_umbrella/apps/seascape_web/assets/js for all the JS that the project contains.)
+(c.f. [/seascape_umbrella/apps/seascape_web/assets/js](/seascape_umbrella/apps/seascape_web/assets/j) for all the JS that the project contains.)
 
 On top of this, the full transportation layer is abstracted away, so we do not have to care about what format of serialized data needs to be transferred over the wire between browser and server.
 
 The disadvantage of this is of course that the SPA cannot work in 'offline' mode,
 but as our project requires a user to be online to fetch data from the running containers anyway, this is not a problem.
 
-All main SPA interaction happens in the files in the /seascape_umbrella/apps/seascape_web/lib/seascape_web/live/ folder. However, it heavily leans on /seascape_umbrella/apps/seascape_web/lib/seascape_web/state.ex and [its sub-modules](/seascape_umbrella/apps/seascape_web/lib/seascape_web/state) to handle the data-model stored inside the SPA.
+All main SPA interaction happens in the files in the [/seascape_umbrella/apps/seascape_web/lib/seascape_web/live/](/seascape_umbrella/apps/seascape_web/lib/seascape_web/live/) folder. However, it heavily leans on [/seascape_umbrella/apps/seascape_web/lib/seascape_web/state.ex](/seascape_umbrella/apps/seascape_web/lib/seascape_web/state.ex) and [its sub-modules](/seascape_umbrella/apps/seascape_web/lib/seascape_web/state) to handle the data-model stored inside the SPA.
 
 #### Basic fault-tolerance
 
@@ -47,7 +47,7 @@ The web-application/SPA is able to detect that the ElasticSearch-database cluste
 
 We implemented DB-facing fault-tolerance by using a circuit breaker, implemented as a watchdog Elixir process.
 
-(c.f. /seascape_umbrella/apps/seascape/lib/seascape/repository/elastic_search/watchdog.ex )
+(c.f. [/seascape_umbrella/apps/seascape/lib/seascape/repository/elastic_search/watchdog.ex](/seascape_umbrella/apps/seascape/lib/seascape/repository/elastic_search/watchdog.ex) )
 
 The watchdog asks the ES cluster every couple of seconds if it is healthy.
 If ES responds an 'unhealthy' response (or no response at all) it is immediately considered 'bad'.
