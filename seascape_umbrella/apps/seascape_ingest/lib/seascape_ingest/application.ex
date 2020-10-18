@@ -12,7 +12,11 @@ defmodule SeascapeIngest.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: SeascapeIngest.PubSub},
       # Start the Endpoint (http/https)
-      SeascapeIngest.Endpoint
+      SeascapeIngest.Endpoint,
+      {Cluster.Supervisor, [
+          Application.get_env(:libcluster, :topologies),
+          [name: SeascapeIngest.ClusterSupervisor]]
+      }
       # Start a worker by calling: SeascapeIngest.Worker.start_link(arg)
       # {SeascapeIngest.Worker, arg}
     ]

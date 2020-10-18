@@ -11,7 +11,12 @@ defmodule SeascapeWeb.Application do
       SeascapeWeb.Telemetry,
       # Start the Endpoint (http/https)
       SeascapeWeb.Endpoint,
-      Pow.Store.Backend.MnesiaCache
+      Pow.Store.Backend.MnesiaCache,
+      # Clustering:
+      {Cluster.Supervisor, [
+          Application.get_env(:libcluster, :topologies),
+          [name: SeascapeWeb.ClusterSupervisor]]
+      }
       # Start a worker by calling: SeascapeWeb.Worker.start_link(arg)
       # {SeascapeWeb.Worker, arg}
     ]

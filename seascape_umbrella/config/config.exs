@@ -56,6 +56,19 @@ config :seascape_ingest, SeascapeIngest.Endpoint,
   scheme: :http,
   port: 4001
 
+# Allow Elixir-nodes to discover each-other
+# using UDP gossip
+config :libcluster,
+  topologies: [
+    gossip_example: [
+      strategy: Elixir.Cluster.Strategy.Gossip,
+      config: [
+        port: 45892,
+        if_addr: "0.0.0.0",
+        multicast_if: "192.168.1.1",
+        multicast_addr: "230.1.1.251",
+        multicast_ttl: 1]]]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
