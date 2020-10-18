@@ -8,7 +8,6 @@ haproxy:
     logging: syslog
     maxconn: 32768 
     listen:
-      balance: source
       admin_page:
         type: admin
         binds:
@@ -17,6 +16,7 @@ haproxy:
         user: admin
         password: "TIJDELIJKWACHTWOORD!AANPASSEN"
       https_in:
+        balance: source
         format: end
         type: http
         force_ssl: true
