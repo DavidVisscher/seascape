@@ -1,0 +1,45 @@
+#cloud-config
+
+write_files:
+    - encoding: b64
+      content: ${deploy_key}
+      owner: root:root
+      path: /root/.ssh/id_rsa
+      permissions: '600'
+    - encoding: b64
+      content: ${deploy_pubkey}
+      owner: root:root
+      path: /root/.ssh/id_rsa.pub
+      permissions: '600'
+
+runcmd:
+    - "echo \"Starting runcmd as $(whoami)\""
+    - "printf 'LANG=en_US.UTF-8' > /etc/locale.conf"
+    - "localectl set-locale LANG=en_US.UTF-8"
+    - "printf \"\n127.0.0.1\tsalt\n\" >> /etc/hosts"
+    - "printf \"\n${deploy_pubkey_decoded}\" >> /root/.ssh/id_rsa"
+    - "yum install -y epel-release"
+    - "yum install -y git"
+    - "yum install -y python38 python38-pip"
+    - "python3.8 -m pip install docker-py"
+    - "yum install -y https://repo.saltstack.com/py3/redhat/salt-py3-repo-latest.el8.noarch.rpm"
+    - "yum clean expire-cache"
+    - "yum install -y salt-master salt-minion salt-ssh salt-syndic salt-cloud salt-api"
+    - "systemctl start salt-master"
+    - "sleep 10"
+    - "systemctl start salt-minion"
+    - "sleep 30"
+    - "salt-key -yA"
+    - "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts"
+    - "git clone git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git /srv/seascape"
+    - "ln -s /srv/seascape/deployment/salt /srv/salt"
+    - "ln -s /srv/seascape/deployment/pillar /srv/pillar"
+    - "ln -s /srv/seascape/deployment/reactor /srv/reactor"
+    - "salt-call state.highstate"
+    - "touch /etc/cloud_init_finished"
+
+package_upgrade: False
+
+hostname: salt.seascape.example
+
+final_message: "The system is up, after $UPTIME seconds"

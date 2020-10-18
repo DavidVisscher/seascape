@@ -6,3 +6,7 @@ mine_functions:
   grains.items: []
 
 selinux_mode: permissive
+
+core:
+  packages:
+    install_updates: True

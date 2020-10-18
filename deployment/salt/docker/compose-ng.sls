@@ -68,6 +68,12 @@ include:
         - {{ value }}
     {%- endfor %}
   {%- endif %}
+  {%- if 'networks' in container and container.networks is iterable %}
+    - networks:
+      {%- for value in container.networks %}
+        - {{ value }}
+      {%- endfor %}
+  {%- endif %}
   {%- if 'ports' in container and container.ports is iterable %}
     - port_bindings:
     {%- for port_mapping in container.ports %}
@@ -76,7 +82,7 @@ include:
         {%- if mapping|length < 2 %}
       - "{{ mapping[0] }}"
         {%- elif mapping|length > 2 %}
-      - "{{ mapping[0] }}:{{ mapping[1] }}:{{ mapping[-1] }}
+      - "{{ mapping[0] }}:{{ mapping[1] }}:{{ mapping[-1] }}"
         {%- else %}
       - "{{ mapping[0] }}:{{ mapping[-1] }}"
         {%- endif %}

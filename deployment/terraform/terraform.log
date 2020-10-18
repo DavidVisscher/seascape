@@ -1,0 +1,16 @@
+[0m[33mRunning apply in the remote backend. Output will stream here. Pressing Ctrl-C
+will cancel the remote apply if it's still pending. If the apply started it
+will stop streaming the logs, but will not stop the apply running remotely.[0m
+
+Preparing the remote apply...
+[0m
+[0m[33mTo view this run in a browser, visit:
+https://app.terraform.io/app/seascape/seascape/runs/run-PTkWv9EZq7gDkujQ[0m
+[0m
+Waiting for 1 run(s) to finish before being queued...
+Waiting for 1 run(s) to finish before being queued... (30s elapsed)
+Waiting for 1 run(s) to finish before being queued... (1m0s elapsed)
+Waiting for 1 run(s) to finish before being queued... (1m30s elapsed)
+Interrupt received.
+Please wait for Terraform to exit or data loss may occur.
+Gracefully shutting down...
