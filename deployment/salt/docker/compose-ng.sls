@@ -68,6 +68,12 @@ include:
         - {{ value }}
     {%- endfor %}
   {%- endif %}
+  {%- if 'networks' in container and container.networks is iterable %}
+    - networks:
+      {%- for value in container.networks %}
+        - {{ value }}
+      {%- endfor %}
+  {%- endif %}
   {%- if 'ports' in container and container.ports is iterable %}
     - port_bindings:
     {%- for port_mapping in container.ports %}
