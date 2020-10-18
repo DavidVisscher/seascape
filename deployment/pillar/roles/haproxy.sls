@@ -38,7 +38,7 @@ haproxy:
         - name: web_host
           conditions:
           - type: "hdr(host)"
-            condition: "www.seascape.example"
+            condition: "seascape.example"
           servers:
           {% for minion, addrs in web_ips.items() %}
           - name: {{ minion }}
