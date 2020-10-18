@@ -8,6 +8,7 @@ haproxy:
     logging: syslog
     maxconn: 32768 
     listen:
+      balance: source
       admin_page:
         type: admin
         binds:
