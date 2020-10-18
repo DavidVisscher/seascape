@@ -29,5 +29,3 @@ docker:
       ports:
         - '9200:9200'
         - '9300:9300'
-      networks:
-        - host
