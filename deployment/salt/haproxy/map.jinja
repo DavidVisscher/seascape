@@ -1,15 +1,61 @@
-{% set haproxy = salt['grains.filter_by']({
-    'default': {
-        'package': 'haproxy',
-        'config_file': '/etc/haproxy/haproxy.cfg',
-        'config_file_source': 'salt://haproxy/templates/haproxy.jinja',
-        'user': 'root',
-        'group': 'root',
+{% set proxy = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['haproxy'],
         'service': 'haproxy',
+        'stats_socket': '/run/haproxy/admin.sock',
+        'global': {
+          'maxconn' : 25000
+        }
     },
-    'FreeBSD': {
-        'config_file': '/usr/local/etc/haproxy.conf',
-        'group': 'wheel',
+    'RedHat': {
+        'pkgs': ['haproxy'],
+        'service': 'haproxy',
+        'stats_socket': '/var/lib/haproxy/stats',
+        'global': {
+          'maxconn' : 25000
+        }
     },
-}, merge=salt['pillar.get']('haproxy:lookup'), base='default') %}
+}, merge=salt['pillar.get']('haproxy:proxy')) %}
 
+{% set invalid_section_options = {
+    'frontend': [
+        'abortonclose',
+        'accept-invalid-http-response',
+        'allbackups',
+        'checkcache',
+        'external-check',
+        'httpchk',
+        'ldap-check',
+        'log-health-checks',
+        'mysql-check',
+        'persist',
+        'pgsql-check',
+        'prefer-last-server',
+        'redis-check',
+        'redispatch',
+        'smtpchk',
+        'srvtcpka',
+        'ssl-hello-chk',
+        'tcp-check',
+        'tcp-smart-connect',
+        'tcpka',
+        'tcplog',
+        'transparent',
+    ],
+    'backend': [
+        'accept-invalid-http-request',
+        'clitcpka',
+        'contstats',
+        'dontlog-normal',
+        'dontlognull',
+        'http-ignore-probes',
+        'http-use-proxy-header',
+        'log-separate-errors',
+        'logasap',
+        'socket-stats',
+        'tcp-smart-accept',
+        'tcpka',
+        'tcplog',
+    ],
+}
+%}
