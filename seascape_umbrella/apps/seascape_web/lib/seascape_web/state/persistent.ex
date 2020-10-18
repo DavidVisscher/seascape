@@ -1,4 +1,6 @@
 defmodule SeascapeWeb.State.Persistent do
+  alias SeascapeWeb.Effect
+  alias __MODULE__.Cluster
   defstruct [:user, :clusters]
 
   def new(user) do
@@ -18,8 +20,8 @@ defmodule SeascapeWeb.State.Persistent do
       {["cluster", "created"], %{"cluster" => cluster}} ->
         state = put_in(state.clusters[cluster.id], cluster)
         {state, []}
-      ["cluster", cluster_id | rest] ->
-        Effect.update_in(state, [Access.key(:clusters), Access.key(cluster_id)], &Clusters.handle_event(&1, {rest, params}))
+      {["cluster", cluster_id | rest], _} ->
+        Effect.update_in(state, [Access.key(:clusters), Access.key(cluster_id)], &Cluster.handle_event(&1, {rest, params}))
     end
   end
 end

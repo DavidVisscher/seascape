@@ -56,7 +56,7 @@ defmodule Seascape.Clusters do
   Returns `{:ok, list_of_machines}` or `{:error, problem}`
   """
   def get_cluster_machines(cluster_id) do
-    Repository.search(cluster_id, Machine,
+    Repository.search(Machine,
       %{
         query: %{
           bool: %{
