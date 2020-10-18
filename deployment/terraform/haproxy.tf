@@ -2,7 +2,7 @@ resource "openstack_compute_instance_v2" "haproxy" {
   name            = "haproxy-0"
   flavor_id       = "2"
   key_pair        = "David"
-  security_groups = ["default"]
+  security_groups = ["default", "http_in"]
 
   user_data = templatefile(
                 "${path.module}/cloud-init/minion.yml", 
@@ -28,6 +28,7 @@ resource "openstack_compute_instance_v2" "haproxy" {
   }
 
   depends_on = [openstack_networking_network_v2.seascape_network,
+                openstack_networking_secgroup_v2.http_in,
                 openstack_compute_instance_v2.salt-master]
 }
 

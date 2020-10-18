@@ -2,7 +2,7 @@ resource "openstack_compute_instance_v2" "salt-master" {
   name            = "salt-master"
   flavor_id       = "2"
   key_pair        = "David"
-  security_groups = ["default"]
+  security_groups = ["default", "ssh_in"]
 
   user_data = templatefile(
                 "${path.module}/cloud-init/salt.yml", 
@@ -27,7 +27,8 @@ resource "openstack_compute_instance_v2" "salt-master" {
     name = "seascape_network"
   }
 
-  depends_on = [openstack_networking_network_v2.seascape_network]
+  depends_on = [openstack_networking_network_v2.seascape_network,
+                openstack_networking_secgroup_v2.ssh_in]
 }
 
 resource "openstack_networking_floatingip_v2" "salt-master" {

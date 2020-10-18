@@ -4,7 +4,6 @@ resource "openstack_compute_instance_v2" "ingest" {
   flavor_id       = "2"
   key_pair        = "David"
   security_groups = ["default"]
-  image_id        = "a11117ac-7a21-4681-96bf-f88e69f7187a" # CentOS 8
 
   user_data = templatefile(
                 "${path.module}/cloud-init/minion.yml", 
