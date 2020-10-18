@@ -33,7 +33,7 @@ haproxy:
           {% for minion, addrs in ingest_ips.items() %}
           - name: {{ minion }}
             host: {{ addrs[0] }}
-            port: 4000
+            port: 4001
           {% endfor %}
         - name: web_host
           conditions:
@@ -43,7 +43,7 @@ haproxy:
           {% for minion, addrs in web_ips.items() %}
           - name: {{ minion }}
             host: {{ addrs[0] }}
-            port: 4001
+            port: 4000
           {% endfor %}
         binds:
         - address: 0.0.0.0
