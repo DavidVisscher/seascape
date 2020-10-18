@@ -82,7 +82,7 @@ include:
         {%- if mapping|length < 2 %}
       - "{{ mapping[0] }}"
         {%- elif mapping|length > 2 %}
-      - "{{ mapping[0] }}:{{ mapping[1] }}:{{ mapping[-1] }}
+      - "{{ mapping[0] }}:{{ mapping[1] }}:{{ mapping[-1] }}"
         {%- else %}
       - "{{ mapping[0] }}:{{ mapping[-1] }}"
         {%- endif %}
