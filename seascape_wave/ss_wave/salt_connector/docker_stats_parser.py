@@ -6,7 +6,7 @@ import json
 
 from ss_wave.salt_connector.client_wrapper import SaltClient
 
-STATSFORMAT = r'{\"container\":\"{{ .Container }}\",\"name\":\"{{ .Name }}\",\"memory\":{\"raw\":\"{{ .MemUsage }}\",\"percent\":\"{{ .MemPerc }}\"},\"cpu\":\"{{ .CPUPerc }}\", \"network_io\":\"{{ .NetIO }}\", \"block_io\": \"{{ .BlockIO }}\", \"pids\":\"{{ .PIDs}}\" }'
+STATSFORMAT = r'{\"container\":\"{{ .Container }}\",\"name\":\"{{ .Name }}\",\"memory\":\"{{ .MemUsage }}\",\"memory_percent\":\"{{ .MemPerc }}\",\"cpu\":\"{{ .CPUPerc }}\", \"network_io\":\"{{ .NetIO }}\", \"block_io\": \"{{ .BlockIO }}\", \"pids\":\"{{ .PIDs}}\" }'
 
 
 def get_docker_stats(tgt='*'):
@@ -31,5 +31,10 @@ def parse_stats(raw_stats: str) -> dict:
     """
     out = []
     for line in raw_stats.split('\n'):
-        out.append(json.loads(line))
+        line_data = json.loads(line)
+        for key, value in line_data.items():
+            if isinstance(value, str) and '/' in value:
+                usage = value.split('/')
+                line_data[key] = {'used': usage[0], 'limit': usage[1]}
+        out.append(line_data)
     return out
