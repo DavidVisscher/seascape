@@ -30,7 +30,8 @@ def websocket_exporter(queue: Queue, url):
     def on_open(ws):
         while True:
             data = queue.get(block=True)
-            ws.send(json.dumps(data))
+            message = {'topic': 'ingest', 'event':'new_data', 'payload': data, 'ref': None}
+            ws.send(json.dumps(message))
 
     ws = websocket.WebSocketApp(url, on_message=on_message, on_error=on_error, on_close=on_close)
     ws.on_open = on_open
