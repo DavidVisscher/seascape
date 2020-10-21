@@ -40,8 +40,8 @@ def main(debug):
     exportmanager = ExportManager()
     exportmanager.register_exporter(file_exporter, Path('/tmp/ss_wave'))
     
-    if 'SS_WEBSOCKET_URL' in os.environ:
-        exportmanager.register_exporter(websocket_exporter, os.environ['SS_WEBSOCKET_URL'])
+    if 'SS_WEBSOCKET_URL' in os.environ and 'SS_API_KEY' in os.environ:
+        exportmanager.register_exporter(websocket_exporter, os.environ['SS_WEBSOCKET_URL'], os.environ['SS_API_KEY'])
 
     in_thread = threading.Thread(target=salt_collector, daemon=True, args=[exportmanager.inbox])
     in_thread.start()
