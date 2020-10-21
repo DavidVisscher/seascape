@@ -4,6 +4,8 @@ Provides a function for exporting captured data to a websocket.
 Takes data from a queue.
 """
 
+import os
+import ssl
 import json
 import websocket
 import logging
@@ -33,7 +35,11 @@ def websocket_exporter(queue: Queue, url, api_key):
             data = queue.get(block=True)
             message = {'topic': 'ingest', 'event':'metrics', 'payload': data, 'ref': None}
             ws.send(json.dumps(message))
-
+    
     ws = websocket.WebSocketApp(url, on_message=on_message, on_error=on_error, on_close=on_close)
     ws.on_open = on_open
-    ws.run_forever()
+
+    if 'SS_INSECURE' in os.environ:
+        ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+    else:
+        ws.run_forever()
