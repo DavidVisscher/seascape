@@ -43,6 +43,7 @@ defmodule SeascapeIngest.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:libcluster, "~> 3.2.1"},
+      {:ring_logger, "~> 0.6"},
 
       # In umbrella:
       {:seascape, in_umbrella: true}

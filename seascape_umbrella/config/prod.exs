@@ -53,6 +53,7 @@ config :seascape_ingest, SeascapeIngest.Endpoint,
 
 # Do not print debug messages in production
 # config :logger, level: :info
+config :logger, backends: [:console, RingLogger]
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
