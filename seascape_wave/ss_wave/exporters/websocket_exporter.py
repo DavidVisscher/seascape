@@ -28,7 +28,7 @@ def websocket_exporter(queue: Queue, url, api_key):
         logging.critical("WEBSOCKET CLOSED")
 
     def on_open(ws):
-        ws.send({'topic': 'ingest', 'event': 'phx_join', 'payload': {'api_key': api_key}, 'ref': None})
+        ws.send(json.dumps({'topic': 'ingest', 'event': 'phx_join', 'payload': {'api_key': api_key}, 'ref': None}))
         while True:
             data = queue.get(block=True)
             message = {'topic': 'ingest', 'event':'metrics', 'payload': data, 'ref': None}
