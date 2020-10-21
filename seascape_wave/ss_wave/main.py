@@ -14,6 +14,7 @@ import click
 
 import ss_wave.salt_connector as salt_connector
 
+from ss_wave.exporters.exportmanager import ExportManager
 from ss_wave.exporters.file_exporter import file_exporter
 from ss_wave.salt_connector.collector import salt_collector
 
@@ -34,14 +35,15 @@ def main(debug):
     nodes = salt_connector.minions.list_minions() 
     logging.info("%s", nodes)
 
-    dataqueue = Queue()
-    out_thread = threading.Thread(target=file_exporter, daemon=True, args=[dataqueue, Path('/tmp/ss_wave')])
-    in_thread = threading.Thread(target=salt_collector, daemon=True, args=[dataqueue])
+    exportmanager = ExportManager()
+    exportmanager.register_exporter(file_exporter, Path('/tmp/ss_wave'))
 
-    out_thread.start()
+    in_thread = threading.Thread(target=salt_collector, daemon=True, args=[exportmanager.inbox])
     in_thread.start()
+    exportmanager.start()
+    
     in_thread.join()
-    out_thread.join()
+    exportmanager.join()
 
 def init_logging(debug=False):
     """
