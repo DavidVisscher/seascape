@@ -14,7 +14,7 @@ def get_docker_stats(tgt='*'):
     Gets and parses docker stats for each minion.
     """
     salt = SaltClient()
-    raw_stats_output = salt.cmd(tgt, 'cmd.run', arg=[f'docker stats --no-stream --format "{STATSFORMAT}"'])
+    raw_stats_output = salt.cmd(tgt, 'cmd.run', arg=[f'docker stats --all --no-stream --format "{STATSFORMAT}"'])
 
     out = {}
     for minion, data in raw_stats_output.items():
