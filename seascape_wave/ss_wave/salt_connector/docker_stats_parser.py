@@ -18,7 +18,6 @@ def get_docker_stats(tgt='*'):
 
     out = {}
     for minion, data in raw_stats_output.items():
-        print(f"{minion}: {data}")
         if int(data['retcode']) == 0:
             out[minion] = parse_stats(data['ret'])
 
