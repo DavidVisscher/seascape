@@ -45,3 +45,8 @@ config :elastic,
 # Override Mnesia persistency directory to be in current working directory
 # rather than in a static location as on production
 config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "/tmp/mnesia/"))
+
+release_name = System.get_env("RELEASE_NAME")
+container_host = System.get_env("CONTAINER_HOST")
+System.put_env("RELEASE_DISTRIBUTION", "name")
+System.put_env("RELEASE_NODE", "#{release_name}@#{container_host}")
