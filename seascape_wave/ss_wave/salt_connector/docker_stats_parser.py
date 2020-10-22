@@ -33,7 +33,7 @@ def parse_stats(raw_stats: str) -> dict:
     for line in raw_stats.split('\n'):
         line_data = json.loads(line)
         for key, value in line_data.items():
-            if isinstance(value, str) and '/' in value:
+            if isinstance(value, str) and '/' in value and value.strip() != '':
                 usage = value.split('/')
                 line_data[key] = {'used': usage[0], 'limit': usage[1]}
         out.append(line_data)
