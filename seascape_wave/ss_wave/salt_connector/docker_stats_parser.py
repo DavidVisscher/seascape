@@ -27,14 +27,23 @@ def get_docker_stats(tgt='*'):
 
 def parse_stats(raw_stats: str) -> dict:
     """
-    Returns a raw stats 
+    Reads the raw stats str returned by salt
+    and turns it into a usable dictionary.
     """
     out = []
     for line in raw_stats.split('\n'):
+        # Check if line is empty
+        if line.strip() == '' or line.isspace():
+            continue
+        # Otherwise, we parse it
         line_data = json.loads(line)
+
+        # Turn, for example "1/100" into {"usage": 1, "limit": 100}
         for key, value in line_data.items():
-            if isinstance(value, str) and '/' in value and value.strip() != '':
+            if isinstance(value, str) and '/' in value:
                 usage = value.split('/')
-                line_data[key] = {'used': usage[0], 'limit': usage[1]}
+                line_data[key] = {'used': usage[0], 'limit': usage[1], "raw": value}
+
+        # Append the data to be returned
         out.append(line_data)
     return out
