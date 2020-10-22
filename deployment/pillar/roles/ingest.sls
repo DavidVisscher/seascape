@@ -8,8 +8,10 @@ docker:
       container_name: 'seascape-ingest'
       extra_hosts:
       {% for minion, addrs in other_ips.items() %}
+      {% if not grains['id'] == minion %}
         - {{ minion }}:{{ addrs[0] }}
         - {{ minion.split('.',1)[0] }}:{{ addrs[0] }}
+      {% endif %}
       {% endfor %}
       environment:
         ELASTICSEARCH_DB_URL: "http://elastic-0.seascape.example:9200/"
