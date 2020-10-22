@@ -41,7 +41,11 @@ def parse_stats(raw_stats: str) -> dict:
         for key, value in line_data.items():
             if isinstance(value, str) and '/' in value:
                 usage = value.split('/')
-                line_data[key] = {'used': usage[0], 'limit': usage[1], "raw": value}
+                if 'io' in key:
+                    labels = ('in', 'out')
+                else:
+                    labels = ('usage', 'limit')
+                line_data[key] = {labels[0]: usage[0], labels[1]: usage[1], "raw": value}
 
         # Append the data to be returned
         out.append(line_data)
