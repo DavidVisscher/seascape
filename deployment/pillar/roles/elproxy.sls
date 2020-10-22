@@ -18,7 +18,7 @@ haproxy:
         balance: source
         type: http
         servers:
-        {% for minion, addrs in elastic.items() %}
+        {% for minion, addrs in elastic_ips.items() %}
         - name: {{ minion }}
           host: {{ addrs[0] }}
           port: 9200
@@ -31,7 +31,7 @@ haproxy:
         balance: source
         type: http
         servers:
-        {% for minion, addrs in elastic.items() %}
+        {% for minion, addrs in elastic_ips.items() %}
         - name: {{ minion }}
           host: {{ addrs[0] }}
           port: 9300
