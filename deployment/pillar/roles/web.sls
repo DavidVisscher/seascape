@@ -14,6 +14,7 @@ docker:
       environment:
         ELASTICSEARCH_DB_URL: "http://elastic-0.seascape.example:9200/"
         SECRET_KEY_BASE: "9f6xBOshzFnIhGFwqXnifKU7ksZyBNTo7lhN91V2/eBFePRczYytfgjqO97beDm1" # Change this in prod
+        CONTAINER_HOST: "{{ grains['id'] }}"
       ports:
         - '4000:4000'
         - '4369:4369'
