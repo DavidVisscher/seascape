@@ -2,10 +2,10 @@
 {% set elixir_cluster_nodes = [] %}
 {% for minion, addrs in all_ips.items() %}
   {% if not grains['id'] == minion %}
-    {% if grains['id'].startswith('web') %}
+    {% if minion.startswith('web') %}
       {% do elixir_cluster_nodes.append("web@" + addrs[0]) %}
     {% endif %}
-    {% if grains['id'].startswith('ingest') %}
+    {% if minion.startswith('ingest') %}
       {% do elixir_cluster_nodes.append("ingest@" + addrs[0]) %}
     {% endif %}
   {% endif %}
