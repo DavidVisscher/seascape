@@ -1,0 +1,35 @@
+{%- from "haproxy/map.jinja" import proxy with context %}
+doc:
+  name: HAProxy
+  description: The Reliable, High Performance TCP/HTTP Load Balancer.
+  role:
+    proxy:
+      name: proxy
+      param:
+        version:
+          value: "{{ salt['cmd.shell']('haproxy -v 2>/dev/null || echo unknown')|replace('HA-Proxy version ', '') }}"
+      endpoint:
+        {%- for listen_name, listen in proxy.get('listen', {}).items() %}
+        {%- if listen.binds.0.address not in ["127.0.0.1", "localhost", "::1"] %}
+        {%- if listen.binds.0.address in ["0.0.0.0", "::"] %}
+        {%- set address = grains.ipv4.1 %}
+        {%- else %}
+        {%- set address = listen.binds.0.address %}
+        {%- endif %}
+        {{ listen_name }}_{{ listen.type|default(listen.get('mode', 'tcp')) }}:
+          name: {{ listen_name }}
+          {%- if listen.type is defined %}
+          type: {{ listen.type }}
+          {%- else %}
+          mode: {{ listen.mode|default('tcp') }}
+          type: {{ listen.mode|default('tcp') }}
+          {%- endif %}
+          {%- if listen.type|default(None) in ['general-service', 'openstack-service', 'http', 'contrail-api', 'admin', 'stats'] or listen.mode|default('tcp') == 'http' %}
+          address: "http://{{ address|default(listen.binds.0.address) }}:{{ listen.binds.0.port }}/"
+          protocol: http
+          {%- else %}
+          address: "{{ address|default(listen.binds.0.address) }}:{{ listen.binds.0.port }}"
+          protocol: tcp
+          {%- endif %}
+        {%- endif %}
+        {%- endfor %}

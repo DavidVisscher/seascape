@@ -18,6 +18,7 @@ docker:
         transport.publish_host: {{ elastic_ips[grains['id']][0] }}
       extra_hosts:
       {% for minion, addrs in elastic_ips.items() %}
+        - {{ minion }}:{{ addrs[0] }}
         - {{ minion.split('.',1)[0] }}:{{ addrs[0] }}
       {% endfor %}
       ulimits:

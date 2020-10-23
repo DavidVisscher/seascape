@@ -10,7 +10,8 @@ echo "Updating Mine..."
 salt '*' mine.update
 salt-call state.highstate
 usermod -aG wheel vagrant
-salt --output=json '*' pkg.upgrade > /tmp/salt_upgrade
+echo "Installing updates..."
+salt --batch-size 1 --state-output=terse '*' pkg.upgrade 
 SCRIPT
 
 
@@ -101,5 +102,4 @@ Vagrant.configure("2") do |config|
     
     elastic2.vm.provision "shell", inline: "usermod -aG wheel vagrant"
   end
-
 end

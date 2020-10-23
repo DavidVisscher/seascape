@@ -14,7 +14,7 @@ from pathlib import Path
 import schedule
 
 from .client_wrapper import SaltClient
-
+from .docker_stats_parser import get_docker_stats 
 
 def salt_collector(queue: Queue, *, target='*', metric_interval=5, meta_interval=60):
     """
@@ -34,12 +34,12 @@ def _collect_metrics(queue: Queue, *, target='*'):
     """
     out_data = {'ss_datatype': 'metrics', 'timestamp': str(datetime.datetime.utcnow())}
     salt = SaltClient()
-    
-    docker_data = salt.cmd(target, 'docker.ps', kwarg={'all':True, 'host':False, 'verbose':False})
-    for host, metrics in docker_data.items():
+
+    docker_stats_data = get_docker_stats(tgt=target)
+    for host, metrics in docker_stats_data.items():
         if host not in out_data.keys():
             out_data[host] = {}
-        out_data[host]['docker'] = metrics
+        out_data[host]['docker_stats'] = metrics
 
     cpu_percent_data = salt.cmd(target, 'ps.cpu_percent')
     for host, metrics in cpu_percent_data.items():
@@ -74,5 +74,11 @@ def _collect_meta(queue: Queue, *, target='*'):
         if host not in out_data.keys():
             out_data[host] = {}
         out_data[host]['docker'] = metadata
+    
+    docker_data = salt.cmd(target, 'docker.ps', kwarg={'all':True, 'host':False, 'verbose':False})
+    for host, metrics in docker_data.items():
+        if host not in out_data.keys():
+            out_data[host] = {}
+        out_data[host]['docker'] = metrics
 
     queue.put(out_data)
