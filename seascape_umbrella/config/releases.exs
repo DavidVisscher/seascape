@@ -45,3 +45,20 @@ config :elastic,
 # Override Mnesia persistency directory to be in current working directory
 # rather than in a static location as on production
 config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "/tmp/mnesia/"))
+
+other_elixir_cluster_nodes =
+  System.get_env("OTHER_ELIXIR_CLUSTER_NODES", "")
+  |> String.split(",")
+  |> Enum.reject(&(&1==""))
+  |> Enum.map(&String.to_atom/1)
+
+IO.puts("Connecting to the following elixir cluster nodes at startup:")
+IO.inspect(other_elixir_cluster_nodes)
+
+# Allow Elixir-nodes to discover each-other
+config :libcluster,
+  topologies: [
+    web_ingest_cluster: [
+      strategy: Elixir.Cluster.Strategy.Epmd,
+      config: [
+        hosts: other_elixir_cluster_nodes]]]

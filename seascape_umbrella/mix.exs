@@ -11,14 +11,20 @@ defmodule Seascape.Umbrella.MixProject do
       releases: [
         web: [
           version: "0.0.1",
-          applications: [seascape_web: :permanent, seascape: :permanent, mnesia: :permanent]
+          applications: [seascape_web: :permanent, seascape: :permanent, mnesia: :permanent],
+          cookie: cluster_cookie()
         ],
         ingest: [
           version: "0.0.1",
-          applications: [seascape_ingest: :permanent, seascape: :permanent, mnesia: :permanent]
+          applications: [seascape_ingest: :permanent, seascape: :permanent, mnesia: :permanent],
+          cookie: cluster_cookie()
         ]
       ]
     ]
+  end
+
+  defp cluster_cookie() do
+    "3MczbyHgKiaQmybNACMePYntfi5AtAhfjpgjc4Z4J1MXErbZzbO_lg=="
   end
 
   # Dependencies can be Hex packages:
