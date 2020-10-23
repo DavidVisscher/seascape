@@ -79,6 +79,7 @@ def _collect_meta(queue: Queue, *, target='*'):
     for host, metrics in docker_data.items():
         if host not in out_data.keys():
             out_data[host] = {}
-        out_data[host]['docker'] = metrics
+        if metrics['retcode'] == 0:
+            out_data[host]['docker'] = metrics
 
     queue.put(out_data)
