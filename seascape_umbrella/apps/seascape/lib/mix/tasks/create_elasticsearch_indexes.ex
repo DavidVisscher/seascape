@@ -24,6 +24,12 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
                        machine_id: %{type: :keyword},
       }}})
 
+    idempotently_create_index("metrics",
+      %{mappings: %{properties: %{
+                       id: %{type: :keyword},
+                       timestamp: %{type: :date_nanos},
+                    }}})
+
     IO.puts("fully done!")
   end
 

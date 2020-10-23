@@ -7,6 +7,7 @@ defmodule Mix.Tasks.Seascape.RemoveElasticsearchIndexes do
     Process.sleep(1000)
     IO.puts("Deleting ElasticSearch indexes...")
 
+    delete_index("metrics")
     delete_index("containers")
     delete_index("machines")
     delete_index("clusters")

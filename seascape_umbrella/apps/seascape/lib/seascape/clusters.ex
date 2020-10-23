@@ -1,5 +1,5 @@
 defmodule Seascape.Clusters do
-  alias __MODULE__.{Cluster, Machine, Container}
+  alias __MODULE__.{Cluster, Machine, Container, Metric}
   use CapturePipe
   alias Seascape.Repository
 
@@ -168,5 +168,11 @@ defmodule Seascape.Clusters do
   """
   def subscribe(user) do
     Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}/#{user.id}")
+  end
+
+  def store_metric!(cluster_id, params) do
+    Metric.new(cluster_id)
+    |> Metric.changeset(params)
+    |> Repository.create()
   end
 end
