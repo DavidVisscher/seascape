@@ -50,18 +50,45 @@ defmodule SeascapeIngest.WaveParser2.MetricsTest do
   end
 
   describe "parse/1" do
-    test "" do
+    test "parses example JSON correctly into a list of metrics" do
       metrics =
         example_json()
         |> Metrics.parse()
 
       Enum.each(metrics, fn metric ->
-        assert is_binary(metric[:key])
-        assert is_binary(metric[:vm_hostname])
-        assert is_binary(metric[:container_ref])
-        assert metric[:value]
+        assert match?(%{key: key, vm_hostname: vm_hostname, container_ref: container_ref, value: _value} when is_binary(key) and is_binary(vm_hostname) and is_binary(container_ref), metric)
+        case metrics[:key] do
+          "metrics.docker_stats.memory.usage" ->
+            assert_nonnegative_int(metrics[:value])
+          "metrics.docker_stats.memory.limit" ->
+            assert_nonnegative_int(metrics[:value])
+          "metrics.docker_stats.network.in" ->
+            assert_nonnegative_int(metrics[:value])
+          "metrics.docker_stats.network.out" ->
+            assert_nonnegative_int(metrics[:value])
+          "metrics.docker_stats.block.in" ->
+            assert_nonnegative_int(metrics[:value])
+          "metrics.docker_stats.block.out" ->
+            assert_nonnegative_int(metrics[:value])
+          "metrics.docker_stats.cpu" ->
+            assert_ratio_float(metrics[:value])
+          "metrics.docker_stats.memory_percent" ->
+            assert_ratio_float(metrics[:value])
+          _other -> :ok
+        end
       end)
     end
+  end
+
+  def assert_nonnegative_int(val) do
+    assert is_integer(val)
+    assert val >= 0
+  end
+
+  def assert_ratio_float(val) do
+    assert is_float(val)
+    assert val >= 0
+    assert val <= 1
   end
 
   def example_json do
