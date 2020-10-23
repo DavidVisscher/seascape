@@ -2,11 +2,11 @@
 {% set elixir_cluster_nodes = [] %}
 {% for minion, addrs in all_ips.items() %}
   {% if not grains['id'] == minion %}
-    {% if grains['id'].startswith('web') %}
-      {% elixir_cluster_nodes.append("web@" + addrs[0]) %}
+    {% if minion.startswith('web') %}
+      {% do elixir_cluster_nodes.append("web@" + addrs[0]) %}
     {% endif %}
-    {% if grains['id'].startswith('ingest') %}
-      {% elixir_cluster_nodes.append("ingest@" + addrs[0]) %}
+    {% if minion.startswith('ingest') %}
+      {% do elixir_cluster_nodes.append("ingest@" + addrs[0]) %}
     {% endif %}
   {% endif %}
 {% endfor %}
@@ -30,7 +30,7 @@ docker:
         RELEASE_DISTRIBUTION: "name"
         RELEASE_NODE: "ingest@{{ all_ips[grains['id']][0] }}"
         BEAM_PORT: 4370
-        OTHER_ELIXIR_CLUSTER_NODES: "{{ elixir_cluster_nodes.join(',') }}"
+        OTHER_ELIXIR_CLUSTER_NODES: "{{ elixir_cluster_nodes|join(',') }}"
       ports:
         - '4001:4001' # web
         - '4369:4369' # EPMD
