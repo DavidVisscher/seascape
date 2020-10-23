@@ -47,7 +47,7 @@ config :elastic,
 config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "/tmp/mnesia/"))
 
 other_elixir_cluster_nodes =
-  System.get_env("OTHER_ELIXIR_CLUSTER_NODES", [])
+  System.get_env("OTHER_ELIXIR_CLUSTER_NODES", "")
   |> String.split(",")
   |> Enum.reject(&(&1==""))
   |> Enum.map(&String.to_atom/1)
