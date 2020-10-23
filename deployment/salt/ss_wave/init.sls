@@ -33,6 +33,7 @@ ss_wave_unit:
     - name: /etc/systemd/system/ss_wave.service
     - source:
       - salt://{{ slspath }}/files/ss_wave.service
+    - template: jinja
 
 ss_wave_reload_daemon:
   cmd.run:
