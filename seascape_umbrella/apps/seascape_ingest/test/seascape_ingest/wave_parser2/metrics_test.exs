@@ -92,7 +92,7 @@ defmodule SeascapeIngest.WaveParser2.MetricsTest do
   end
 
   def example_json do
-    "./test/support/example_wave_output_split.json"
+    "./test/support/example_wave_output_single_metrics_payload.json"
     |> File.read!()
     |> Jason.decode!()
   end
