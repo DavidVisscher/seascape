@@ -35,6 +35,7 @@ haproxy:
           - name: {{ minion }}
             host: {{ addrs[0] }}
             port: 4001
+            params: "check inter 15s fastinter 2s downinter 1s rise 5 fall 3" 
           {% endfor %}
         - name: web_host
           conditions:
@@ -45,6 +46,7 @@ haproxy:
           - name: {{ minion }}
             host: {{ addrs[0] }}
             port: 4000
+            params: "check inter 15s fastinter 2s downinter 1s rise 5 fall 3" 
           {% endfor %}
         binds:
         - address: 0.0.0.0
