@@ -31,7 +31,6 @@ defmodule SeascapeIngest.WaveParser2 do
   end
 
   def parse_metrics_container(container_json) do
-    docker_stats = 
   end
 
   def parse_metrics_container_docker_stats(container_json) do

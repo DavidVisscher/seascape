@@ -75,3 +75,11 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix, :stacktrace_depth, 20
 
 config :mnesia, dir: to_charlist(System.get_env("MNESIA_DIR", "./priv/mnesia/"))
+
+other_elixir_cluster_nodes = [:"web@localhost", :"ingest@localhost"]
+config :libcluster,
+  topologies: [
+    web_ingest_cluster: [
+      strategy: Elixir.Cluster.Strategy.Epmd,
+      config: [
+        hosts: other_elixir_cluster_nodes]]]

@@ -42,6 +42,7 @@ defmodule SeascapeIngest.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:math, "~> 0.5.0"},
       {:libcluster, "~> 3.2.1"},
       {:ring_logger, "~> 0.6"},
 

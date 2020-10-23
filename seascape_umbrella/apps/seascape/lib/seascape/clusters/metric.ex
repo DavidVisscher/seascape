@@ -6,7 +6,7 @@ defmodule Seascape.Clusters.Metric do
 
   use Ecto.Schema
 
-  @derive {Jason.Encode, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key {:id, :binary_id, autogenerate: false}
   schema "metrics" do
     field :cluster_id, :binary_id
@@ -24,7 +24,7 @@ defmodule Seascape.Clusters.Metric do
   end
 
   def changeset(metric, changes \\ %{}) do
-    metrics
+    metric
     |> Ecto.Changeset.cast(changes, [:host, :timestamp, :key, :value])
     |> Ecto.Changeset.validate_required([:host, :timestamp, :key, :value])
   end
