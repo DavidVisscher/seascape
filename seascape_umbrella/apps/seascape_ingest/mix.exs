@@ -45,7 +45,7 @@ defmodule SeascapeIngest.MixProject do
       {:math, "~> 0.5.0"},
       {:libcluster, "~> 3.2.1"},
       {:ring_logger, "~> 0.6"},
-
+      {:solution, "~> 1.0"},
 
       {:stream_data, "~> 0.5", only: :test},
 

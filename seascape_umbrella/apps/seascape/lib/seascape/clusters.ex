@@ -176,7 +176,6 @@ defmodule Seascape.Clusters do
     |> Repository.create()
   end
 
-
   def store_machine_metric!(cluster_id, params) do
     MachineMetric.new(cluster_id)
     |> Metric.changeset(params)
