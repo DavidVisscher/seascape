@@ -7,7 +7,7 @@ defmodule SeascapeIngest.WaveParser2.Metrics do
     case val do
       :error -> :error
       {float, unit_str} ->
-
+        {:ok, round(float * parse_unit(unit_str))}
     end
   end
 
