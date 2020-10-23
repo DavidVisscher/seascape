@@ -9,5 +9,9 @@ User=root
 Group=root
 WorkingDirectory=/opt/seascape/seascape_wave
 
+Environment="SS_WEBSOCKET_URL={{ salt.pillar.get('ss_wave:websocket_url', 'wss://ingest.seascape.example/ingest/websocket') }}"
+Environment="SS_API_KEY={{ salt.pillar.get('ss_wave:api-key', '00000000-0000-0000-0000-000000000000') }}"
+Environment="SS_INSECURE={{ salt.pillar.get('ss_wave:insecure', 'True') }}"
+
 [Install]
 WantedBy=multi-user.target
