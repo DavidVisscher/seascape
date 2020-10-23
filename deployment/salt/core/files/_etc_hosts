@@ -11,7 +11,7 @@
 {%- set hostname = minion.split('.', 1)[0] -%}{# Split hostname & Domainname#}
 {{ addrs[0] }}  {{hostname}} {{ minion }} 
 {%-  if minion in additional_names.keys() -%}
-{%-    for name in additional_names[hostname] -%}{{name}}
+{%-    for name in additional_names[minion] -%}{{name}}
 {%-    endfor -%}
 {%-  endif -%}
 {%- endfor %}
