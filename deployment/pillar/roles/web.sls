@@ -17,7 +17,9 @@ docker:
         CONTAINER_HOST: "{{ grains['id'] }}"
         RELEASE_DISTRIBUTION: "name"
         RELEASE_NODE: "web@{{ grains['id'] }}"
+        BEAM_PORT: 4370
       ports:
         - '4000:4000'
         - '4369:4369'
+        - '4370:4370'
         - '45892:45892/udp'
