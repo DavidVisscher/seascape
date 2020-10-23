@@ -170,8 +170,15 @@ defmodule Seascape.Clusters do
     Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}/#{user.id}")
   end
 
-  def store_metric!(cluster_id, params) do
-    Metric.new(cluster_id)
+  def store_container_metric!(cluster_id, params) do
+    ContainerMetric.new(cluster_id)
+    |> Metric.changeset(params)
+    |> Repository.create()
+  end
+
+
+  def store_machine_metric!(cluster_id, params) do
+    MachineMetric.new(cluster_id)
     |> Metric.changeset(params)
     |> Repository.create()
   end

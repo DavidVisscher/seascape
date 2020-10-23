@@ -1,4 +1,4 @@
-defmodule Seascape.Clusters.Metric do
+defmodule Seascape.Clusters.MachineMetric do
   @moduledoc """
   A KISS {host, key, timestamp, value}-store
   for data obtained from SeaScape Wave.
@@ -8,9 +8,9 @@ defmodule Seascape.Clusters.Metric do
 
   @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key {:id, :binary_id, autogenerate: false}
-  schema "metrics" do
+  schema "machine_metrics" do
     field :cluster_id, :binary_id
-    field :host, :string
+    field :hostname, :string
     field :timestamp, :utc_datetime_usec
     field :key, :string
     field :value, :string
@@ -25,7 +25,7 @@ defmodule Seascape.Clusters.Metric do
 
   def changeset(metric, changes \\ %{}) do
     metric
-    |> Ecto.Changeset.cast(changes, [:host, :timestamp, :key, :value])
-    |> Ecto.Changeset.validate_required([:host, :timestamp, :key, :value])
+    |> Ecto.Changeset.cast(changes, [:hostname, :timestamp, :key, :value])
+    |> Ecto.Changeset.validate_required([:hostname, :timestamp, :key, :value])
   end
 end

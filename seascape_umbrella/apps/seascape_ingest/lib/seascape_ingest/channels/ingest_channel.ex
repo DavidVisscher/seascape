@@ -10,8 +10,12 @@ defmodule SeascapeIngest.IngestChannel do
     end
   end
 
-  def handle_in("metrics", _payload, socket) do
+  def handle_in("metrics", payload, socket) do
     # Perform the handling of metrics information here.
+    WaveParser.parse(payload)
+    |> Enum.map(fn metric ->
+      Seascape.Clusters.store_metric!(socket.assigns.cluster_id, metric)
+    end)
     {:noreply, socket}
   end
 
