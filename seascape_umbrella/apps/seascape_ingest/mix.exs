@@ -46,6 +46,9 @@ defmodule SeascapeIngest.MixProject do
       {:libcluster, "~> 3.2.1"},
       {:ring_logger, "~> 0.6"},
 
+
+      {:stream_data, "~> 0.5", only: :test},
+
       # In umbrella:
       {:seascape, in_umbrella: true}
     ]
