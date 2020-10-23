@@ -8,5 +8,5 @@
 
 {% for minion, addrs in salt.mine.get('*', 'network.ip_addrs', tgt_type='glob' ) | dictsort() -%}
 {%- set hostname = minion.split('.', 1)[0] -%}{# Split hostname & Domainname#}
-{{ addrs[0] }}  {{hostname}} {{ minion }} {% for name in salt.pillar.get('additional_hostnames')[salt.grains.get('id')] %}{{name}}{%endfor%}
+{{ addrs[0] }}  {{hostname}} {{ minion }} {% for name in salt.pillar.get('additional_hostnames')[hostname] %}{{name}}{%endfor%}
 {%- endfor %}
