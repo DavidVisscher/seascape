@@ -13,5 +13,8 @@ Environment="SS_WEBSOCKET_URL={{ salt.pillar.get('ss_wave:websocket_url', 'wss:/
 Environment="SS_API_KEY={{ salt.pillar.get('ss_wave:api_key', '00000000-0000-0000-0000-000000000000') }}"
 Environment="SS_INSECURE={{ salt.pillar.get('ss_wave:insecure', 'True') }}"
 
+Restart=on-failure
+RestartSec=5
+
 [Install]
 WantedBy=multi-user.target

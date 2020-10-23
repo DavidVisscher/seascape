@@ -5,6 +5,7 @@ Takes data from a queue.
 """
 
 import os
+import sys
 import ssl
 import json
 import websocket
@@ -28,6 +29,7 @@ def websocket_exporter(queue: Queue, url, api_key):
 
     def on_close(ws):
         logging.critical("WEBSOCKET CLOSED")
+        sys.exit(1)
 
     def on_open(ws):
         ws.send(json.dumps({'topic': 'ingest', 'event': 'phx_join', 'payload': {'api_key': api_key}, 'ref': None}))
