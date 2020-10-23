@@ -30,7 +30,7 @@ docker:
         RELEASE_DISTRIBUTION: "name"
         RELEASE_NODE: "ingest@{{ all_ips[grains['id']][0] }}"
         BEAM_PORT: 4370
-        OTHER_ELIXIR_CLUSTER_NODES: "{{ elixir_cluster_nodes.join(',') }}"
+        OTHER_ELIXIR_CLUSTER_NODES: "{{ elixir_cluster_nodes|join(',') }}"
       ports:
         - '4001:4001' # web
         - '4369:4369' # EPMD
