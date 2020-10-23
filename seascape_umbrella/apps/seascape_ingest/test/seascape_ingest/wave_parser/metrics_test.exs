@@ -1,8 +1,8 @@
-defmodule SeascapeIngest.WaveParser2.MetricsTest do
+defmodule SeascapeIngest.WaveParser.MetricsTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
-  alias SeascapeIngest.WaveParser2.Metrics
+  alias SeascapeIngest.WaveParser.Metrics
 
   describe "parse_metric_num/1" do
     test "parses 0" do

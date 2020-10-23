@@ -1,13 +1,13 @@
-defmodule SeascapeIngest.WaveParser2Test do
+defmodule SeascapeIngest.WaveParserTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
-  alias SeascapeIngest.WaveParser2
+  alias SeascapeIngest.WaveParser
 
   describe "parse/1" do
     test "it does not crash for any of the example payloads" do
       example_payloads()
-      |> Stream.map(&WaveParser2.parse/1)
+      |> Stream.map(&WaveParser.parse/1)
       |> Enum.each(fn events ->
         assert is_list(events)
         Enum.each(events, fn event ->

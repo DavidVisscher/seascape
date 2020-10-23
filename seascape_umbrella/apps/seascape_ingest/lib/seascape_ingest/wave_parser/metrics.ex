@@ -1,4 +1,4 @@
-defmodule SeascapeIngest.WaveParser2.Metrics do
+defmodule SeascapeIngest.WaveParser.Metrics do
   def parse(json) do
     json
     |> Enum.flat_map(fn {vm_hostname, container_json} -> parse_vm(vm_hostname, container_json) end)
