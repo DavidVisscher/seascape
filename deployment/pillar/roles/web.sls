@@ -1,5 +1,15 @@
-{% set other_ips = salt['saltutil.runner']('mine.get', tgt='*', fun='network.ip_addrs') %}
-
+{% set all_ips = salt['saltutil.runner']('mine.get', tgt='*', fun='network.ip_addrs') %}
+{% set elixir_cluster_nodes = [] %}
+{% for minion, addrs in all_ips.items() %}
+  {% if not grains['id'] == minion %}
+    {% if grains['id'].startswith('web') %}
+      {% elixir_cluster_nodes.append("web@" + addrs[0]) %}
+    {% endif %}
+    {% if grains['id'].startswith('ingest') %}
+      {% elixir_cluster_nodes.append("ingest@" + addrs[0]) %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
 
 docker:
   compose:
@@ -7,7 +17,7 @@ docker:
       image: 'qqwy/seascape:web'
       container_name: 'seascape-web'
       extra_hosts:
-      {% for minion, addrs in other_ips.items() %}
+      {% for minion, addrs in all_ips.items() %}
       {% if not grains['id'] == minion %}
         - {{ minion }}:{{ addrs[0] }}
         - {{ minion.split('.',1)[0] }}:{{ addrs[0] }}
@@ -18,10 +28,10 @@ docker:
         SECRET_KEY_BASE: "9f6xBOshzFnIhGFwqXnifKU7ksZyBNTo7lhN91V2/eBFePRczYytfgjqO97beDm1" # Change this in prod
         # CONTAINER_HOST: "{{ grains['id'] }}"
         RELEASE_DISTRIBUTION: "name"
-        RELEASE_NODE: "web@{{ other_ips[grains['id']][0] }}"
+        RELEASE_NODE: "web@{{ all_ips[grains['id']][0] }}"
         BEAM_PORT: 4370
+        OTHER_ELIXIR_CLUSTER_NODES: "{{ elixir_cluster_nodes.join(',') }}"
       ports:
-        - '4000:4000'
-        - '4369:4369'
-        - '4370:4370'
-        - '45892:45892/udp'
+        - '4000:4000' # web
+        - '4369:4369' # EPMD
+        - '4370:4370' # the Elixir node itself
