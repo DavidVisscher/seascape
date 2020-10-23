@@ -16,9 +16,9 @@ docker:
       environment:
         ELASTICSEARCH_DB_URL: "http://elproxy-0.seascape.example:9200/"
         SECRET_KEY_BASE: "9f6xBOshzFnIhGFwqXnifKU7ksZyBNTo7lhN91V2/eBFePRczYytfgjqO97beDm1" # Change this in prod
-        CONTAINER_HOST: "{{ grains['id'] }}"
-        RELEASE_DISTRIBUTION: "name"
-        RELEASE_NODE: "ingest@{{ grains['id'] }}"
+        # CONTAINER_HOST: "{{ grains['id'] }}"
+        # RELEASE_DISTRIBUTION: "name"
+        # RELEASE_NODE: "ingest@{{ grains['id'] }}"
         BEAM_PORT: 4370
       ports:
         - '4001:4001'
