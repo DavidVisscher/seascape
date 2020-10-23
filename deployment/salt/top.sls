@@ -22,3 +22,7 @@ base:
     - core
     - users
     - haproxy
+  "elproxy-*":
+    - core
+    - users
+    - haproxy
