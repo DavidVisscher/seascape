@@ -77,7 +77,7 @@ def _collect_meta(queue: Queue, *, target='*'):
     
     docker_data = salt.cmd(target, 'docker.ps', kwarg={'all':True, 'host':False, 'verbose':False})
     for host, metrics in docker_data.items():
-        if host not in out_data.keys():
+        if host not in out_data.keys() and metrics['retcode'] == 0:
             out_data[host] = {}
         out_data[host]['docker'] = metrics
 
