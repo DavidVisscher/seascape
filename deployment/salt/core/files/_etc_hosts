@@ -1,3 +1,4 @@
+{% set additional_names = salt.pillar.get('additional_hostnames') %}
 # Warning!
 # 
 # This file is managed by salt.
@@ -8,5 +9,5 @@
 
 {% for minion, addrs in salt.mine.get('*', 'network.ip_addrs', tgt_type='glob' ) | dictsort() -%}
 {%- set hostname = minion.split('.', 1)[0] -%}{# Split hostname & Domainname#}
-{{ addrs[0] }}  {{hostname}} {{ minion }} {% for name in salt.pillar.get('additional_hostnames')[hostname] %}{{name}}{%endfor%}
+{{ addrs[0] }}  {{hostname}} {{ minion }} {% if hostname in additional_names.keys() %} {% for name in additional_names[hostname] %}{{name}}{%endfor%}{% endif %}
 {%- endfor %}
