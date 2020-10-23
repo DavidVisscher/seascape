@@ -48,7 +48,7 @@ COPY ./apps/seascape/lib/ ./apps/seascape/lib/
 COPY ./apps/seascape_web/lib/ ./apps/seascape_web/lib/
 # COPY ./apps/seascape_ingest/lib/ ./apps/seascape_ingest/lib/
 # uncomment COPY if rel/ exists
-# COPY rel rel
+COPY rel rel
 RUN mix do compile, release web
 
 # prepare release image
