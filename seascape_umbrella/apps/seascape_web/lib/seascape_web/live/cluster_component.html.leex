@@ -90,7 +90,7 @@
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.usage" => memory_usage}} <- container_metrics, do: %{x: timestamp, y: memory_usage} %>
                         <%= unless graph_data == [] do %>
-                          <%= time_line_chart("chart1", "Memory usage, Bytes", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
+                          <%= time_line_chart("chart1", "Memory usage, Bytes", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0}}]}}, assigns) %>
                         <% end %>
                       </div>
                       <div class="eight wide column">
@@ -104,14 +104,14 @@
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.in" => network_in}} <- container_metrics, do: %{x: timestamp, y: network_in} %>
                         <%= unless graph_data == [] do %>
-                          <%= time_line_chart("chart1", "Network (incoming), Bytes", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
+                          <%= time_line_chart("chart1", "Network (incoming), Bytes", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0}}]}}, assigns) %>
                         <% end %>
                       </div>
                       <div class="eight wide column">
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.out" => network_out}} <- container_metrics, do: %{x: timestamp, y: network_out} %>
                         <%= unless graph_data == [] do %>
-                          <%= time_line_chart("chart1", "Network (outgoing), Bytes", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
+                          <%= time_line_chart("chart1", "Network (outgoing), Bytes", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0}}]}}, assigns) %>
                         <% end %>
                       </div>
                     </div>

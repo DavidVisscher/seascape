@@ -18,7 +18,7 @@ defmodule SeascapeIngest.WaveParser do
   end
 
   defp prepare_json(json) do
-    timestamp = DateTime.utc_now # timestamp = DateTime.from_iso8601!(json["timestamp"])
+    timestamp = timestamp = DateTime.from_iso8601!(json["timestamp"])
     datatype = json["ss_datatype"]
     clean_json =
       json
