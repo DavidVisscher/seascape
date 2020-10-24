@@ -105,8 +105,9 @@ Deployment to the cloud is automated. This follows these steps:
 
 #### Admin Dashboard
 
-We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and start `:observer` there to have even more insight into and be able to debug the running system live.
+We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and have full logging- and behaviour introspection.
 
+Besides this, we are running Kibana (the ElasticSearch dashboard) and HaProxy's status dashboard which enable us to quickly find out what is happening in our system and diagnose potential problems.
 
 ![Phoenix LiveDashboard](/architecture/phoenix_livedashboard.png)
 
