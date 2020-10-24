@@ -36,7 +36,7 @@ This means that we are able to create an SPA while writing (virtually) no JavaSc
 
 Only for the graphs we want to show do we hook the LiveView-state-changes into the JS chart-drawing library [`charts.js`](https://www.chartjs.org/), so we do not need to re-invent this wheel.
 
-(c.f. [/seascape_umbrella/apps/seascape_web/assets/js](/seascape_umbrella/apps/seascape_web/assets/j) for all the JS that the project contains.)
+(c.f. [/seascape_umbrella/apps/seascape_web/assets/js](/seascape_umbrella/apps/seascape_web/assets/js) for all the JS that the project contains.)
 
 On top of this, the full transportation layer is abstracted away, so we do not have to care about what format of serialized data needs to be transferred over the wire between browser and server.
 
