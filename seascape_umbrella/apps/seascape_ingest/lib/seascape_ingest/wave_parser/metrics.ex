@@ -3,13 +3,14 @@ defmodule SeascapeIngest.WaveParser.Metrics do
     json
     |> Enum.map(fn {vm_hostname, container_json} -> parse_vm(vm_hostname, container_json) end)
     |> Enum.reject(&(&1==%{}))
+    |> Enum.concat
   end
 
   def parse_vm(vm_hostname, vm_json) do
     # We're not yet parsing cpu_percent, cpu_times here
     (vm_json["docker_stats"] || [])
-    |> Enum.flat_map(&parse_container(vm_hostname, &1))
-    |> Enum.into(%{})
+    |> Enum.map(&parse_container(vm_hostname, &1))
+    |> Enum.map(&Enum.into(&1, %{}))
   end
 
   def parse_container(_vm_hostname, nil), do: [] # Called for VMs without containers
