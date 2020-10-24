@@ -273,11 +273,9 @@ defmodule Seascape.Clusters do
       }
     }
     )
-      |> IO.inspect
 
     with {:ok, %{"aggregations" => %{"per_container" => %{"buckets" => container_agg}}}} <- Repository.search(ContainerMetric, query, extract_hits: false) do
       res = Enum.reduce(container_agg, %{max_block_in: 0, max_block_out: 0, max_network_in: 0, max_network_out: 0}, fn elem, acc ->
-        IO.inspect({elem, acc}, label: :reduce)
         %{
           max_block_in: acc[:max_block_in] + elem["max_block_in"]["value"],
           max_block_out: acc[:max_block_out] + elem["max_block_out"]["value"],

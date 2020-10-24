@@ -5,6 +5,8 @@ defmodule SeascapeWeb.State.Persistent.Cluster do
     with {:ok, metrics} <- Seascape.Clusters.get_metrics(cluster_id),
          {:ok, aggregates} <- Seascape.Clusters.get_clusterwide_metrics_aggregates(cluster_id)
       do
+      Process.send_after(self(), {"persistent/cluster/#{cluster_id}/update_aggregates", %{}}, 5_000)
+
       {:ok, {cluster_id, %__MODULE__{name: cluster.name, id: cluster.id, api_key: cluster.api_key, metrics: invert_cluster_metrics(metrics), aggregates: aggregates}}}
       # {:ok, %{cluster | metrics: metrics}}
     end
@@ -17,6 +19,13 @@ defmodule SeascapeWeb.State.Persistent.Cluster do
         IO.inspect("Received new metrics: #{inspect(new_metrics)}")
         new_metrics = invert_cluster_metrics(new_metrics)
         {merge_metrics(state, new_metrics), []}
+      {["update_aggregates"], %{}} ->
+        {:ok, new_aggregates} = Seascape.Clusters.get_clusterwide_metrics_aggregates(state.id)
+        IO.inspect("Updated aggregates!")
+        state = put_in(state.aggregates, new_aggregates)
+        Process.send_after(self(), {"persistent/cluster/#{state.id}/update_aggregates", %{}}, 5_000)
+
+        {state, []}
       _ ->
         {state, []}
     end

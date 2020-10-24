@@ -13,9 +13,40 @@
       <input type="text" placeholder="" readonly="readonly" value="<%= @cluster.api_key %>" >
     </div>
 
-    <p>
-    Cluster-wide stats here.
-    </p>
+    <table class="ui very basic collapsing celled centering table">
+      <thread>
+        <td>
+          <em>(During the last 5 minutes)</em>
+        </td>
+        <td>In</td>
+        <td>Out</td>
+      </thread>
+      <tbody>
+        <tr>
+          <td>
+            Total Network (B)
+          </td>
+          <td>
+            <%= round(@cluster.aggregates.max_network_in) %>
+          </td>
+          <td>
+            <%= round(@cluster.aggregates.max_network_out) %>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            Total IO (B)
+          </td>
+          <td>
+            <%= round(@cluster.aggregates.max_block_in) %>
+          </td>
+          <td>
+            <%= round(@cluster.aggregates.max_block_out) %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 <div class="row">
