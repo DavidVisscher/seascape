@@ -15,12 +15,12 @@ defmodule SeascapeWeb.State.Persistent do
     case {event, params} do
       {["cluster", "create"], %{}} ->
         create_cluster_function = fn ->
-          Seascape.Clusters.create_cluster(state.user, %{name: "New cluster"})
+          Seascape.Clusters.create_cluster(state.user, %{name: "#{Faker.Superhero.prefix()} #{Faker.Food.En.spice()}"})
         end
 
         {state, [create_cluster_function]}
       {["cluster", "created"], %{"cluster" => cluster}} ->
-        {:ok, filled_cluster} = Cluster.new(cluster)
+        {:ok, {_, filled_cluster}} = Cluster.new({cluster.id, cluster})
         state = put_in(state.clusters[cluster.id], filled_cluster)
         {state, []}
       {["cluster", cluster_id | rest], _} ->
