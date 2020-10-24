@@ -52,7 +52,7 @@
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.cpu.percent" => cpu_percent}} <- container_metrics, do: %{x: timestamp, y: cpu_percent} %>
                         <%= unless graph_data == [] do %>
-                          <%= time_line_chart("chart1", "CPU usage, %", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
+                          <%= time_line_chart("chart1", "CPU usage, %", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0, suggestedMax: 1}}]}}, assigns) %>
                         <% end %>
                       </div>
                       <div class="eight wide column">
@@ -66,7 +66,7 @@
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.percent" => memory_percent}} <- container_metrics, do: %{x: timestamp, y: memory_percent} %>
                         <%= unless graph_data == [] do %>
-                          <%= time_line_chart("chart1", "Memory usage, %", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
+                          <%= time_line_chart("chart1", "Memory usage, %", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0, suggestedMax: 1}}]}}, assigns) %>
                         <% end %>
                       </div>
                       <div class="eight wide column">

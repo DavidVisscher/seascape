@@ -5,14 +5,14 @@ defmodule SeascapeWeb.ClusterComponent do
   @doc """
   expects `points` to be an enumerable where each elements is an `%{x: key, y: value}`-map.
   """
-  def time_line_chart(id, label, points, options \\ %{data: %{}}, assigns) do
+  def time_line_chart(id, label, points, options \\ %{}, assigns) do
     type = "line"
-    data = Map.merge(options[:data], %{
+    data = %{
       datasets: [%{
                     label: label,
                     data: points,
                  }]
-    })
+    }
     options = Map.merge(%{scales: %{ xAxes: [%{type: "time"}]}}, options)
     chart(id, type, data, options, assigns)
   end

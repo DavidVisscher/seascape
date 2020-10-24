@@ -1,9 +1,11 @@
 defmodule SeascapeWeb.State.Persistent.Cluster do
-  defstruct [:name, :id, :api_key, :metrics]
+  defstruct [:name, :id, :api_key, :metrics, :aggregates]
 
   def new({cluster_id, cluster}) do
-    with {:ok, metrics} <- Seascape.Clusters.get_metrics(cluster_id) do
-      {:ok, {cluster_id, %__MODULE__{name: cluster.name, id: cluster.id, api_key: cluster.api_key, metrics: invert_cluster_metrics(metrics)}}}
+    with {:ok, metrics} <- Seascape.Clusters.get_metrics(cluster_id),
+         {:ok, aggregates} <- Seascape.Clusters.get_clusterwide_metrics_aggregates(cluster_id)
+      do
+      {:ok, {cluster_id, %__MODULE__{name: cluster.name, id: cluster.id, api_key: cluster.api_key, metrics: invert_cluster_metrics(metrics), aggregates: aggregates}}}
       # {:ok, %{cluster | metrics: metrics}}
     end
   end
