@@ -1,3 +1,0 @@
-# Seascape
-
-**TODO: Add description**
