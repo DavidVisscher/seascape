@@ -5,6 +5,10 @@
 
 Project: **Docker resource use measurement**
 
+![](/architecture/seascape_spa.png)
+
+
+
 
 ## Architecture Slides
 
@@ -89,6 +93,9 @@ Data is sent to our elxir-based ingest api using websockets, this allows for low
 
 We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and start `:observer` there to have even more insight into and be able to debug the running system live.
 
+
+![Phoenix LiveDashboard](/architecture/phoenix_livedashboard.png)
+
 #### Fault Tolerance
 
 Both the Elixir web-nodes and Elixir ingest-nodes can be scaled independently to larger/smaller numbers, and all of them connect to form a large Elixir cluster with transparent message-passing between them. 
@@ -167,4 +174,12 @@ run the `build_web.sh` and `build_ingest.sh` scripts, respectively.
 
 ## Testing
 
-TODO
+The most important thing to get right was the ingest system, as this depends on the part that we send to users.
+
+Therefore, this is what we focused our testing efforts on.
+These tests, include 
+- unit-tests and stateless property-based that make sure that parsing works correctly, 
+- websocket-wrapping tests to make sure authentication is done correctly
+- tests talking with ElasticSearch to make sure correct data is stored.
+
+Tests can be run by going to `seascape_umbrella/apps/seascape_ingest` and running  `mix test` there (while you have ElasticSearch running locally on the default port 9200).
