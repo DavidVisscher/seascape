@@ -12,6 +12,7 @@ defmodule SeascapeWeb.State.Persistent.Cluster do
     # For now do nothing
     case {event, params} do
       {["metrics"], new_metrics} ->
+        IO.inspect("Received new metrics: #{inspect(new_metrics)}")
         new_metrics = invert_cluster_metrics(new_metrics)
         {merge_metrics(state, new_metrics), []}
       _ ->
