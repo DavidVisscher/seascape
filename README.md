@@ -95,6 +95,7 @@ Data is sent to our elxir-based ingest api using websockets, this allows for low
 ![](/architecture/infra_details.png)
 
 * using these 10 machines we reached our quota for instances. Our ideal deployment would have 3 ingest and 3 web nodes.
+* while drawn separately in the diagram, the salt master with wave may also be the one that manages seascape as per the dogfooding principle.
 
 #### Automated deployment
 
