@@ -191,7 +191,7 @@ defmodule Seascape.Clusters do
         |> ContainerMetric.changeset(map)
       end)
     Task.start(fn ->
-      Phoenix.PubSub.broadcast(Seascape.PubSub, "#{__MODULE__}/#{cluster_id}", {"persistent/cluster/#{cluster_id}/metrics", structs})
+      Phoenix.PubSub.broadcast(Seascape.PubSub, "#{__MODULE__}/#{cluster_user_id}", {"persistent/cluster/#{cluster_id}/metrics", structs})
     end)
     Task.start(fn ->
       Repository.bulk_create(structs)
