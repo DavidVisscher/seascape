@@ -56,26 +56,34 @@ defmodule SeascapeIngest.WaveParser.MetricsTest do
         |> Metrics.parse()
 
       Enum.each(metrics, fn metric ->
-        assert match?(%{key: key, vm_hostname: vm_hostname, container_ref: container_ref, value: _value} when is_binary(key) and is_binary(vm_hostname) and is_binary(container_ref), metric)
-        case metrics[:key] do
-          "metrics.docker_stats.memory.usage" ->
-            assert_nonnegative_int(metrics[:value])
-          "metrics.docker_stats.memory.limit" ->
-            assert_nonnegative_int(metrics[:value])
-          "metrics.docker_stats.network.in" ->
-            assert_nonnegative_int(metrics[:value])
-          "metrics.docker_stats.network.out" ->
-            assert_nonnegative_int(metrics[:value])
-          "metrics.docker_stats.block.in" ->
-            assert_nonnegative_int(metrics[:value])
-          "metrics.docker_stats.block.out" ->
-            assert_nonnegative_int(metrics[:value])
-          "metrics.docker_stats.cpu" ->
-            assert_ratio_float(metrics[:value])
-          "metrics.docker_stats.memory_percent" ->
-            assert_ratio_float(metrics[:value])
-          _other -> :ok
-        end
+        assert match?(%{vm_hostname: vm_hostname, container_ref: container_ref} when is_binary(vm_hostname) and is_binary(container_ref), metric)
+        cleaned_metric =
+          metric
+          |> Map.delete(:vm_hostname)
+          |> Map.delete(:container_ref)
+
+        Enum.each(cleaned_metric, fn {key, value} ->
+
+          case key do
+            "metrics.docker_stats.memory.usage" ->
+              assert_nonnegative_int(value)
+            "metrics.docker_stats.memory.limit" ->
+              assert_nonnegative_int(value)
+            "metrics.docker_stats.network.in" ->
+              assert_nonnegative_int(value)
+            "metrics.docker_stats.network.out" ->
+              assert_nonnegative_int(value)
+            "metrics.docker_stats.block.in" ->
+              assert_nonnegative_int(value)
+            "metrics.docker_stats.block.out" ->
+              assert_nonnegative_int(value)
+            "metrics.docker_stats.cpu" ->
+              assert_ratio_float(value)
+            "metrics.docker_stats.memory_percent" ->
+              assert_ratio_float(value)
+            _other -> :ok
+          end
+        end)
       end)
     end
   end

@@ -1,8 +1,4 @@
-<%= if @state.ephemeral.repository_ok? do %>
-  <p class="alert alert-info">
-    The database is working correctly.
-  </p>
-<% else %>
+<%= unless @state.ephemeral.repository_ok? do %>
   <p class="alert alert-danger" role="alert">
   Connection with the database lost.
   You can still read real-time information,
@@ -57,3 +53,6 @@
       </div>
   <% end %>
 </section>
+
+<% #data = for {str, second} <- Enum.reverse(@seconds), do: %{x: str, y: second} %>
+<%= #time_line_chart("chart1", "Seconds over time", data, assigns) %>

@@ -6,7 +6,8 @@ defmodule SeascapeIngest.IngestChannelTest do
     IO.puts("Creating example cluster data in ElasticSearch")
     Seascape.Repository.delete_all(Seascape.Clusters.ContainerMetric)
 
-    {:ok, cluster} = Seascape.Clusters.create_cluster(%{id: "fake_user_id"}, %{name: "testcluster"})
+    {:ok, cluster} = Seascape.Clusters.create_cluster(%{id: "a6c490da-809d-4515-b491-327adad92814"}, %{name: "testcluster"})
+    IO.inspect(cluster)
     Seascape.Repository.refresh_all # Since we'll need the data immediately in tests
     [cluster: cluster]
   end
@@ -22,7 +23,7 @@ defmodule SeascapeIngest.IngestChannelTest do
 
     {:ok, socket} = connect(ApiSocket, %{}, %{})
     {:ok, _, socket} = subscribe_and_join(socket, "ingest", %{"api_key" => cluster.api_key})
-    assert socket.assigns.cluster_id == cluster.id
+    assert socket.assigns.cluster.id == cluster.id
   end
 
   test "Sending a websocket message with `metrics` as topic will result in container_metrics being added to the DB", context do
@@ -35,7 +36,7 @@ defmodule SeascapeIngest.IngestChannelTest do
     example_payloads()
     |> Enum.map(fn payload ->
       ref = push(socket, "metrics", payload)
-      assert_reply ref, :ok, _
+      assert_reply ref, :ok, _, 200
     end)
 
     # TODO assert that changes were pushed to repo

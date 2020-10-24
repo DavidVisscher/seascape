@@ -74,7 +74,7 @@ defmodule Seascape.Repository do
         changeset =
         Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
       {:error, changeset}
-  end
+    end
   end
 
   def delete(struct) do
@@ -85,8 +85,8 @@ defmodule Seascape.Repository do
     Elastic.HTTP.delete(Elastic.Index.name(table_name(struct_module)) <> "/_query", body: %{"query" => %{"match_all" => %{}}})
   end
 
-  def search(struct_module, query) do
-    ElasticSearch.search(struct_module, table_name(struct_module), query)
+  def search(struct_module, query, opts \\ [extract_hits: true]) do
+    ElasticSearch.search(struct_module, table_name(struct_module), query, opts)
   end
 
   defp pkey_value(struct = %module{}) do
@@ -110,8 +110,8 @@ defmodule Seascape.Repository do
   end
 
   defp apply_changeset(changeset, action) do
-    with {:ok, cluster} <- Ecto.Changeset.apply_action(changeset, action) do
-      res = filter_virtual_keys(cluster)
+    with {:ok, data} <- Ecto.Changeset.apply_action(changeset, action) do
+      res = filter_virtual_keys(data)
       {:ok, res}
     end
   end
@@ -135,4 +135,5 @@ defmodule Seascape.Repository do
   def refresh(struct_module) do
     ElasticSearch.refresh(table_name(struct_module))
   end
+
 end

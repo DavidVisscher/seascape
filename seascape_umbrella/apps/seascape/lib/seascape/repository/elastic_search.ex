@@ -62,19 +62,23 @@ defmodule Seascape.Repository.ElasticSearch do
     end
   end
 
-  def search(struct_module, index, query) do
+  def search(struct_module, index, query, opts \\ [extract_hits:  true]) do
     result =
       Elastic.Query.build(index, query)
       |> Elastic.Index.search()
     case result do
       {:error, _code, problem} ->
         {:error, problem}
-      {:ok, 200, %{"hits" => %{"hits" => hits}}} ->
-        hits
-        |> Enum.map(fn %{"_source" => source, "_id" => _id} ->
-          into_struct(struct_module, source)
-        end)
-        |> &{:ok, &1}
+      {:ok, 200, result = %{"hits" => %{"hits" => hits}}} ->
+        if opts[:extract_hits] do
+          hits
+          |> Enum.map(fn %{"_source" => source, "_id" => _id} ->
+            into_struct(struct_module, source)
+          end)
+          |> &{:ok, &1}
+        else
+          {:ok, result}
+        end
     end
   end
 

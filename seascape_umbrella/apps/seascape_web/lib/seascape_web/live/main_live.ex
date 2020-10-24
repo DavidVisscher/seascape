@@ -7,7 +7,9 @@ defmodule SeascapeWeb.MainLive do
   def mount(_params, session, socket) do
     IO.inspect(session)
     case SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache]) do
+
       nil ->
+        Process.send_after(self, :update_self, 1000)
         {:ok, state} = State.new()
 
         socket
@@ -46,6 +48,15 @@ defmodule SeascapeWeb.MainLive do
     |> String.split("/")
     |> do_handle_event(params, socket)
     |> IO.inspect(label: :handle_event_result)
+  end
+
+  def handle_info(:update_self, socket) do
+    IO.puts("Updated!")
+
+    Process.send_after(self, :update_self, 1000)
+    socket =
+      socket
+    {:noreply, socket}
   end
 
   def handle_info({event, params}, socket) do
@@ -99,4 +110,5 @@ defmodule SeascapeWeb.MainLive do
     <% end %>
     """
   end
+
 end
