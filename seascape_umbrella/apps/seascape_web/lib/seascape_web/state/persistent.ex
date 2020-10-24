@@ -7,7 +7,6 @@ defmodule SeascapeWeb.State.Persistent do
   def new(user) do
     swith ok(raw_clusters) <- Seascape.Clusters.get_user_clusters(user),
           ok(filled_clusters) <- raw_clusters |> Enum.map(&Cluster.new/1) |> Solution.Enum.combine() do
-      IO.inspect(filled_clusters, label: :filled_clusters)
       {:ok, %__MODULE__{user: user, clusters: Enum.into(filled_clusters, %{})}}
     end
   end

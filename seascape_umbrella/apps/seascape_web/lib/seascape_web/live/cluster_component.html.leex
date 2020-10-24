@@ -23,17 +23,54 @@
     <h2 class="ui header">
       (Virtual) Machines
     </h2>
-    <div class="ui cards">
-      <div class="card">
+    <div class="ui items">
+      <%= for {hostname, machine_metrics} <- @cluster.metrics do %>
+      <div class="item">
         <div class="content">
-        <div class="header">
-          example.com
+        <div class="left floated header">
+          <%= hostname %>
         </div>
-        <div class="metadata">
-          Foo Bar
+        <div class="meta">
+          
+        </div>
+        <div class="description">
+          <div class="ui cards">
+            <%= for {container_ref, container_metrics} <- machine_metrics do %>
+                <% [container_hash, container_name] = String.split(container_ref, ":", parts: 2) %>
+                <div class="ui fluid card">
+                  <div class="content">
+                    <div class="ui header">
+                      <%= container_name %>
+                    <div class="ui sub header">
+                      <%= container_hash %>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="extra content">
+                    <span>
+                      <i class="memory icon">
+                      </i>
+                    </span>
+                  </div>
+                </div>
+            <% end %>
+          </div>
         </div>
         </div>
       </div>
+      <% end %>
+    </div>
+    <!-- <div class="ui cards"> -->
+    <!--   <div class="card"> -->
+    <!--     <div class="content"> -->
+    <!--     <div class="header"> -->
+    <!--       example.com -->
+    <!--     </div> -->
+    <!--     <div class="metadata"> -->
+    <!--       Foo Bar -->
+    <!--     </div> -->
+    <!--     </div> -->
+    <!--   </div> -->
       
     </div>
   </div>

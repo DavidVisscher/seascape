@@ -204,7 +204,7 @@ defmodule Seascape.Clusters do
             %{match: %{cluster_id: cluster_id}},
           ],
           filter: [
-            %{range: %{timestamp: %{gte: "now-5m"}}}
+            %{range: %{timestamp: %{gte: "now-60m"}}}
           ]
         }
       }}
