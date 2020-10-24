@@ -51,7 +51,6 @@ All main SPA interaction happens in the files in the [/seascape_umbrella/apps/se
 The web-application/SPA is able to detect that the ElasticSearch-database cluster is unreachable offline and if this is the case:
 - it will display a nice message to the users that data storage and signing in is currently not possible.
 - queries that would require database usage are not executed, but this does not result in application-breaking crashes but rather clear error messages to the user.
-- Real-time data is pushed through the Elixir cluster in parallel with (attempting to) store it in the database, allowing the application to still display real-time data while the database is temporarily unreachable.
 
 
 
@@ -111,9 +110,17 @@ Deployment to the cloud is automated. This follows these steps:
 
 We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and have full logging- and behaviour introspection.
 
-Besides this, we are running Kibana (the ElasticSearch dashboard) and HaProxy's status dashboard which enable us to quickly find out what is happening in our system and diagnose potential problems.
+Besides this, we are running Kibana (the ElasticSearch dashboard) and HaProxy's admin dashboard which enable us to quickly find out what is happening in our system and diagnose potential problems.
 
+##### Phoenix LiveDashboard
 ![Phoenix LiveDashboard](/architecture/phoenix_livedashboard.png)
+
+##### HAProxy Admin
+![HAProxy](/architecture/haproxy.png)
+
+##### Kibana
+![Kibana](/architecture/kibana.png)
+
 
 #### Fault Tolerance
 
