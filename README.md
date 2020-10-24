@@ -150,4 +150,12 @@ run the `build_web.sh` and `build_ingest.sh` scripts, respectively.
 
 ## Testing
 
-TODO
+The most important thing to get right was the ingest system, as this depends on the part that we send to users.
+
+Therefore, this is what we focused our testing efforts on.
+These tests, include 
+- unit-tests and stateless property-based that make sure that parsing works correctly, 
+- websocket-wrapping tests to make sure authentication is done correctly
+- tests talking with ElasticSearch to make sure correct data is stored.
+
+Tests can be run by going to `seascape_umbrella/apps/seascape_ingest` and running  `mix test` there (while you have ElasticSearch running locally on the default port 9200).
