@@ -198,11 +198,11 @@ defmodule Seascape.Clusters do
     end)
   end
 
-  def get_metrics(cluster_id) do
-    Repository.search(ContainerMetric, get_metrics_query(cluster_id))
+  def get_metrics(cluster_id, ago \\ "10m") do
+    Repository.search(ContainerMetric, get_metrics_query(cluster_id, ago))
   end
 
-  defp get_metrics_query(cluster_id) do
+  defp get_metrics_query(cluster_id, ago \\ "10m") do
     %{size: @everything,
       query: %{
         bool: %{
@@ -210,65 +210,77 @@ defmodule Seascape.Clusters do
             %{match: %{cluster_id: cluster_id}},
           ],
           filter: [
-            %{range: %{timestamp: %{gte: "now-10m"}}}
+            %{range: %{timestamp: %{gte: "now-#{ago}"}}}
           ]
         }
       }}
   end
 
-  def get_metrics_aggregates(cluster_id) do
-    # query = %{get_metrics_query(cluster_id) |
-    #   size: 0,
-    #   aggs: get_aggs_query()
-    #   }
+  def get_metrics_aggregates(cluster_id, ago \\ "10m", interval \\ "1m") do
     query =
-      get_metrics_query(cluster_id)
+      get_metrics_query(cluster_id, ago)
       |> put_in([:size], 0)
-      |> put_in([:aggs], get_aggs_query())
+      |> put_in([:aggs], get_aggs_query(interval))
+
     with {:ok, result} <- Repository.search(ContainerMetric, query, extract_hits: false) do
       {:ok, result["aggregations"]}
     end
   end
 
-  # TODO does not give back results yet
-  def get_aggs_query() do
+  def get_metrics_flat_aggregates(cluster_id, ago \\ "5m") do
+    query =
+      get_metrics_query(cluster_id, ago)
+      |> put_in([:size], 0)
+      |> put_in([:aggs], inner_get_aggs_query())
+
+    with {:ok, result} <- Repository.search(ContainerMetric, query, extract_hits: false) do
+      {:ok, result["aggregations"]}
+    end
+  end
+
+
+  def get_aggs_query(interval \\ "1m") do
     %{"metrics_per_minute": %{
         "date_histogram": %{
           "field": "timestamp",
-          "calendar_interval": "1m"
+          "calendar_interval": interval
+        },
+        "aggs": inner_get_aggs_query()
+      }
+    }
+  end
+
+  def inner_get_aggs_query() do
+    %{
+      "per_container": %{
+        "terms": %{
+          "field": "container_ref",
+          "size": @everything
         },
         "aggs": %{
-          "per_container": %{
-            "terms": %{
-              "field": "container_ref",
-              "size": @everything
-            },
-            "aggs": %{
-              "avg_cpu_percent": %{
-                "avg": %{
-                  "field": "data.metrics.docker_stats.cpu.percent"
-                }
-              },
-              "avg_mem_usage": %{
-                "avg": %{
-                  "field": "data.metrics.docker_stats.memory.usage"
-                }
-              },
-              "avg_block_in": %{
-                "avg": %{
-                  "field": "data.metrics.docker_stats.block.in"
-                }
-              },
-              "avg_block_out": %{
-                "avg": %{
-                  "field": "data.metrics.docker_stats.block.out"
-                }
-              },
-              "avg_mem_percent": %{
-                "avg": %{
-                  "field": "data.metrics.docker_stats.memory.percent"
-                }
-              }
+          "avg_cpu_percent": %{
+            "avg": %{
+              "field": "data.metrics.docker_stats.cpu.percent"
+            }
+          },
+          "avg_mem_usage": %{
+            "avg": %{
+              "field": "data.metrics.docker_stats.memory.usage"
+            }
+          },
+          "avg_block_in": %{
+            "avg": %{
+              "field": "data.metrics.docker_stats.block.in"
+            }
+          },
+          "avg_block_out": %{
+            "avg": %{
+              "field": "data.metrics.docker_stats.block.out"
+            }
+          },
+          "avg_mem_percent": %{
+            "avg": %{
+              "field": "data.metrics.docker_stats.memory.percent"
             }
           }
         }

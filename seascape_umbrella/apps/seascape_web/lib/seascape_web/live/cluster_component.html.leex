@@ -47,29 +47,36 @@
                     </div>
                   </div>
                   <div class="extra content">
-                    <div class="ui two column grid">
-                      <div class="column">
+                    <div class="ui grid">
+                      <div class="sixteen wide column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.cpu.percent" => cpu_percent}} <- container_metrics, do: %{x: timestamp, y: cpu_percent} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "CPU usage, %", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="eight wide column">
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.usage" => memory_usage}} <- container_metrics, do: %{x: timestamp, y: memory_usage} %>
                         <%= unless graph_data == [] do %>
-                          <%= time_line_chart("chart1", "Memory usage, Bytes", Enum.sort_by(graph_data, &(&1.x)), %{data: %{backgroundColor: 'cyan'}}, assigns) %>
+                          <%= time_line_chart("chart1", "Memory usage, Bytes", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
                         <% end %>
                       </div>
-                      <div class="column">
+                      <div class="eight wide column">
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.percent" => memory_percent}} <- container_metrics, do: %{x: timestamp, y: memory_percent} %>
                         <%= unless graph_data == [] do %>
                           <%= time_line_chart("chart1", "Memory usage, %", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
                         <% end %>
                       </div>
-                      <div class="column">
+                      <div class="eight wide column">
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.in" => network_in}} <- container_metrics, do: %{x: timestamp, y: network_in} %>
                         <%= unless graph_data == [] do %>
                           <%= time_line_chart("chart1", "Network (incoming), Bytes", Enum.sort_by(graph_data, &(&1.x)), assigns) %>
                         <% end %>
                       </div>
-                      <div class="column">
+                      <div class="eight wide column">
                         
                         <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.out" => network_out}} <- container_metrics, do: %{x: timestamp, y: network_out} %>
                         <%= unless graph_data == [] do %>
