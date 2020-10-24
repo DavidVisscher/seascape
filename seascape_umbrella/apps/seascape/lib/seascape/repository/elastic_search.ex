@@ -17,6 +17,15 @@ defmodule Seascape.Repository.ElasticSearch do
     Elastic.Document.index(index, type, key, data)
   end
 
+  def bulk_create(list) do
+    raise_unless_cluster_ok!()
+    list
+    |> Enum.map(fn {index, type, id, data} ->
+      {Elastic.Index.name(index), type, id, data}
+    end)
+    |> Elastic.Bulk.create()
+  end
+
   def get(index, type, key, struct_module) do
     raise_unless_cluster_ok!()
     case Elastic.Document.get(index, type, key) do

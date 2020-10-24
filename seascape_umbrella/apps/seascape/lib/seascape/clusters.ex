@@ -181,4 +181,14 @@ defmodule Seascape.Clusters do
     |> MachineMetric.changeset(params)
     |> Repository.create()
   end
+
+  def store_container_metrics!(metrics_params, cluster_id) do
+    metrics_params
+    |> Enum.map(fn map ->
+      cluster_id
+      |> ContainerMetric.new()
+      |> ContainerMetric.changeset(map)
+    end)
+    |> Repository.bulk_create
+  end
 end

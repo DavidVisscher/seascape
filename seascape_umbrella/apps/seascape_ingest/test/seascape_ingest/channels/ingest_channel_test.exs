@@ -35,7 +35,7 @@ defmodule SeascapeIngest.IngestChannelTest do
     example_payloads()
     |> Enum.map(fn payload ->
       ref = push(socket, "metrics", payload)
-      assert_reply ref, :ok, _, 1000
+      assert_reply ref, :ok, _
     end)
 
     # TODO assert that changes were pushed to repo
@@ -48,7 +48,6 @@ defmodule SeascapeIngest.IngestChannelTest do
     "./test/support/example_wave_output.json"
     |> File.stream!()
     |> Stream.map(&Jason.decode!/1)
-    |> Stream.take(10)
   end
 
   defp count_metrics() do

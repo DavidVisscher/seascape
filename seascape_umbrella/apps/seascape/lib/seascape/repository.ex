@@ -37,6 +37,15 @@ defmodule Seascape.Repository do
     end
   end
 
+  def bulk_create(list_of_changesets) do
+    list_of_changesets
+    |> Enum.map(&apply_changeset!(&1, :create))
+    |> Enum.map(fn struct ->
+      {table_name(struct), type_name(struct), pkey_value(struct), struct}
+    end)
+    |> ElasticSearch.bulk_create
+  end
+
   def get(primary_key_value, module) do
     try do
       ElasticSearch.get(table_name(module), type_name(module), primary_key_value, module)
@@ -94,6 +103,11 @@ defmodule Seascape.Repository do
 
   defp table_name(%module{}), do: table_name(module)
   defp table_name(module) when is_atom(module), do: module.__schema__(:source)
+
+  defp apply_changeset!(changeset, action) do
+    {:ok, struct} = apply_changeset(changeset, action)
+    struct
+  end
 
   defp apply_changeset(changeset, action) do
     with {:ok, cluster} <- Ecto.Changeset.apply_action(changeset, action) do
