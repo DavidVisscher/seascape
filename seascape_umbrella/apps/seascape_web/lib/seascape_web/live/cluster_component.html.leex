@@ -1,14 +1,19 @@
-<ul>
-  <li>
-Page for Cluster "<%= @cluster.name %>"
-  </li>
-  <li>
-(Id: <%= @cluster.id %>)
-  </li>
-  <li>
-  API key: <%= @cluster.api_key %>
-  </li>
-</ul>
+<div class="row">
+  <div class="column">
+    <div class="ui header">
+      Cluster "<%= @cluster.name %>"
+      <div class="ui sub header">
+        (Id: <%= @cluster.id %>)
+      </div>
+    </div>
+  <div class="ui small labeled input">
+    <div class="ui label">
+      API Key:
+    </div>
+    <input type="text" placeholder="" readonly="readonly" value="<%= @cluster.api_key %>" >
+  </div>
+  </div>
+</div>
 
 <%= case @page do %>
 <% [] -> %>
