@@ -72,6 +72,10 @@ defmodule Seascape.Repository do
     ElasticSearch.delete(table_name(struct), type_name(struct), pkey_value(struct))
   end
 
+  def delete_all(struct_module) do
+    Elastic.HTTP.delete(Elastic.Index.name(table_name(struct_module)) <> "/_query", body: %{"query" => %{"match_all" => %{}}})
+  end
+
   def search(struct_module, query) do
     ElasticSearch.search(struct_module, table_name(struct_module), query)
   end

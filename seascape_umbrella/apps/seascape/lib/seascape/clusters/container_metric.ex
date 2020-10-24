@@ -8,13 +8,13 @@ defmodule Seascape.Clusters.ContainerMetric do
 
   @derive {Jason.Encoder, except: [:__meta__]}
   @primary_key {:id, :binary_id, autogenerate: false}
-  schema "machine_metrics" do
+  schema "container_metrics" do
     field :cluster_id, :binary_id
     field :hostname, :string
     field :container_ref, :string # Contains `alphanumeric_hash:arbitrary_string`
     field :timestamp, :utc_datetime_usec
     field :key, :string
-    field :value, :string
+    field :value, :float
   end
 
   def new(cluster_id) do

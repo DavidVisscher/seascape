@@ -1,5 +1,5 @@
 defmodule Seascape.Clusters do
-  alias __MODULE__.{Cluster, Machine, Container, Metric}
+  alias __MODULE__.{Cluster, Machine, Container, ContainerMetric, MachineMetric}
   use CapturePipe
   alias Seascape.Repository
 
@@ -172,13 +172,13 @@ defmodule Seascape.Clusters do
 
   def store_container_metric!(cluster_id, params) do
     ContainerMetric.new(cluster_id)
-    |> Metric.changeset(params)
+    |> ContainerMetric.changeset(params)
     |> Repository.create()
   end
 
   def store_machine_metric!(cluster_id, params) do
     MachineMetric.new(cluster_id)
-    |> Metric.changeset(params)
+    |> MachineMetric.changeset(params)
     |> Repository.create()
   end
 end
