@@ -14,15 +14,36 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
            id: %{type: :keyword}}
     }})
 
-    idempotently_create_index("machines",
-      %{ mappings: %{properties: %{
-                        id: %{type: :keyword},
-                        cluster_id: %{type: :keyword},
-    }}})
-    idempotently_create_index("containers",
+    # idempotently_create_index("machines",
+    #   %{ mappings: %{properties: %{
+    #                     id: %{type: :keyword},
+    #                     cluster_id: %{type: :keyword},
+    # }}})
+    # idempotently_create_index("containers",
+    #   %{mappings: %{properties: %{
+    #                    machine_id: %{type: :keyword},
+    #   }}})
+
+    idempotently_create_index("machine_metrics",
       %{mappings: %{properties: %{
-                       machine_id: %{type: :keyword},
-      }}})
+                       id: %{type: :keyword},
+                       cluster_id: %{type: :keyword},
+                       hostname: %{type: :keyword},
+                       key: %{type: :keyword},
+                       timestamp: %{type: :date_nanos},
+                       value: %{type: :double}
+                    }}})
+
+    idempotently_create_index("container_metrics",
+      %{mappings: %{properties: %{
+                       id: %{type: :keyword},
+                       cluster_id: %{type: :keyword},
+                       hostname: %{type: :keyword},
+                       container_ref: %{type: :keyword},
+                       key: %{type: :keyword},
+                       timestamp: %{type: :date_nanos},
+                       value: %{type: :double}
+                    }}})
 
     IO.puts("fully done!")
   end

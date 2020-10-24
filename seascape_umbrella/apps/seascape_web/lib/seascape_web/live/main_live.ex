@@ -82,4 +82,21 @@ defmodule SeascapeWeb.MainLive do
   #   |> assign(:page, ["clusters", "show", cluster_id])
   #   |> &{:noreply, &1}
   # end
+
+  require Integer
+
+  def breadcrumbs(current_page, socket) do
+    assigns = socket.assigns
+    ~L"""
+    <%= for element <- (current_page |> Enum.scan([], &[&1 | &2])) do %>
+    <div class="divider">/</div>
+      <%= case element do %>
+        <% list when Integer.is_odd(length(list)) -> %>
+          <span><%= hd(list) %></span>
+        <% list -> %>
+        <%= live_patch (hd(list)), to: Routes.live_path(socket, SeascapeWeb.MainLive, (Enum.reverse(list))), class: "section" %>
+      <% end %>
+    <% end %>
+    """
+  end
 end
