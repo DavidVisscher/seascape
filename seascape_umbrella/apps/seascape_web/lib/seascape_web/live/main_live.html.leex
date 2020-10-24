@@ -53,3 +53,6 @@
       </div>
   <% end %>
 </section>
+
+<% #data = for {str, second} <- Enum.reverse(@seconds), do: %{x: str, y: second} %>
+<%= #time_line_chart("chart1", "Seconds over time", data, assigns) %>

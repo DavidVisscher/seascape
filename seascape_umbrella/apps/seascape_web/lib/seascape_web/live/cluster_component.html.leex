@@ -47,10 +47,36 @@
                     </div>
                   </div>
                   <div class="extra content">
-                    foo
-                  </div>
-                  <div class="extra content">
-                    bar
+                    <div class="ui two column grid">
+                      <div class="column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.usage" => memory_usage}} <- container_metrics, do: %{x: timestamp, y: memory_usage} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Memory usage, Bytes", graph_data, %{data: %{backgroundColor: 'cyan'}}, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.percent" => memory_percent}} <- container_metrics, do: %{x: timestamp, y: memory_percent} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Memory usage, %", graph_data, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.in" => network_in}} <- container_metrics, do: %{x: timestamp, y: network_in} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Network (incoming), Bytes", graph_data, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.out" => network_out}} <- container_metrics, do: %{x: timestamp, y: network_out} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Network (outgoing), Bytes", graph_data, assigns) %>
+                        <% end %>
+                      </div>
+                    </div>
                   </div>
                 </div>
             <% end %>
