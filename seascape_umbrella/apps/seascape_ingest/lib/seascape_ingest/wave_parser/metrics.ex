@@ -3,7 +3,6 @@ defmodule SeascapeIngest.WaveParser.Metrics do
     json
     |> Enum.map(fn {vm_hostname, container_json} -> parse_vm(vm_hostname, container_json) end)
     |> Enum.reject(&(&1==%{}))
-    # |> Enum.map(&update_in(&1[:key], fn key -> "metrics.#{key}" end))
   end
 
   def parse_vm(vm_hostname, vm_json) do
@@ -21,6 +20,8 @@ defmodule SeascapeIngest.WaveParser.Metrics do
   end
 
   def parse_container_docker_stats(json = %{"container" => container_hash, "name" => container_name}) do
+    # We use the property that `container_hash` never contains a `:` here.
+    # to ensure we store both fields in a single string
     container_ref = container_hash <> ":" <> container_name
     (
       parse_memory_percent(json["memory_percent"])
@@ -36,11 +37,6 @@ defmodule SeascapeIngest.WaveParser.Metrics do
     |> Enum.map(fn {key, val} -> {"metrics.docker_stats.#{key}", val} end)
     |> put_in([:container_ref], container_ref)
     |> Enum.into(%{})
-    # |> Enum.map(fn {key, val} ->
-      # We use the property that `container_hash` never contains a `:` here.
-      # to ensure we store both fields in a single string
-      # %{container_ref: container_ref, key: key, value: val}
-    # end)
   end
 
   def parse_memory_percent(nil), do: []
