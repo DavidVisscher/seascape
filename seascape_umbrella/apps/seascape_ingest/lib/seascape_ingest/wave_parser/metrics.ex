@@ -30,7 +30,7 @@ defmodule SeascapeIngest.WaveParser.Metrics do
       ++
       parse_memory(json["memory"])
       ++
-      parse_network_io(json["network_id"])
+      parse_network_io(json["network_io"])
       ++
       parse_block_io(json["block_io"])
     )

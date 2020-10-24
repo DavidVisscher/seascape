@@ -1,8 +1,4 @@
-<%= if @state.ephemeral.repository_ok? do %>
-  <p class="alert alert-info">
-    The database is working correctly.
-  </p>
-<% else %>
+<%= unless @state.ephemeral.repository_ok? do %>
   <p class="alert alert-danger" role="alert">
   Connection with the database lost.
   You can still read real-time information,
