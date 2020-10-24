@@ -17,10 +17,11 @@
       <div class="row">
         <div class="ui breadcrumb">
           <%= live_patch "Home", to: Routes.live_path(@socket, SeascapeWeb.MainLive, []), class: "section" %>
-          <%= for element <- @state.ephemeral.current_page do %>
-              <div class="divider">/</div>
-              <%= live_patch element, to: Routes.live_path(@socket, SeascapeWeb.MainLive, [element]), class: "section" %>
-          <% end %>
+          <!-- <%= for element <- @state.ephemeral.current_page do %> -->
+          <!--     <div class="divider">/</div> -->
+          <!--     <%= live_patch element, to: Routes.live_path(@socket, SeascapeWeb.MainLive, [element]), class: "section" %> -->
+          <!-- <% end %> -->
+            <%= breadcrumbs(@state.ephemeral.current_page, @socket) %>
         </div>
       </div>
 
