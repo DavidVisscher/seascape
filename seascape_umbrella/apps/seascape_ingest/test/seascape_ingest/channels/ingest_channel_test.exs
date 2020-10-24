@@ -6,7 +6,8 @@ defmodule SeascapeIngest.IngestChannelTest do
     IO.puts("Creating example cluster data in ElasticSearch")
     Seascape.Repository.delete_all(Seascape.Clusters.ContainerMetric)
 
-    {:ok, cluster} = Seascape.Clusters.create_cluster(%{id: "a6c490da-809d-4515-b491-327adad92814"}, %{name: "testcluster"})
+    # {:ok, cluster} = Seascape.Clusters.create_cluster(%{id: "a6c490da-809d-4515-b491-327adad92814"}, %{name: "testcluster"})
+    {:ok, cluster} = Seascape.Repository.get("c5afe608-be30-41f9-b575-6a81ea03cdd2", Seascape.Clusters.Cluster)
     IO.inspect(cluster)
     Seascape.Repository.refresh_all # Since we'll need the data immediately in tests
     [cluster: cluster]

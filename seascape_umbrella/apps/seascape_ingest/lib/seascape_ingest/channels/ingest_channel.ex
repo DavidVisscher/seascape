@@ -12,7 +12,10 @@ defmodule SeascapeIngest.IngestChannel do
           socket
           |> assign(:cluster, cluster)
 
-        {:ok, _} = Seascape.Presence.track(self(), "user/#{cluster.user_id}/ingest_channels", socket.assigns.cluster.id, %{since: DateTime.utc_now})
+        {:ok, res} = Seascape.Presence.track(self(), "user/#{cluster.user_id}/ingest_channels", socket.assigns.cluster.id, %{since: DateTime.utc_now})
+        IO.inspect("Tracking myself on #{inspect(res)}")
+        Process.sleep(5000)
+
         {:ok, socket}
       error() ->
         {:error, %{reason: "unknown API key"}}

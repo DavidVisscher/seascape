@@ -19,7 +19,7 @@ defmodule SeascapeWeb.MainLive do
 
       current_user ->
         Seascape.Clusters.subscribe(current_user)
-        Seascape.PubSub.subscribe("user/#{current_user.id}/ingest_channels")
+        Phoenix.PubSub.subscribe(Seascape.PubSub, "user/#{current_user.id}/ingest_channels")
 
         with {:ok, state} <- State.new(current_user) do
           socket
