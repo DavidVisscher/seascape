@@ -1,7 +1,9 @@
 <header>
     <nav role="navigation" class="ui top fixed inverted menu">
     <section class="ui container">
-            <%=  link "Seascape", to: Routes.live_path(@conn, SeascapeWeb.MainLive, []), class: "header item" %>
+            <%=  link to: Routes.live_path(@conn, SeascapeWeb.MainLive, []), class: "header item" do %>
+                <img alt="" src="/images/logo_inverted.svg"/>
+            <% end %>
             <%= if Pow.Plug.current_user(@conn) do %>
                 <div class="item">
                     <strong>
