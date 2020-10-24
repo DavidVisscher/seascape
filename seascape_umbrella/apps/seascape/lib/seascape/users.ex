@@ -11,6 +11,14 @@ defmodule Seascape.Users do
 
   - The actual datatype and (persistence-less) logic is found in `Seascape.Users.User`.
   - Authentication can be done using `Seascape.Users.PowContext` (and this is usually handled inside the Pow HTTP Plug).
+
+  Note the calls to `Repository.refresh`
+  this strengthens the 'session consistency'
+  by waiting to return until the indices referring to the user
+  have been refreshed, making it less likely
+  that the user might e.g. register an account and then have to wait
+  for eventual consistency to kick in 'later'
+  before they will be able to log in.
   """
 
   def get(email) do
@@ -18,20 +26,29 @@ defmodule Seascape.Users do
   end
 
   def create(params) do
-    User.new()
-    |> User.changeset(params)
-    |> Ecto.Changeset.validate_change(User.pow_user_id_field, &validates_uniqueness/2)
-    |> Repository.create()
+    result =
+      User.new()
+      |> User.changeset(params)
+      |> Ecto.Changeset.validate_change(User.pow_user_id_field, &validates_uniqueness/2)
+      |> Repository.create()
+    Repository.refresh()
+    result
   end
 
   def delete(user) do
-    Repository.delete(user)
+    result = Repository.delete(user)
+    Repository.refresh()
+    result
   end
 
   def update(user, params) do
-    user
-    |> User.changeset(params)
-    |> Repository.update()
+    result =
+      user
+      |> User.changeset(params)
+      |> Repository.update()
+
+    Repository.refresh()
+    result
   end
 
 

@@ -77,4 +77,12 @@ defmodule Seascape.Repository.ElasticSearch do
         |> &{:ok, &1}
     end
   end
+
+  def refresh_all do
+    Elastic.HTTP.post("_refresh")
+  end
+
+  def refresh(index) do
+    Elastic.HTTP.post(Elastic.Index.name(index) <> "/_refresh")
+  end
 end

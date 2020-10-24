@@ -7,7 +7,7 @@ defmodule SeascapeIngest.IngestChannelTest do
     Seascape.Repository.delete_all(Seascape.Clusters.ContainerMetric)
 
     {:ok, cluster} = Seascape.Clusters.create_cluster(%{id: "fake_user_id"}, %{name: "testcluster"})
-    Elastic.HTTP.post("_refresh") # Since we'll need the data immediately in tests
+    Seascape.Repository.refresh_all # Since we'll need the data immediately in tests
     [cluster: cluster]
   end
 
@@ -51,7 +51,7 @@ defmodule SeascapeIngest.IngestChannelTest do
   end
 
   defp count_metrics() do
-    Elastic.HTTP.post("_refresh") # Since we'll need the data immediately in tests
+    Seascape.Repository.refresh_all # Since we'll need the data immediately in tests
     {:ok, 200, %{"count" => count}} = Elastic.HTTP.post("/seascape_container_metrics/_count")
     count
     end
