@@ -135,4 +135,5 @@ defmodule Seascape.Repository do
   def refresh(struct_module) do
     ElasticSearch.refresh(table_name(struct_module))
   end
+
 end

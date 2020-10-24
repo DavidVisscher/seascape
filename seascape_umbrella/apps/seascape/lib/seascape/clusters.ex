@@ -191,4 +191,81 @@ defmodule Seascape.Clusters do
     end)
     |> Repository.bulk_create
   end
+
+  def get_metrics(cluster_id) do
+    Repository.search(ContainerMetric, get_metrics_query(cluster_id))
+  end
+
+  defp get_metrics_query(cluster_id) do
+    %{size: @everything,
+      query: %{
+        bool: %{
+          must: [
+            %{match: %{cluster_id: cluster_id}},
+          ],
+          filter: [
+            %{range: %{timestamp: %{gte: "now-5m"}}}
+          ]
+        }
+      }}
+  end
+
+  def get_metrics_aggregates(cluster_id) do
+    # query = %{get_metrics_query(cluster_id) |
+    #   size: 0,
+    #   aggs: get_aggs_query()
+    #   }
+    query =
+      get_metrics_query(cluster_id)
+      |> put_in([:size], 0)
+      |> put_in([:aggs], get_aggs_query())
+    IO.inspect(query)
+    Repository.search(ContainerMetric, query)
+  end
+
+  # TODO does not give back results yet
+  def get_aggs_query() do
+    %{"metrics_per_minute": %{
+        "date_histogram": %{
+          "field": "timestamp",
+          "calendar_interval": "1m"
+        },
+        "aggs": %{
+          "per_container": %{
+            "terms": %{
+              "field": "container_ref",
+              "size": @everything
+            },
+            "aggs": %{
+              "avg_cpu_percent": %{
+                "avg": %{
+                  "field": "data.metrics.docker_stats.cpu.percent"
+                }
+              },
+              "avg_mem_usage": %{
+                "avg": %{
+                  "field": "data.metrics.docker_stats.memory.usage"
+                }
+              },
+              "avg_block_in": %{
+                "avg": %{
+                  "field": "data.metrics.docker_stats.block.in"
+                }
+              },
+              "avg_block_out": %{
+                "avg": %{
+                  "field": "data.metrics.docker_stats.block.out"
+                }
+              },
+              "avg_mem_percent": %{
+                "avg": %{
+                  "field": "data.metrics.docker_stats.memory.percent"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  end
 end

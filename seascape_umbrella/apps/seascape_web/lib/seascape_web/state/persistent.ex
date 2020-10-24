@@ -2,10 +2,13 @@ defmodule SeascapeWeb.State.Persistent do
   alias SeascapeWeb.Effect
   alias __MODULE__.Cluster
   defstruct [:user, :clusters]
+  import Solution
 
   def new(user) do
-    with {:ok, clusters} <- Seascape.Clusters.get_user_clusters(user) do
-      {:ok, %__MODULE__{user: user, clusters: clusters}}
+    swith ok(raw_clusters) <- Seascape.Clusters.get_user_clusters(user),
+          ok(filled_clusters) <- raw_clusters |> Enum.map(&Cluster.new/1) |> Solution.Enum.combine() do
+      IO.inspect(filled_clusters, label: :filled_clusters)
+      {:ok, %__MODULE__{user: user, clusters: Enum.into(filled_clusters, %{})}}
     end
   end
 

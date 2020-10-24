@@ -51,6 +51,7 @@ defmodule SeascapeWeb.MixProject do
       {:pow, "~> 1.0.20"},
       {:libcluster, "~> 3.2.1"},
       {:ring_logger, "~> 0.6"},
+      {:solution, "~> 1.0"},
 
       # Testing only/dev only:
       {:phoenix_live_reload, "~> 1.2", only: :dev},

@@ -30,7 +30,7 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
                        cluster_id: %{type: :keyword},
                        hostname: %{type: :keyword},
                        timestamp: %{type: :date_nanos},
-                       data: %{type: :json}
+                       data: %{type: :object}
                     }}})
 
     idempotently_create_index("container_metrics",
@@ -40,7 +40,7 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
                        hostname: %{type: :keyword},
                        container_ref: %{type: :keyword},
                        timestamp: %{type: :date_nanos},
-                       data: %{type: :json}
+                       data: %{type: :object}
                     }}})
 
     IO.puts("fully done!")
