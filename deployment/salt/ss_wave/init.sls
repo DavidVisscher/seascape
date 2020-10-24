@@ -19,8 +19,10 @@ ss_wave_clone:
     - user: root
     - identity: {{ salt['pillar.get']('ss_wave:identity', ['/tmp/github_key', '/root/.ssh/id_rsa']) }}
     - branch: {{ salt['pillar.get']('ss_wave:branch', 'master') }}
+    - rev: {{ salt['pillar.get']('ss_wave:branch', 'master') }}
     - force_reset: True
     - force_checkout: True
+    - remote: origin
 
 ss_wave_venv:
   virtualenv.managed:

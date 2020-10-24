@@ -74,10 +74,15 @@ defmodule Seascape.Repository.ElasticSearch.Watchdog do
   end
 
   defp check() do
-    case Elastic.HTTP.get("_cluster/health/") do
-      {:ok, 200, %{"status" => status}} when status in ~w(green yellow) ->
-        :connected
-      _other ->
+    try do
+      case Elastic.HTTP.get("_cluster/health/") do
+        {:ok, 200, %{"status" => status}} when status in ~w(green yellow) ->
+          :connected
+        _other ->
+          :disconnected
+      end
+    rescue
+      _ ->
         :disconnected
     end
   end
