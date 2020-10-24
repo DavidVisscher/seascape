@@ -1,5 +1,5 @@
 defmodule Seascape.Clusters do
-  alias __MODULE__.{Cluster, Machine, Container}
+  alias __MODULE__.{Cluster, Machine, Container, ContainerMetric, MachineMetric}
   use CapturePipe
   alias Seascape.Repository
 
@@ -168,5 +168,27 @@ defmodule Seascape.Clusters do
   """
   def subscribe(user) do
     Phoenix.PubSub.subscribe(Seascape.PubSub, "#{__MODULE__}/#{user.id}")
+  end
+
+  def store_container_metric!(cluster_id, params) do
+    ContainerMetric.new(cluster_id)
+    |> ContainerMetric.changeset(params)
+    |> Repository.create()
+  end
+
+  def store_machine_metric!(cluster_id, params) do
+    MachineMetric.new(cluster_id)
+    |> MachineMetric.changeset(params)
+    |> Repository.create()
+  end
+
+  def store_container_metrics!(metrics_params, cluster_id) do
+    metrics_params
+    |> Enum.map(fn map ->
+      cluster_id
+      |> ContainerMetric.new()
+      |> ContainerMetric.changeset(map)
+    end)
+    |> Repository.bulk_create
   end
 end

@@ -1,4 +1,4 @@
-defmodule SeascapeIngestWeb.ConnCase do
+defmodule SeascapeIngest.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule SeascapeIngestWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use SeascapeIngestWeb.ConnCase, async: true`, although
+  by setting `use SeascapeIngest.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,12 +22,12 @@ defmodule SeascapeIngestWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import SeascapeIngestWeb.ConnCase
+      import SeascapeIngest.ConnCase
 
-      alias SeascapeIngestWeb.Router.Helpers, as: Routes
+      alias SeascapeIngest.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint SeascapeIngestWeb.Endpoint
+      @endpoint SeascapeIngest.Endpoint
     end
   end
 
