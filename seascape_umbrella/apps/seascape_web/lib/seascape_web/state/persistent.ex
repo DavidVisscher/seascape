@@ -20,7 +20,8 @@ defmodule SeascapeWeb.State.Persistent do
 
         {state, [create_cluster_function]}
       {["cluster", "created"], %{"cluster" => cluster}} ->
-        state = put_in(state.clusters[cluster.id], cluster)
+        {:ok, filled_cluster} = Cluster.new(cluster)
+        state = put_in(state.clusters[cluster.id], filled_cluster)
         {state, []}
       {["cluster", cluster_id | rest], _} ->
         Effect.update_in(state, [Access.key(:clusters), Access.key(cluster_id)], &Cluster.handle_event(&1, {rest, params}))

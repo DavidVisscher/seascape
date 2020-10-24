@@ -22,7 +22,7 @@ defmodule SeascapeIngest.IngestChannelTest do
 
     {:ok, socket} = connect(ApiSocket, %{}, %{})
     {:ok, _, socket} = subscribe_and_join(socket, "ingest", %{"api_key" => cluster.api_key})
-    assert socket.assigns.cluster_id == cluster.id
+    assert socket.assigns.cluster.id == cluster.id
   end
 
   test "Sending a websocket message with `metrics` as topic will result in container_metrics being added to the DB", context do

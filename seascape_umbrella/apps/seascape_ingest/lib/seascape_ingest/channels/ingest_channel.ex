@@ -9,7 +9,7 @@ defmodule SeascapeIngest.IngestChannel do
     scase authenticate_api_key(params) do
       ok(cluster) ->
         socket
-        |> assign(:cluster_id, cluster.id)
+        |> assign(:cluster, cluster)
         |> &{:ok, &1}
       error() ->
         {:error, %{reason: "unknown API key"}}
@@ -19,7 +19,7 @@ defmodule SeascapeIngest.IngestChannel do
   def handle_in("metrics", payload, socket) do
     payload
     |> WaveParser.parse()
-    |> store_container_metrics!(socket.assigns.cluster_id)
+    |> store_container_metrics!(socket.assigns.cluster.id, socket.assigns.cluster.user_id)
 
     {:reply, :ok, socket}
   end
@@ -28,7 +28,7 @@ defmodule SeascapeIngest.IngestChannel do
     Seascape.Clusters.get_cluster_by_api_key(params["api_key"])
   end
 
-  defp store_container_metrics!(metrics, cluster_id) do
+  defp store_container_metrics!(metrics, cluster_id, user_id) do
     metrics
     |> Enum.filter(&(&1[:container_ref]))
     |> Enum.map(fn data = %{timestamp: timestamp, vm_hostname: vm_hostname, container_ref: container_ref} ->
@@ -40,6 +40,6 @@ defmodule SeascapeIngest.IngestChannel do
 
       %{timestamp: timestamp, hostname: vm_hostname, container_ref: container_ref, data: clean_data}
     end)
-    |> Seascape.Clusters.store_container_metrics!(cluster_id)
+    |> Seascape.Clusters.store_container_metrics!(cluster_id, user_id)
   end
 end

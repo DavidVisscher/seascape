@@ -182,14 +182,20 @@ defmodule Seascape.Clusters do
     |> Repository.create()
   end
 
-  def store_container_metrics!(metrics_params, cluster_id) do
-    metrics_params
-    |> Enum.map(fn map ->
-      cluster_id
-      |> ContainerMetric.new()
-      |> ContainerMetric.changeset(map)
+  def store_container_metrics!(metrics_params, cluster_id, cluster_user_id) do
+    structs =
+      metrics_params
+      |> Enum.map(fn map ->
+        cluster_id
+        |> ContainerMetric.new()
+        |> ContainerMetric.changeset(map)
+      end)
+    Task.start(fn ->
+      Phoenix.PubSub.broadcast(Seascape.PubSub, "#{__MODULE__}/#{cluster_id}", {"persistent/cluster/#{cluster_id}/metrics", structs})
     end)
-    |> Repository.bulk_create
+    Task.start(fn ->
+      Repository.bulk_create(structs)
+    end)
   end
 
   def get_metrics(cluster_id) do

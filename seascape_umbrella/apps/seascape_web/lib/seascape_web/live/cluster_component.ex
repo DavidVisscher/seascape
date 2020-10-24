@@ -45,5 +45,4 @@ defmodule SeascapeWeb.ClusterComponent do
     </div>
     """
   end
-
 end

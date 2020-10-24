@@ -11,6 +11,9 @@ defmodule SeascapeWeb.State.Persistent.Cluster do
   def handle_event(state, {event, params}) do
     # For now do nothing
     case {event, params} do
+      {["metrics"], new_metrics} ->
+        new_metrics = invert_cluster_metrics(new_metrics)
+        {merge_metrics(state, new_metrics), []}
       _ ->
         {state, []}
     end
@@ -26,5 +29,20 @@ defmodule SeascapeWeb.State.Persistent.Cluster do
   defp invert_machine_metrics({hostname, machine_metrics}) do
     {hostname, Enum.group_by(machine_metrics, &(&1.container_ref))}
     |> IO.inspect(label: :result)
+  end
+
+  def merge_metrics(cluster_with_metrics, new_metrics) do
+    old_metrics = cluster_with_metrics.metrics
+    Enum.reduce(new_metrics, old_metrics, fn {hostname, new_machine_metrics}, new_metrics ->
+      old_metrics
+      |> Map.update(hostname, new_machine_metrics, &merge_machine_metrics/2)
+    end)
+  end
+
+  def merge_machine_metrics(old_machine_metrics, new_machine_metrics) do
+    Enum.reduce(new_machine_metrics, old_machine_metrics, fn {container_ref, new_container_metrics}, new_machine_metrics ->
+      old_machine_metrics
+      |> Map.update(container_ref, new_container_metrics, fn old, new -> (new ++ old) end)
+    end)
   end
 end
