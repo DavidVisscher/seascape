@@ -238,7 +238,7 @@ defmodule Seascape.Clusters do
     end
   end
 
-  def get_clusterwide_metrics_aggregates(cluster_id, ago \\ "5m") do
+  def get_clusterwide_metrics_aggregates(cluster_id, ago \\ "50m") do
     query =
       get_metrics_query(cluster_id, ago)
       |> put_in([:size], 0)

@@ -16,40 +16,37 @@
     <div class="ui four statistics">
       <div class="statistic">
         <div class="value">
-          <%= round(@cluster.aggregates.max_network_in) %>
+          <%= mb_stat(@cluster.aggregates.max_network_in) %>
         </div>
         <div class="label">
-          Total Network (In)
+          Total Network (In), MB
         </div>
       </div>
       <div class="statistic">
         <div class="value">
-          <%= round(@cluster.aggregates.max_network_out) %>
+          <%= mb_stat(@cluster.aggregates.max_network_out) %>
         </div>
         <div class="label">
-          Total Network (Out)
+          Total Network (Out), MB
         </div>
       </div>
       <div class="statistic">
         <div class="value">
-          <%= round(@cluster.aggregates.max_block_in) %>
+          <%= mb_stat(@cluster.aggregates.max_block_in) %>
         </div>
         <div class="label">
-          Total IO (In)
+          Total IO (In), MB
         </div>
       </div>
       <div class="statistic">
         <div class="value">
-          <%= round(@cluster.aggregates.max_block_out) %>
+          <%= mb_stat(@cluster.aggregates.max_block_out) %>
         </div>
         <div class="label">
-          Total IO (Out)
+          Total IO (Out), MB
         </div>
       </div>
     </div>
-    <p>
-      <em>During the last 5 minutes</em>
-    </p>
   </div>
 </div>
 <div class="row">

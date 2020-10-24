@@ -45,4 +45,10 @@ defmodule SeascapeWeb.ClusterComponent do
     </div>
     """
   end
+
+  def mb_stat(float) do
+    val =
+      float / (1000 * 1000)
+      |> Float.round(3)
+  end
 end
