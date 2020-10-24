@@ -1,11 +1,11 @@
-# Web and Cloud Computing 2020-2021: Group 13
+![](/architecture/logo.svg)
+
+**Web and Cloud Computing 2020-2021: Group 13**
 
 **David Visscher (s3278891) and Wiebe-Marten Wijnja (s2776278)**
 
-
 Project: **Docker resource use measurement**
 
-![](/architecture/seascape_spa.png)
 
 
 
@@ -183,3 +183,7 @@ These tests, include
 - tests talking with ElasticSearch to make sure correct data is stored.
 
 Tests can be run by going to `seascape_umbrella/apps/seascape_ingest` and running  `mix test` there (while you have ElasticSearch running locally on the default port 9200).
+
+## Screenshot
+
+![](/architecture/seascape_spa.png)
