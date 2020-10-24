@@ -53,6 +53,8 @@ The web-application/SPA is able to detect that the ElasticSearch-database cluste
 - queries that would require database usage are not executed, but this does not result in application-breaking crashes but rather clear error messages to the user.
 - Real-time data is pushed through the Elixir cluster in parallel with (attempting to) store it in the database, allowing the application to still display real-time data while the database is temporarily unreachable.
 
+
+
 We implemented DB-facing fault-tolerance by using a circuit breaker, implemented as a watchdog Elixir process.
 
 (c.f. [/seascape_umbrella/apps/seascape/lib/seascape/repository/elastic_search/watchdog.ex](/seascape_umbrella/apps/seascape/lib/seascape/repository/elastic_search/watchdog.ex) )
