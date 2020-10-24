@@ -5,4 +5,4 @@ ss_wave:
     - /tmp/github_key
   insecure: True
   websocket_url: 'wss://ingest.seascape.example/ingest/websocket'
-  api_key: 'c5a34549-b5d7-447f-92e3-8db9f7228d0d'
+  api_key: '9d4e302d-d868-48f9-9ec2-066fe606e39'
