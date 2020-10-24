@@ -219,8 +219,9 @@ defmodule Seascape.Clusters do
       get_metrics_query(cluster_id)
       |> put_in([:size], 0)
       |> put_in([:aggs], get_aggs_query())
-    IO.inspect(query)
-    Repository.search(ContainerMetric, query)
+    with {:ok, result} <- Repository.search(ContainerMetric, query, extract_hits: false) do
+      {:ok, result["aggregations"]}
+    end
   end
 
   # TODO does not give back results yet
