@@ -9,7 +9,7 @@ defmodule SeascapeWeb.MainLive do
     case SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache]) do
 
       nil ->
-        Process.send_after(self, :update_self, 1000)
+        # Process.send_after(self, :update_self, 1000)
         {:ok, state} = State.new()
 
         socket
@@ -19,6 +19,7 @@ defmodule SeascapeWeb.MainLive do
 
       current_user ->
         Seascape.Clusters.subscribe(current_user)
+        Seascape.PubSub.subscribe("user/#{current_user.id}/ingest_channels")
 
         with {:ok, state} <- State.new(current_user) do
           socket
@@ -51,7 +52,7 @@ defmodule SeascapeWeb.MainLive do
   end
 
   def handle_info(:update_self, socket) do
-    IO.puts("Updated!")
+    # IO.puts("Updated!")
 
     Process.send_after(self, :update_self, 1000)
     socket =
@@ -60,12 +61,17 @@ defmodule SeascapeWeb.MainLive do
   end
 
   def handle_info({event, params}, socket) do
-    IO.inspect({event, params}, label: :handle_info)
+    # IO.inspect({event, params}, label: :handle_info)
 
     event
     |> String.split("/")
     |> do_handle_event(params, socket)
-    |> IO.inspect(label: :handle_info_result)
+    # |> IO.inspect(label: :handle_info_result)
+  end
+
+  def handle_info(%{event: "presence_diff", payload: %{joins: joins, leaves: leaves}}, socket) do
+    IO.inspect({joins, leaves}, label: :joins_leaves)
+    {:noreply, socket}
   end
 
   defp do_handle_event(event, params, socket) do

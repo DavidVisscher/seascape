@@ -9,7 +9,8 @@ defmodule Seascape.Application do
     children = [
       Seascape.Repository.ElasticSearch.Watchdog,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Seascape.PubSub}
+      {Phoenix.PubSub, name: Seascape.PubSub},
+      Seascape.Presence
       # Start a worker by calling: Seascape.Worker.start_link(arg)
       # {Seascape.Worker, arg}
     ]

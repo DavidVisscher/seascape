@@ -8,9 +8,12 @@ defmodule SeascapeIngest.IngestChannel do
   def join("ingest", params, socket) do
     scase authenticate_api_key(params) do
       ok(cluster) ->
-        socket
-        |> assign(:cluster, cluster)
-        |> &{:ok, &1}
+        socket =
+          socket
+          |> assign(:cluster, cluster)
+
+        {:ok, _} = Seascape.Presence.track(self(), "user/#{cluster.user_id}/ingest_channels", socket.assigns.cluster.id, %{since: DateTime.utc_now})
+        {:ok, socket}
       error() ->
         {:error, %{reason: "unknown API key"}}
     end
