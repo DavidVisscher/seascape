@@ -16,7 +16,6 @@ haproxy:
         user: admin
         password: "TIJDELIJKWACHTWOORD!AANPASSEN"
       https_in:
-        balance: source
         format: end
         type: http
         force_ssl: true
@@ -27,6 +26,7 @@ haproxy:
           track: content
         acls:
         - name: ingest_host
+          balance: source
           conditions:
           - type: "hdr(host)"
             condition: "ingest.seascape.example"
@@ -39,6 +39,7 @@ haproxy:
           {% endfor %}
         - name: web_host
           conditions:
+          balance: source
           - type: "hdr(host)"
             condition: "seascape.example"
           servers:
