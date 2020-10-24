@@ -16,26 +16,27 @@ You can (re)view them at [https://slides.com/qqwy/web-and-cloud-computing-group-
 ### Minimal
 
 #### Docker
-All our component live inside Docker images, which are deployed (grouped in a couple of VMs) to the RUG's OpenStack cluster.
+All our components live inside Docker images, which are deployed (spread across a couple of VMs) in the RUG's OpenStack cluster.
 
 #### Docker life cycle
 See the 'building docker containers' instructions later on in this README on instructions on how to transform our application code into docker containers.
 
 #### Single Page Application
 Our web-application is implemented using the [Elixir](https://elixir-lang.org/) programming language (which builds on Erlang's VM and therefore has the same multithreading/fault-tolerance features), with the [Phoenix web-framework](https://phoenixframework.org/).
+
 For our interactive single-page application we use [Phoenix LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html), which is different from fully JS-based frameworks in that it:
-- has transparent websocket-based two-way browser<->server communication.
+- has transparent websocket-based two-way browser/server communication.
 - performs server-side DOM-diffing, sending the lightweight DOM changes over the websocket connection back to the user.
 
 This means that we are able to create an SPA while writing (virtually) no JavaScript.
+
 Only for the graphs we want to show do we hook the LiveView-state-changes into the JS chart-drawing library [`charts.js`](https://www.chartjs.org/), so we do not need to re-invent this wheel.
 
 (c.f. [/seascape_umbrella/apps/seascape_web/assets/js](/seascape_umbrella/apps/seascape_web/assets/j) for all the JS that the project contains.)
 
 On top of this, the full transportation layer is abstracted away, so we do not have to care about what format of serialized data needs to be transferred over the wire between browser and server.
 
-The disadvantage of this is of course that the SPA cannot work in 'offline' mode,
-but as our project requires a user to be online to fetch data from the running containers anyway, this is not a problem.
+The disadvantage of this is of course that the SPA cannot work in 'full offline' mode, but as our project requires a user to be online to fetch data from the running containers anyway, this is not a problem.
 
 All main SPA interaction happens in the files in the [/seascape_umbrella/apps/seascape_web/lib/seascape_web/live/](/seascape_umbrella/apps/seascape_web/lib/seascape_web/live/) folder. However, it heavily leans on [/seascape_umbrella/apps/seascape_web/lib/seascape_web/state.ex](/seascape_umbrella/apps/seascape_web/lib/seascape_web/state.ex) and [its sub-modules](/seascape_umbrella/apps/seascape_web/lib/seascape_web/state) to handle the data-model stored inside the SPA.
 
@@ -65,6 +66,22 @@ As second database we rely on [Mnesia](http://erlang.org/doc/man/mnesia.html) wh
 We use it to have persistent user sessions without having to rely on making the work of our load balancer more difficult (e.g. no need for 'sticky sessions') or relying on 'stateless' technologies like JWTs which have their own security-related drawbacks.
 
 This distributed user-session handling is done for us by the Pow user management library. See [Pow.Store.Backend.MnesiaCache](https://hexdocs.pm/pow/Pow.Store.Backend.MnesiaCache.html) together with [Pow.Store.Backend.MnesiaCache.Unsplit](https://hexdocs.pm/pow/Pow.Store.Backend.MnesiaCache.Unsplit.html) for details (including how recovery from netsplits is handled).
+
+#### Data Collection
+
+Our data is collected using a custom python application in combination with saltstack. That application is called "Seascape wave".
+
+All our machines are registered with a salt master. That salt-master provides a 0mq message-bus with a security layer on top for encryption and identity verification.
+
+This approach has serveral advantages:
+ - Wave only needs to be deployed on the salt master, minimizing the amount of maintenance that needs to be done.
+ - We can use a secured message bus to communicate with all machines and remotely execute commands. This way there's no worries about the confidentialy of data as it moves across networks or that it may end up with the wrong machine. This eases deployment across networks and clouds.
+ - We can also use salt to administer our own machines.
+ - Seascape can also monitor itself this way. 
+ - Salt allows us to use a declarative approach to configuration. This makes our configuration easy to understand, change and verify.
+
+Data is sent to our elxir-based ingest api using websockets, this allows for low-overhead data transmission. This way wave remains in the background of whatever system we're monitoring.
+
 
 ### Extended for a higher grade
 
