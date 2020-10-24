@@ -6,7 +6,7 @@
         (Id: <%= @cluster.id %>)
       </div>
     </h1>
-    <div class="ui small labeled input">
+    <div class="ui tiny labeled input">
       <div class="ui label">
         API Key:
       </div>
@@ -17,6 +17,7 @@
       <div class="statistic">
         <div class="value">
           <%= mb_stat(@cluster.aggregates.max_network_in) %>
+          <i class="tiny cloud upload icon"></i>
         </div>
         <div class="label">
           Total Network (In), MB
@@ -25,6 +26,7 @@
       <div class="statistic">
         <div class="value">
           <%= mb_stat(@cluster.aggregates.max_network_out) %>
+          <i class="tiny cloud download icon"></i>
         </div>
         <div class="label">
           Total Network (Out), MB
@@ -33,6 +35,7 @@
       <div class="statistic">
         <div class="value">
           <%= mb_stat(@cluster.aggregates.max_block_in) %>
+          <i class="tiny upload icon"></i>
         </div>
         <div class="label">
           Total IO (In), MB
@@ -41,6 +44,7 @@
       <div class="statistic">
         <div class="value">
           <%= mb_stat(@cluster.aggregates.max_block_out) %>
+          <i class="tiny download icon"></i>
         </div>
         <div class="label">
           Total IO (Out), MB
