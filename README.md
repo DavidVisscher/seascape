@@ -10,7 +10,9 @@ Project: **Docker resource use measurement**
 
 
 
-## Architecture Slides
+## Architecture Overview
+
+![](/architecture/architecture_diagram.png)
 
 We are hosting the architecture slides (containing elaboration on technology choices and the deployment diagram) outside of GitHub for an easy viewing/presenting experience.
 You can (re)view them at [https://slides.com/qqwy/web-and-cloud-computing-group-13](https://slides.com/qqwy/web-and-cloud-computing-group-13).
@@ -86,8 +88,11 @@ This approach has serveral advantages:
 
 Data is sent to our elxir-based ingest api using websockets, this allows for low-overhead data transmission. This way wave remains in the background of whatever system we're monitoring.
 
-
 ### Extended for a higher grade
+
+#### Deployment in the RUG CIT Openstack Cloud
+
+![](/architecture/infra_details.png)
 
 #### Admin Dashboard
 
