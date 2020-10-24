@@ -72,6 +72,9 @@ This distributed user-session handling is done for us by the Pow user management
 
 We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and start `:observer` there to have even more insight into and be able to debug the running system live.
 
+
+![Phoenix LiveDashboard](/architecture/phoenix_livedashboard.png)
+
 #### Fault Tolerance
 
 Both the Elixir web-nodes and Elixir ingest-nodes can be scaled independently to larger/smaller numbers, and all of them connect to form a large Elixir cluster with transparent message-passing between them. 
