@@ -1,17 +1,41 @@
 <div class="row">
   <div class="column">
-    <div class="ui header">
+    <h1 class="ui header">
       Cluster "<%= @cluster.name %>"
       <div class="ui sub header">
         (Id: <%= @cluster.id %>)
       </div>
+    </h1>
+    <div class="ui small labeled input">
+      <div class="ui label">
+        API Key:
+      </div>
+      <input type="text" placeholder="" readonly="readonly" value="<%= @cluster.api_key %>" >
     </div>
-  <div class="ui small labeled input">
-    <div class="ui label">
-      API Key:
-    </div>
-    <input type="text" placeholder="" readonly="readonly" value="<%= @cluster.api_key %>" >
+
+    <p>
+    Cluster-wide stats here.
+    </p>
   </div>
+</div>
+<div class="row">
+  <div class="column">
+    <h2 class="ui header">
+      (Virtual) Machines
+    </h2>
+    <div class="ui cards">
+      <div class="card">
+        <div class="content">
+        <div class="header">
+          example.com
+        </div>
+        <div class="metadata">
+          Foo Bar
+        </div>
+        </div>
+      </div>
+      
+    </div>
   </div>
 </div>
 
