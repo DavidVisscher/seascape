@@ -2,7 +2,7 @@
         <nav role="navigation" class="ui top fixed inverted menu">
     <section class="ui container">
             <%=  link to: Routes.live_path(@socket, SeascapeWeb.MainLive, []), class: "header item" do %>
-                <img alt="" src="/images/logo_inverted.svg"/>
+                <img alt="" src="/images/logo_inverted.svg" style="width: 100px;" />
             <% end %>
 
             <%= if @current_user do %>
