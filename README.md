@@ -5,6 +5,10 @@
 
 Project: **Docker resource use measurement**
 
+![](/architecture/seascape_spa.png)
+
+
+
 
 ## Architecture Slides
 
