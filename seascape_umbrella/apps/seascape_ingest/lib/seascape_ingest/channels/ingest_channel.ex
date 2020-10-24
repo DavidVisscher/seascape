@@ -29,13 +29,13 @@ defmodule SeascapeIngest.IngestChannel do
     Seascape.Clusters.get_cluster_by_api_key(params["api_key"])
   end
 
-  defp store_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, vm_hostname: vm_hostname, container_ref: container_ref}) do
-    Seascape.Clusters.store_container_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, container_ref: container_ref, hostname: vm_hostname})
-  end
+  # defp store_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, vm_hostname: vm_hostname, container_ref: container_ref}) do
+  #   Seascape.Clusters.store_container_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, container_ref: container_ref, hostname: vm_hostname})
+  # end
 
-  defp store_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, vm_hostname: vm_hostname}) do
-    Seascape.Clusters.store_machine_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, hostname: vm_hostname})
-  end
+  # defp store_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, vm_hostname: vm_hostname}) do
+  #   Seascape.Clusters.store_machine_metric!(cluster_id, %{key: key, value: value, timestamp: timestamp, hostname: vm_hostname})
+  # end
 
   defp store_container_metrics!(metrics, cluster_id) do
     metrics
