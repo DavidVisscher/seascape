@@ -11,8 +11,42 @@
           <div class="header">
             <%= cluster.name %>
           </div>
+          <div class="extra content">
+            <ul>
+            <%= for {hostname, _machine_metrics} <- cluster.metrics do %>
+                <li>
+                  <%= hostname %>
+                </li>
+            <% end %>
+            </ul>
+          </div>
           <div class="metadata">
-            <span>Health here</span>
+            <div class="ui four mini statistics">
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_network_in) %>
+                  <i class="tiny cloud upload icon"></i>
+                </div>
+              </div>
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_network_out) %>
+                  <i class="tiny cloud download icon"></i>
+                </div>
+              </div>
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_block_in) %>
+                  <i class="tiny upload icon"></i>
+                </div>
+              </div>
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_block_out) %>
+                  <i class="tiny download icon"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <% end %>

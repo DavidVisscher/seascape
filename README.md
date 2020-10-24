@@ -94,10 +94,21 @@ Data is sent to our elxir-based ingest api using websockets, this allows for low
 
 ![](/architecture/infra_details.png)
 
+* using these 10 machines we reached our quota for instances. Our ideal deployment would have 3 ingest and 3 web nodes.
+* while drawn separately in the diagram, the salt master with wave may also be the one that manages seascape as per the dogfooding principle.
+
+#### Automated deployment
+
+Deployment to the cloud is automated. This follows these steps:
+ - Terraform is used to place and bootstrap the virtual machines, configure the networks, and set up security groups.
+ - The salt-master, after bootstrapping, accepts the keys offered by the newly created minions. (this is a manual step, for security)
+ - All minions can be configured using a simple call to the `state.highstate` salt module.
+
 #### Admin Dashboard
 
-We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and start `:observer` there to have even more insight into and be able to debug the running system live.
+We did not implement a separate admin dashboard ourselves, but you can look at the Phoenix LiveDashboard to see the current state of the connected Elixir cluster, as well as connect to a running Elixir application using a remote shell and have full logging- and behaviour introspection.
 
+Besides this, we are running Kibana (the ElasticSearch dashboard) and HaProxy's status dashboard which enable us to quickly find out what is happening in our system and diagnose potential problems.
 
 ![Phoenix LiveDashboard](/architecture/phoenix_livedashboard.png)
 
