@@ -11,10 +11,12 @@ defmodule SeascapeIngest.WaveParserTest do
       |> Enum.each(fn events ->
         assert is_list(events)
         Enum.each(events, fn event ->
-          assert (
-            match?("metrics." <> _, event[:key])
-            or match?("meta." <> _, event[:key])
-          )
+          assert match?(%{timestamp: timestamp, container_ref: container_ref, vm_hostname: vm_hostname}, event)
+
+          # assert (
+          #   match?("metrics." <> _, event[:key])
+          #   or match?("meta." <> _, event[:key])
+          # )
         end)
       end)
     end

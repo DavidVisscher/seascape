@@ -35,7 +35,7 @@ defmodule SeascapeIngest.IngestChannelTest do
     example_payloads()
     |> Enum.map(fn payload ->
       ref = push(socket, "metrics", payload)
-      assert_reply ref, :ok, _
+      assert_reply ref, :ok, _, 200
     end)
 
     # TODO assert that changes were pushed to repo

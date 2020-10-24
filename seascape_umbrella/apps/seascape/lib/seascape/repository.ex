@@ -74,7 +74,7 @@ defmodule Seascape.Repository do
         changeset =
         Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
       {:error, changeset}
-  end
+    end
   end
 
   def delete(struct) do
@@ -110,8 +110,8 @@ defmodule Seascape.Repository do
   end
 
   defp apply_changeset(changeset, action) do
-    with {:ok, cluster} <- Ecto.Changeset.apply_action(changeset, action) do
-      res = filter_virtual_keys(cluster)
+    with {:ok, data} <- Ecto.Changeset.apply_action(changeset, action) do
+      res = filter_virtual_keys(data)
       {:ok, res}
     end
   end

@@ -40,8 +40,13 @@ defmodule SeascapeIngest.IngestChannel do
   defp store_container_metrics!(metrics, cluster_id) do
     metrics
     |> Enum.filter(&(&1[:container_ref]))
-    |> Enum.map(fn %{key: key, value: value, timestamp: timestamp, vm_hostname: vm_hostname, container_ref: container_ref} ->
-      %{key: key, value: value, timestamp: timestamp, hostname: vm_hostname, container_ref: container_ref}
+    |> Enum.map(fn data = %{timestamp: timestamp, vm_hostname: vm_hostname, container_ref: container_ref} ->
+      clean_data =
+        data
+      |> Map.delete(:timestamp)
+      |> Map.delete(:vm_hostname)
+      |> Map.delete(:container_ref)
+      %{timestamp: timestamp, hostname: vm_hostname, container_ref: container_ref, data: clean_data}
     end)
     |> Seascape.Clusters.store_container_metrics!(cluster_id)
   end

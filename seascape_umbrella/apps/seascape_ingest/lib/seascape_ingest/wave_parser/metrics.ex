@@ -1,21 +1,23 @@
 defmodule SeascapeIngest.WaveParser.Metrics do
   def parse(json) do
     json
-    |> Enum.flat_map(fn {vm_hostname, container_json} -> parse_vm(vm_hostname, container_json) end)
-    |> Enum.map(&update_in(&1[:key], fn key -> "metrics.#{key}" end))
+    |> Enum.map(fn {vm_hostname, container_json} -> parse_vm(vm_hostname, container_json) end)
+    |> Enum.reject(&(&1==%{}))
+    # |> Enum.map(&update_in(&1[:key], fn key -> "metrics.#{key}" end))
   end
 
   def parse_vm(vm_hostname, vm_json) do
     # We're not yet parsing cpu_percent, cpu_times here
     (vm_json["docker_stats"] || [])
     |> Enum.flat_map(&parse_container(vm_hostname, &1))
+    |> Enum.into(%{})
   end
 
   def parse_container(_vm_hostname, nil), do: [] # Called for VMs without containers
   def parse_container(vm_hostname, container_json) do
     container_json
     |> parse_container_docker_stats()
-    |> Enum.map(&put_in(&1[:vm_hostname], vm_hostname))
+    |> put_in([:vm_hostname], vm_hostname)
   end
 
   def parse_container_docker_stats(json = %{"container" => container_hash, "name" => container_name}) do
@@ -31,12 +33,14 @@ defmodule SeascapeIngest.WaveParser.Metrics do
       ++
       parse_block_io(json["block_io"])
     )
-    |> Enum.map(fn {key, val} -> {"docker_stats.#{key}", val} end)
-    |> Enum.map(fn {key, val} ->
+    |> Enum.map(fn {key, val} -> {"metrics.docker_stats.#{key}", val} end)
+    |> put_in([:container_ref], container_ref)
+    |> Enum.into(%{})
+    # |> Enum.map(fn {key, val} ->
       # We use the property that `container_hash` never contains a `:` here.
       # to ensure we store both fields in a single string
-      %{container_ref: container_ref, key: key, value: val}
-    end)
+      # %{container_ref: container_ref, key: key, value: val}
+    # end)
   end
 
   def parse_memory_percent(nil), do: []
