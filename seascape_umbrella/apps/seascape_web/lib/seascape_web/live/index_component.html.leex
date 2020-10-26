@@ -1,26 +1,63 @@
 <%= if @state.persistent do %>
+  
 <div class="row">
   <button phx-click="persistent/cluster/create" class="ui green blue icon button"><i class="plus icon"></i> Add Cluster</button>
 </div>
 <div class="three column row">
     <%= for {_id, cluster} <- @state.persistent.clusters do %>
-        <div class="ui column">
-          <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ), class: "ui fluid card" do %>
-          <div class="content">
-            <div class="header">
-              <%= cluster.name %>
-            </div>
-            <div class="metadata">
-              <span>Health here</span>
+      <div class="ui column">
+        <%= live_redirect to: Routes.live_path(@socket, SeascapeWeb.MainLive, ["clusters", "#{cluster.id}"] ), class: "ui fluid card" do %>
+        <div class="content">
+          <div class="header">
+            <%= cluster.name %>
+          </div>
+          <div class="extra content">
+            <ul>
+            <%= for {hostname, _machine_metrics} <- cluster.metrics do %>
+                <li>
+                  <%= hostname %>
+                </li>
+            <% end %>
+            </ul>
+          </div>
+          <div class="metadata">
+            <div class="ui four mini statistics">
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_network_in) %>
+                  <i class="tiny cloud upload icon"></i>
+                </div>
+              </div>
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_network_out) %>
+                  <i class="tiny cloud download icon"></i>
+                </div>
+              </div>
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_block_in) %>
+                  <i class="tiny upload icon"></i>
+                </div>
+              </div>
+              <div class="statistic">
+                <div class="value">
+                  <%= mb_stat(cluster.aggregates.max_block_out) %>
+                  <i class="tiny download icon"></i>
+                </div>
+              </div>
             </div>
           </div>
-          <% end %>
         </div>
-      <% end %>
-  </div>
+        <% end %>
+      </div>
+    <% end %>
+</div>
 
 <% else %>
+<div class="row">
   <p class="alert alert-danger">
     Cannot currently fetch information as connection with database is lost.
   </p>
+</div>
 <% end %>

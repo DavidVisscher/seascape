@@ -49,6 +49,10 @@ defmodule SeascapeWeb.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, "~> 0.14.6"},
       {:pow, "~> 1.0.20"},
+      {:libcluster, "~> 3.2.1"},
+      {:ring_logger, "~> 0.6"},
+      {:solution, "~> 1.0"},
+      {:faker, "~> 0.16"},
 
       # Testing only/dev only:
       {:phoenix_live_reload, "~> 1.2", only: :dev},

@@ -17,6 +17,15 @@ defmodule Seascape.Repository.ElasticSearch do
     Elastic.Document.index(index, type, key, data)
   end
 
+  def bulk_create(list) do
+    raise_unless_cluster_ok!()
+    list
+    |> Enum.map(fn {index, type, id, data} ->
+      {Elastic.Index.name(index), type, id, data}
+    end)
+    |> Elastic.Bulk.create()
+  end
+
   def get(index, type, key, struct_module) do
     raise_unless_cluster_ok!()
     case Elastic.Document.get(index, type, key) do
@@ -53,19 +62,31 @@ defmodule Seascape.Repository.ElasticSearch do
     end
   end
 
-  def search(struct_module, index, query) do
+  def search(struct_module, index, query, opts \\ [extract_hits:  true]) do
     result =
       Elastic.Query.build(index, query)
       |> Elastic.Index.search()
     case result do
       {:error, _code, problem} ->
         {:error, problem}
-      {:ok, 200, %{"hits" => %{"hits" => hits}}} ->
-        hits
-        |> Enum.map(fn %{"_source" => source, "_id" => id} ->
-          into_struct(struct_module, source)
-        end)
-        |> &{:ok, &1}
+      {:ok, 200, result = %{"hits" => %{"hits" => hits}}} ->
+        if opts[:extract_hits] do
+          hits
+          |> Enum.map(fn %{"_source" => source, "_id" => _id} ->
+            into_struct(struct_module, source)
+          end)
+          |> &{:ok, &1}
+        else
+          {:ok, result}
+        end
     end
+  end
+
+  def refresh_all do
+    Elastic.HTTP.post("_refresh")
+  end
+
+  def refresh(index) do
+    Elastic.HTTP.post(Elastic.Index.name(index) <> "/_refresh")
   end
 end

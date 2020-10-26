@@ -11,8 +11,9 @@ defmodule SeascapeWeb.State.Ephemeral do
   def handle_event(state, event) do
     case event do
       {["changed_page"], %{"spa_path" => new_page}} ->
-        state.current_page
-        |> put_in(new_page)
+        new_state =
+          state.current_page
+          |> put_in(new_page)
       {["repository", "connected"], status} ->
         state.repository_ok?
         |> put_in(status)

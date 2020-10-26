@@ -1,8 +1,9 @@
 defmodule SeascapeIngest do
   @moduledoc """
-  Entrypoint for the `SeascapeIngest`-application.
+  SeascapeIngest keeps the contexts that define your domain
+  and business logic.
 
-  This application contains the logic to ingest data
-  from the SeascapeWave daemons that are running in remote clusters.
+  Contexts are also responsible for managing your data, regardless
+  if it comes from the database, an external API or others.
   """
 end

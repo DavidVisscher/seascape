@@ -1,14 +1,148 @@
-<ul>
-  <li>
-Page for Cluster "<%= @cluster.name %>"
-  </li>
-  <li>
-(Id: <%= @cluster.id %>)
-  </li>
-  <li>
-  API key: <%= @cluster.api_key %>
-  </li>
-</ul>
+<div class="row">
+  <div class="column">
+    <h1 class="ui header">
+      Cluster "<%= @cluster.name %>"
+      <div class="ui sub header">
+        (Id: <%= @cluster.id %>)
+      </div>
+    </h1>
+    <div class="ui tiny labeled input">
+      <div class="ui label">
+        API Key:
+      </div>
+      <input type="text" placeholder="" readonly="readonly" value="<%= @cluster.api_key %>" >
+    </div>
+
+    <div class="ui four statistics">
+      <div class="statistic">
+        <div class="value">
+          <%= mb_stat(@cluster.aggregates.max_network_in) %>
+          <i class="tiny cloud upload icon"></i>
+        </div>
+        <div class="label">
+          Total Network (In), MB
+        </div>
+      </div>
+      <div class="statistic">
+        <div class="value">
+          <%= mb_stat(@cluster.aggregates.max_network_out) %>
+          <i class="tiny cloud download icon"></i>
+        </div>
+        <div class="label">
+          Total Network (Out), MB
+        </div>
+      </div>
+      <div class="statistic">
+        <div class="value">
+          <%= mb_stat(@cluster.aggregates.max_block_in) %>
+          <i class="tiny upload icon"></i>
+        </div>
+        <div class="label">
+          Total IO (In), MB
+        </div>
+      </div>
+      <div class="statistic">
+        <div class="value">
+          <%= mb_stat(@cluster.aggregates.max_block_out) %>
+          <i class="tiny download icon"></i>
+        </div>
+        <div class="label">
+          Total IO (Out), MB
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <h2 class="ui header">
+      (Virtual) Machines
+    </h2>
+    <div class="ui items">
+      <%= for {hostname, machine_metrics} <- @cluster.metrics do %>
+      <div class="item">
+        <div class="content">
+        <div class="left floated header">
+          <%= hostname %>
+        </div>
+        <div class="meta">
+          
+        </div>
+        <div class="description">
+          <div class="ui cards">
+            <%= for {container_ref, container_metrics} <- machine_metrics do %>
+                <% [container_hash, container_name] = String.split(container_ref, ":", parts: 2) %>
+                <div class="ui fluid card">
+                  <div class="content">
+                    <div class="ui header">
+                      <%= container_name %>
+                    <div class="ui sub header">
+                      <%= container_hash %>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="extra content">
+                    <div class="ui grid">
+                      <div class="sixteen wide column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.cpu.percent" => cpu_percent}} <- container_metrics, do: %{x: timestamp, y: cpu_percent} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "CPU usage, %", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0, suggestedMax: 1}}]}}, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="eight wide column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.usage" => memory_usage}} <- container_metrics, do: %{x: timestamp, y: memory_usage} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Memory usage, Bytes", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0}}]}}, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="eight wide column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.memory.percent" => memory_percent}} <- container_metrics, do: %{x: timestamp, y: memory_percent} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Memory usage, %", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0, suggestedMax: 1}}]}}, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="eight wide column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.in" => network_in}} <- container_metrics, do: %{x: timestamp, y: network_in} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Network (incoming), Bytes", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0}}]}}, assigns) %>
+                        <% end %>
+                      </div>
+                      <div class="eight wide column">
+                        
+                        <% graph_data = for %{timestamp: timestamp, data: %{"metrics.docker_stats.network.out" => network_out}} <- container_metrics, do: %{x: timestamp, y: network_out} %>
+                        <%= unless graph_data == [] do %>
+                          <%= time_line_chart("chart1", "Network (outgoing), Bytes", Enum.sort_by(graph_data, &(&1.x)), %{scales: %{yAxes: [%{ticks: %{suggestedMin: 0}}]}}, assigns) %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+        </div>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <!-- <div class="ui cards"> -->
+    <!--   <div class="card"> -->
+    <!--     <div class="content"> -->
+    <!--     <div class="header"> -->
+    <!--       example.com -->
+    <!--     </div> -->
+    <!--     <div class="metadata"> -->
+    <!--       Foo Bar -->
+    <!--     </div> -->
+    <!--     </div> -->
+    <!--   </div> -->
+      
+    </div>
+  </div>
+</div>
 
 <%= case @page do %>
 <% [] -> %>

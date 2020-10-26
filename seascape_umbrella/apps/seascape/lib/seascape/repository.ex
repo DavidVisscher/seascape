@@ -37,6 +37,15 @@ defmodule Seascape.Repository do
     end
   end
 
+  def bulk_create(list_of_changesets) do
+    list_of_changesets
+    |> Enum.map(&apply_changeset!(&1, :create))
+    |> Enum.map(fn struct ->
+      {table_name(struct), type_name(struct), pkey_value(struct), struct}
+    end)
+    |> ElasticSearch.bulk_create
+  end
+
   def get(primary_key_value, module) do
     try do
       ElasticSearch.get(table_name(module), type_name(module), primary_key_value, module)
@@ -65,15 +74,19 @@ defmodule Seascape.Repository do
         changeset =
         Ecto.Changeset.add_error(changeset, pkey_value(changeset.data), "Data persistence is currently not possible.")
       {:error, changeset}
-  end
+    end
   end
 
   def delete(struct) do
     ElasticSearch.delete(table_name(struct), type_name(struct), pkey_value(struct))
   end
 
-  def search(struct_module, query) do
-    ElasticSearch.search(struct_module, table_name(struct_module), query)
+  def delete_all(struct_module) do
+    Elastic.HTTP.delete(Elastic.Index.name(table_name(struct_module)) <> "/_query", body: %{"query" => %{"match_all" => %{}}})
+  end
+
+  def search(struct_module, query, opts \\ [extract_hits: true]) do
+    ElasticSearch.search(struct_module, table_name(struct_module), query, opts)
   end
 
   defp pkey_value(struct = %module{}) do
@@ -91,9 +104,14 @@ defmodule Seascape.Repository do
   defp table_name(%module{}), do: table_name(module)
   defp table_name(module) when is_atom(module), do: module.__schema__(:source)
 
+  defp apply_changeset!(changeset, action) do
+    {:ok, struct} = apply_changeset(changeset, action)
+    struct
+  end
+
   defp apply_changeset(changeset, action) do
-    with {:ok, cluster} <- Ecto.Changeset.apply_action(changeset, action) do
-      res = filter_virtual_keys(cluster)
+    with {:ok, data} <- Ecto.Changeset.apply_action(changeset, action) do
+      res = filter_virtual_keys(data)
       {:ok, res}
     end
   end
@@ -109,4 +127,13 @@ defmodule Seascape.Repository do
       end
     end)
   end
+
+  def refresh_all do
+    ElasticSearch.refresh_all
+  end
+
+  def refresh(struct_module) do
+    ElasticSearch.refresh(table_name(struct_module))
+  end
+
 end

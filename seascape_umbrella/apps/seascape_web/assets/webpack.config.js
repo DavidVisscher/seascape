@@ -7,7 +7,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, options) => {
-  const devMode = options.mode !== 'production';
+    const devMode = true;//options.mode !== 'production';
 
   return {
     optimization: {

@@ -14,13 +14,22 @@ use Mix.Config
 config :seascape_web,
   generators: [context_app: :seascape]
 
-# Configures the endpoint
+# Configures the Web endpoint
 config :seascape_web, SeascapeWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "FoY3bOfyhH70G3mISyy+iqavEDYBHN6uV+iNuj0Z3FhsEX+2MsJ5oDUdwki+cWAj",
   render_errors: [view: SeascapeWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Seascape.PubSub,
   live_view: [signing_salt: "1ZK2yiDJ"]
+
+# Configures the Ingest endpoint
+config :seascape_ingest, SeascapeIngest.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "ruYHpGSq6/Wlyu7shzNRegV0GpdFU0KpM2FWq3rgHg2bW0MzY5kjDCeDXzNW3aNr",
+  render_errors: [view: SeascapeIngest.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: Seascape.PubSub
+  # live_view: [signing_salt: "SupM5BFi"]
+
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -46,6 +55,7 @@ config :seascape_web, :pow,
 config :seascape_ingest, SeascapeIngest.Endpoint,
   scheme: :http,
   port: 4001
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

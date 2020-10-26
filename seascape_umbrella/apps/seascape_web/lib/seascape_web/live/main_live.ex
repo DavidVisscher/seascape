@@ -1,5 +1,4 @@
 defmodule SeascapeWeb.MainLive do
-  use Phoenix.LiveView, layout: {SeascapeWeb.LayoutView, "live.html"}
   use SeascapeWeb, :live_view
   use CapturePipe
 
@@ -8,7 +7,9 @@ defmodule SeascapeWeb.MainLive do
   def mount(_params, session, socket) do
     IO.inspect(session)
     case SeascapeWeb.Credentials.get_user(socket, session, [backend: Pow.Store.Backend.MnesiaCache]) do
+
       nil ->
+        Process.send_after(self, :update_self, 1000)
         {:ok, state} = State.new()
 
         socket
@@ -36,7 +37,7 @@ defmodule SeascapeWeb.MainLive do
   end
 
   # Invoked on page change.
-  def handle_params(params = %{"spa_path" => path}, url, socket) do
+  def handle_params(params = %{"spa_path" => _}, _url, socket) do
     do_handle_event(["ephemeral", "changed_page"], params, socket)
   end
 
@@ -47,6 +48,15 @@ defmodule SeascapeWeb.MainLive do
     |> String.split("/")
     |> do_handle_event(params, socket)
     |> IO.inspect(label: :handle_event_result)
+  end
+
+  def handle_info(:update_self, socket) do
+    IO.puts("Updated!")
+
+    Process.send_after(self, :update_self, 1000)
+    socket =
+      socket
+    {:noreply, socket}
   end
 
   def handle_info({event, params}, socket) do
@@ -83,4 +93,22 @@ defmodule SeascapeWeb.MainLive do
   #   |> assign(:page, ["clusters", "show", cluster_id])
   #   |> &{:noreply, &1}
   # end
+
+  require Integer
+
+  def breadcrumbs(current_page, socket) do
+    assigns = socket.assigns
+    ~L"""
+    <%= for element <- (current_page |> Enum.scan([], &[&1 | &2])) do %>
+    <div class="divider">/</div>
+      <%= case element do %>
+        <% list when Integer.is_odd(length(list)) -> %>
+          <span><%= hd(list) %></span>
+        <% list -> %>
+        <%= live_patch (hd(list)), to: Routes.live_path(socket, SeascapeWeb.MainLive, (Enum.reverse(list))), class: "section" %>
+      <% end %>
+    <% end %>
+    """
+  end
+
 end

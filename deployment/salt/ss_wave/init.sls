@@ -17,11 +17,12 @@ ss_wave_clone:
     - name: "git@github.com:rug-wacc/2020_group_13_s3278891_s2776278.git"
     - target: /opt/seascape
     - user: root
-    - identity:
-      - /tmp/github_key
+    - identity: {{ salt['pillar.get']('ss_wave:identity', ['/tmp/github_key', '/root/.ssh/id_rsa']) }}
     - branch: {{ salt['pillar.get']('ss_wave:branch', 'master') }}
+    - rev: {{ salt['pillar.get']('ss_wave:branch', 'master') }}
     - force_reset: True
     - force_checkout: True
+    - remote: origin
 
 ss_wave_venv:
   virtualenv.managed:
@@ -34,6 +35,7 @@ ss_wave_unit:
     - name: /etc/systemd/system/ss_wave.service
     - source:
       - salt://{{ slspath }}/files/ss_wave.service
+    - template: jinja
 
 ss_wave_reload_daemon:
   cmd.run:

@@ -14,20 +14,39 @@ defmodule Mix.Tasks.Seascape.CreateElasticsearchIndexes do
            id: %{type: :keyword}}
     }})
 
-    idempotently_create_index("machines",
-      %{ mappings: %{properties: %{
-                        id: %{type: :keyword},
-                        cluster_id: %{type: :keyword},
-    }}})
-    idempotently_create_index("containers",
+    # idempotently_create_index("machines",
+    #   %{ mappings: %{properties: %{
+    #                     id: %{type: :keyword},
+    #                     cluster_id: %{type: :keyword},
+    # }}})
+    # idempotently_create_index("containers",
+    #   %{mappings: %{properties: %{
+    #                    machine_id: %{type: :keyword},
+    #   }}})
+
+    idempotently_create_index("machine_metrics",
       %{mappings: %{properties: %{
-                       machine_id: %{type: :keyword},
-      }}})
+                       id: %{type: :keyword},
+                       cluster_id: %{type: :keyword},
+                       hostname: %{type: :keyword},
+                       timestamp: %{type: :date_nanos},
+                       data: %{type: :object}
+                    }}})
+
+    idempotently_create_index("container_metrics",
+      %{mappings: %{properties: %{
+                       id: %{type: :keyword},
+                       cluster_id: %{type: :keyword},
+                       hostname: %{type: :keyword},
+                       container_ref: %{type: :keyword},
+                       timestamp: %{type: :date_nanos},
+                       data: %{type: :object}
+                    }}})
 
     IO.puts("fully done!")
   end
 
-  defp idempotently_create_index(name, params \\ []) do
+  defp idempotently_create_index(name, params) do
     full_name = Elastic.Index.name(name)
     if Elastic.Index.exists?(name) do
       IO.puts("  Skipping ElasticSearch index #{full_name} as it already exists.")

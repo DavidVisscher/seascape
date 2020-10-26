@@ -1,27 +1,45 @@
 defmodule SeascapeIngest.Endpoint do
-  use Plug.Router
+  use Phoenix.Endpoint, otp_app: :seascape_ingest
 
-  require Logger
+  # The session will be stored in the cookie and signed,
+  # this means its contents can be read but not tampered with.
+  # Set :encryption_salt if you would also like to encrypt it.
+  @session_options [
+    store: :cookie,
+    key: "_seascape_ingest_key",
+    signing_salt: "2gQmlhDl"
+  ]
 
-  plug(Plug.Logger, log: :debug)
+  socket "/ingest", SeascapeIngest.ApiSocket,
+    websocket: true,
+    longpoll: false
 
-  plug(:match)
+  # Serve at "/" the static files from "priv/static" directory.
+  #
+  # You should set gzip to true if you are running phx.digest
+  # when deploying your static files in production.
+  plug Plug.Static,
+    at: "/",
+    from: :seascape_ingest,
+    gzip: false,
+    only: ~w(css fonts images js favicon.ico robots.txt)
 
-  plug(Plug.Parsers,
-    parsers: [:json],
-    pass: ["application/json"],
-    json_decoder: Jason
-  )
-
-  plug(:dispatch)
-
-  post("/ingest", to: SeascapeIngest.IngestPlug)
-
-  match _ do
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(404, Jason.encode!(%{status: "error", message: "not found"}))
+  # Code reloading can be explicitly enabled under the
+  # :code_reloader configuration of your endpoint.
+  if code_reloading? do
+    plug Phoenix.CodeReloader
   end
 
-  # defp config, do: Application.fetch_env(:seascape_ingest, __MODULE__)
+  plug Plug.RequestId
+  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
+
+  plug Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json],
+    pass: ["*/*"],
+    json_decoder: Phoenix.json_library()
+
+  plug Plug.MethodOverride
+  plug Plug.Head
+  plug Plug.Session, @session_options
+  plug SeascapeIngest.Router
 end

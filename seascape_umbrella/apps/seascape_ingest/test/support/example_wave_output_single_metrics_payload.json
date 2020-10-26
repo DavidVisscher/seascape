@@ -1,0 +1,466 @@
+{
+  "elastic-2.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "826c9886d50f",
+        "name": "elasticsearch",
+        "memory": {
+          "usage": "1.338GiB ",
+          "limit": " 3.69GiB",
+          "raw": "1.338GiB / 3.69GiB"
+        },
+        "memory_percent": "36.26%",
+        "cpu": "0.25%",
+        "network_io": {
+          "in": "647MB ",
+          "out": " 1.06GB",
+          "raw": "647MB / 1.06GB"
+        },
+        "block_io": {
+          "in": "281MB ",
+          "out": " 654MB",
+          "raw": "281MB / 654MB"
+        },
+        "pids": "60"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 1617.15,
+        "nice": 8.81,
+        "system": 250.79,
+        "idle": 168561.77,
+        "iowait": 107.64,
+        "irq": 0.0,
+        "softirq": 20.32,
+        "steal": 14.56,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "ingest-0.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "7ce36da701a9",
+        "name": "seascape-ingest",
+        "memory": {
+          "usage": "113.9MiB ",
+          "limit": " 1.784GiB",
+          "raw": "113.9MiB / 1.784GiB"
+        },
+        "memory_percent": "6.23%",
+        "cpu": "0.11%",
+        "network_io": {
+          "in": "307kB ",
+          "out": " 227kB",
+          "raw": "307kB / 227kB"
+        },
+        "block_io": {
+          "in": "2.22MB ",
+          "out": " 4.1kB",
+          "raw": "2.22MB / 4.1kB"
+        },
+        "pids": "50"
+      },
+      {
+        "container": "050b187bb854",
+        "name": "goofy_kalam",
+        "memory": {
+          "usage": "0B ",
+          "limit": " 0B",
+          "raw": "0B / 0B"
+        },
+        "memory_percent": "0.00%",
+        "cpu": "0.00%",
+        "network_io": {
+          "in": "0B ",
+          "out": " 0B",
+          "raw": "0B / 0B"
+        },
+        "block_io": {
+          "in": "0B ",
+          "out": " 0B",
+          "raw": "0B / 0B"
+        },
+        "pids": "0"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 51301.69,
+        "nice": 77.0,
+        "system": 8487.92,
+        "idle": 538806.94,
+        "iowait": 37.87,
+        "irq": 407.04,
+        "softirq": 229.04,
+        "steal": 49.39,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "ingest-1.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "41c0a57209d7",
+        "name": "seascape-ingest",
+        "memory": {
+          "usage": "83.35MiB ",
+          "limit": " 1.784GiB",
+          "raw": "83.35MiB / 1.784GiB"
+        },
+        "memory_percent": "4.56%",
+        "cpu": "0.04%",
+        "network_io": {
+          "in": "267kB ",
+          "out": " 185kB",
+          "raw": "267kB / 185kB"
+        },
+        "block_io": {
+          "in": "0B ",
+          "out": " 4.1kB",
+          "raw": "0B / 4.1kB"
+        },
+        "pids": "26"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 48045.89,
+        "nice": 75.56,
+        "system": 7709.36,
+        "idle": 542826.08,
+        "iowait": 41.02,
+        "irq": 351.54,
+        "softirq": 187.59,
+        "steal": 41.8,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "web-0.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "bd1f812a08bd",
+        "name": "seascape-web",
+        "memory": {
+          "usage": "91.63MiB ",
+          "limit": " 1.784GiB",
+          "raw": "91.63MiB / 1.784GiB"
+        },
+        "memory_percent": "5.02%",
+        "cpu": "0.01%",
+        "network_io": {
+          "in": "660kB ",
+          "out": " 484kB",
+          "raw": "660kB / 484kB"
+        },
+        "block_io": {
+          "in": "57.3kB ",
+          "out": " 98.8kB",
+          "raw": "57.3kB / 98.8kB"
+        },
+        "pids": "34"
+      },
+      {
+        "container": "bbc408c35542",
+        "name": "strange_golick",
+        "memory": {
+          "usage": "0B ",
+          "limit": " 0B",
+          "raw": "0B / 0B"
+        },
+        "memory_percent": "0.00%",
+        "cpu": "0.00%",
+        "network_io": {
+          "in": "0B ",
+          "out": " 0B",
+          "raw": "0B / 0B"
+        },
+        "block_io": {
+          "in": "0B ",
+          "out": " 0B",
+          "raw": "0B / 0B"
+        },
+        "pids": "0"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 35198.25,
+        "nice": 75.41,
+        "system": 5892.88,
+        "idle": 557298.78,
+        "iowait": 42.57,
+        "irq": 349.65,
+        "softirq": 231.18,
+        "steal": 51.46,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "web-1.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "b41e1cd6fa0d",
+        "name": "seascape-web",
+        "memory": {
+          "usage": "86.41MiB ",
+          "limit": " 1.784GiB",
+          "raw": "86.41MiB / 1.784GiB"
+        },
+        "memory_percent": "4.73%",
+        "cpu": "0.11%",
+        "network_io": {
+          "in": "626kB ",
+          "out": " 483kB",
+          "raw": "626kB / 483kB"
+        },
+        "block_io": {
+          "in": "258kB ",
+          "out": " 81.4kB",
+          "raw": "258kB / 81.4kB"
+        },
+        "pids": "28"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 53397.54,
+        "nice": 75.56,
+        "system": 8967.88,
+        "idle": 535941.01,
+        "iowait": 38.99,
+        "irq": 446.74,
+        "softirq": 239.04,
+        "steal": 50.75,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "elastic-1.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "373e81c22ec9",
+        "name": "elasticsearch",
+        "memory": {
+          "usage": "1.363GiB ",
+          "limit": " 3.69GiB",
+          "raw": "1.363GiB / 3.69GiB"
+        },
+        "memory_percent": "36.94%",
+        "cpu": "2.71%",
+        "network_io": {
+          "in": "1.07GB ",
+          "out": " 1.47GB",
+          "raw": "1.07GB / 1.47GB"
+        },
+        "block_io": {
+          "in": "353MB ",
+          "out": " 543MB",
+          "raw": "353MB / 543MB"
+        },
+        "pids": "66"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 1777.14,
+        "nice": 8.69,
+        "system": 234.72,
+        "idle": 168407.69,
+        "iowait": 114.69,
+        "irq": 0.0,
+        "softirq": 24.89,
+        "steal": 15.27,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "elastic-0.seascape.example": {
+    "docker_stats": [
+      {
+        "container": "4c3ddbc1c69d",
+        "name": "elasticsearch",
+        "memory": {
+          "usage": "1.348GiB ",
+          "limit": " 3.69GiB",
+          "raw": "1.348GiB / 3.69GiB"
+        },
+        "memory_percent": "36.53%",
+        "cpu": "0.49%",
+        "network_io": {
+          "in": "1.98GB ",
+          "out": " 1.16GB",
+          "raw": "1.98GB / 1.16GB"
+        },
+        "block_io": {
+          "in": "366MB ",
+          "out": " 1.06GB",
+          "raw": "366MB / 1.06GB"
+        },
+        "pids": "61"
+      },
+      {
+        "container": "c8e4a22c9d89",
+        "name": "kibana",
+        "memory": {
+          "usage": "408.1MiB ",
+          "limit": " 3.69GiB",
+          "raw": "408.1MiB / 3.69GiB"
+        },
+        "memory_percent": "10.80%",
+        "cpu": "0.11%",
+        "network_io": {
+          "in": "64.8MB ",
+          "out": " 102MB",
+          "raw": "64.8MB / 102MB"
+        },
+        "block_io": {
+          "in": "360MB ",
+          "out": " 55.2MB",
+          "raw": "360MB / 55.2MB"
+        },
+        "pids": "12"
+      }
+    ],
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 1956.95,
+        "nice": 9.51,
+        "system": 268.5,
+        "idle": 168122.21,
+        "iowait": 181.84,
+        "irq": 0.0,
+        "softirq": 27.45,
+        "steal": 16.13,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "haproxy-0.seascape.example": {
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 79524.65,
+        "nice": 80.99,
+        "system": 14241.64,
+        "idle": 507650.95,
+        "iowait": 74.4,
+        "irq": 544.75,
+        "softirq": 214.88,
+        "steal": 49.06,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "elproxy-0.seascape.example": {
+    "cpu_percent": {
+      "ret": 0.0,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 1721.2,
+        "nice": 13.57,
+        "system": 365.2,
+        "idle": 79456.19,
+        "iowait": 34.85,
+        "irq": 33.38,
+        "softirq": 44.01,
+        "steal": 9.48,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  },
+  "salt.seascape.example": {
+    "cpu_percent": {
+      "ret": 9.1,
+      "retcode": 0,
+      "jid": "20201023141205901224"
+    },
+    "cpu_times": {
+      "ret": {
+        "user": 100060.67,
+        "nice": 98.42,
+        "system": 21920.14,
+        "idle": 563310.69,
+        "iowait": 3045.03,
+        "irq": 824.89,
+        "softirq": 638.74,
+        "steal": 91.3,
+        "guest": 0.0,
+        "guest_nice": 0.0
+      },
+      "retcode": 0,
+      "jid": "20201023141206233633"
+    }
+  }
+}

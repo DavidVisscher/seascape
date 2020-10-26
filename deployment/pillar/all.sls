@@ -6,3 +6,10 @@ mine_functions:
   grains.items: []
 
 selinux_mode: permissive
+
+core:
+  packages:
+    install_updates: True
+
+additional_hostnames:
+  haproxy-0.seascape.example: ["ingest.seascape.example", "seascape.example"]
